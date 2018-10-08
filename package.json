@@ -1,6 +1,6 @@
 {
   "name": "simple.space",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simplified alternative for botlist.space API",
   "main": "src/spacerun.js",
   "dependencies": {
@@ -15,6 +15,11 @@
     "bls",
     "botlist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/test-resp/simple.space.git",
+    "homepage": "https://github.com/test-resp/simple.space"
+  },
   "author": "iRED",
   "license": "ISC"
 }

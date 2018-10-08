@@ -1,0 +1,20 @@
+{
+  "name": "simple.space",
+  "version": "1.0.4",
+  "description": "Simplified alternative for botlist.space API",
+  "main": "src/spacerun.js",
+  "dependencies": {
+    "snekfetch": "^4.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "botlist.space",
+    "bls",
+    "botlist"
+  ],
+  "author": "iRED",
+  "license": "ISC"
+}

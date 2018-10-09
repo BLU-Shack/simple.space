@@ -1,6 +1,6 @@
 {
   "name": "simple.space",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simplified alternative for botlist.space API",
   "main": "src/spacerun.js",
   "dependencies": {
@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node examples/test.js"
   },
   "keywords": [
     "botlist.space",
@@ -21,5 +21,5 @@
     "homepage": "https://github.com/test-resp/simple.space"
   },
   "author": "iRED",
-  "license": "ISC"
+  "license": "MIT"
 }

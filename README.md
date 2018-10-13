@@ -21,18 +21,19 @@ Wait, before we get in, let me explain things.
 // Small description of what thing does
 // For each value: valueExample (TypeOfValue) => Description of how value affects function.
 // EXAMPLE: token (String) => This value requires a String-type value to be passed in.
-// Sometimes, there is a ? before the TypeOfValue, which means Optional.
+// Sometimes, there is a ? before the Type, which means Optional.
 ```
 
 ```js
 // First, you have to initialize the package. Obviously.
 const SimpleSpace = require('simple.space');
 
-// token (?String) => The API token from botlist.space; Required for some functions. If not needed, use 'none'.
-// botID (?string) => The bot ID, used for self functions. If not needed, use 'none'.
-// client (?ClientObject) => The client object. Used for setCount() if no value is provided. Probably not needed, so use undefined.
-// log (?Boolean) => Whether or not to log any POST actions. Recommended value is false. Useful if you want to know whenever something happens I guess?
-const Example = new SimpleSpace(token = 'none', botID = 'none', ?client = false, ?log = false); // Example varies
+// options (?SpaceOptions) => The options for initiation.
+// options.token (?String) => The API token for specified actions.
+// options.botID (?String) => The bot ID for self functions.
+// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
+// options.log (?Boolean) => Whether or not to log POST actions.
+const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
 
 // Fetches the site statistics.
 // specified (?String) => The specific value to receive.
@@ -47,23 +48,30 @@ Example.setGuilds(10); // A message, code, and whether or not it succeeded.
 
 // Fetch a bot from the site.
 // botID (String) => The bot ID to fetch from the site.
-// specified (?String) => The specific value to receive.
-Example.fetchBot(botID, ?specified);
+// options (?FetchOptions) => Options when fetching.
+Example.fetchBot(botID, ?options);
 Example.fetchBot('463803888072523797'); // Example too large to show.
-Example.fetchBot('463803888072523797', 'username'); // Moddy ©
-
-// Fetch every bot that had been logged onto the site.
-// kind (String) => To get either "bots" or "guilds" (supply "servers")
-// specified (?String) The specific value to receive.
-Example.fetchAll(kind, ?specified);
-Example.fetchAll('servers'); // Example too large to show.
-Example.fetchAll('bots', 'prefix'); // ['!', '.', '$', ...a lot more];
+Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
 
 // Fetches the bot by using the ID supplied during initialization.
 // specified (?String) => The specific value to receive.
 Example.fetchSelf(?specified);
 Example.fetchSelf(); // Example varies
 Example.fetchSelf('username'); // Example varies
+
+// Fetches a server in the database.
+// guildID (String) => The server ID to fetch.
+// options (?FetchOptions) => Options when fetching.
+Example.fetchGuild(guildID, ?options);
+Example.fetchGuild('467868565073035284');
+Example.fetchGuild('467868565073035284', { specified: 'username' });
+
+// Fetch every bot that had been logged onto the site.
+// kind (String) => To get either "bots" or "guilds"
+// specified (?String) The specific value to receive.
+Example.fetchAll(kind, ?specified);
+Example.fetchAll('guilds'); // Example too large to show.
+Example.fetchAll('bots', 'prefix'); // ['!', '.', '$', ...a lot more];
 
 // Fetch a user that has logged onto the site.
 // userID (String) => The user ID to fetch.
@@ -86,17 +94,25 @@ Example.fetchUpvotesSelf(); // Example varies
 Example.fetchUpvotesSelf(true); // Example varies
 
 // Edit a key-value pair in the instance.
-// key (String) The key value to change, etc. 'token', 'botID', 'client', 'log'
-// value (*) The value to change the key into.
-Example.edit(key, value);
-Example.edit('token', 'xxx'); // { 'token': 'xxx', ... };
-Example.edit('client', 'none'); // { 'client': false, ...};
+// options (?SpaceOptions) => The options for initiation.
+// options.token (?String) => The API token for specified actions.
+// options.botID (?String) => The bot ID for self functions.
+// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
+// options.log (?Boolean) => Whether or not to log POST actions.
+Example.edit(options);
+Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 ```
 
 ## Update Notes Section
 
 ### v2 Section
-Releases will now be on the github page/releases! You can get notified by joining [my main server](https://discord.gg/eB3gK72)!
+
+#### v2.1.0.
+
+[Here](https://github.com/iREDMe/simple.space/releases/tag/v2.1.0)
+
+#### v2.0.0
+~~Releases will now be on the github page/releases! You can get notified by joining [my main server](https://discord.gg/eB3gK72)!~~ No: [here](https://github.com/iREDMe/simple.space/releases/tag/v2.0.0)
 
 ### v1 Section
 #### v1.0.6

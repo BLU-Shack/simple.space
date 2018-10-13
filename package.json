@@ -1,8 +1,8 @@
 {
   "name": "simple.space",
-  "version": "1.0.6",
+  "version": "2.1.0",
   "description": "Simplified alternative for botlist.space API",
-  "main": "src/spacerun.js",
+  "main": "src/source.js",
   "dependencies": {
     "snekfetch": "^4.0.4"
   },
@@ -13,7 +13,9 @@
   "keywords": [
     "botlist.space",
     "bls",
-    "botlist"
+    "botlist",
+    "simple.space",
+    "simplespace"
   ],
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "simple.space",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Simplified alternative for botlist.space API",
   "main": "src/source.js",
   "dependencies": {
@@ -15,7 +15,8 @@
     "bls",
     "botlist",
     "simple.space",
-    "simplespace"
+    "simplespace",
+    "botlist.space-api"
   ],
   "repository": {
     "type": "git",

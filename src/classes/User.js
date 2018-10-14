@@ -1,45 +1,67 @@
-const Base = require('./Base');
-/* eslint-disable */
+const NonGuildBase = require('./bases/NonGuildBase');
 const FetchOptions = require('./FetchOptions');
-const Bot = require('./Bot');
 const Guild = require('./Guild');
-/* eslint-enable */
+const Bot = require('./Bot');
 
-class User extends Base {
+/**
+ * Represents any user logged onto botlist.space.
+ * @extends {NonGuildBase}
+ */
+class User extends NonGuildBase {
+    /**
+     * @param {Object} user The default user object from the API.
+     * @property {Object} user The default user object received from fetching.
+     * @property {String} [github] The user's github link, if any.
+     * @property {String} [gitlab] The user's gitlab link, if any.
+     * @property {String} [shortDescription] The user's description, if any.
+     */
     constructor(user) {
         super(user);
+
         this.user = user;
 
-        /** @type {String} */
-        const avatar = user.avatar;
-        this.avatar = avatar;
+        this.github = user.links.github;
 
-        /** @type {String} */
-        const discriminator = user.discriminator;
-        this.discriminator = discriminator;
+        this.gitlab = user.links.gitlab;
 
-        /** @type {String} */
-        const username = user.username;
-        this.username = username;
+        this.shortDescription = user.short_description;
+    }
 
-        /** @type {String} */
-        const tag = `${this.username}#${discriminator}`;
-        this.tag = tag;
+    /**
+     * Fetches all bots that the user owns.
+     * @param {FetchOptions} [options={}] Fetch options.
+     * @returns {Array<Bot>} An array of bots.
+     */
+    bots(options = {}) {
+        console.warn('We have some technical difficulties here.');
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
 
-        /** @type {String} */
-        const github = user.links.github;
-        /** @type {String} */
-        const gitlab = user.links.gitlab;
-        this.links = { github, gitlab };
+        if (Options.normal) {
+            return Options.specified ? this.user.bots.map(bot => bot[Options.specified]) : this.user.bots;
+        } else {
+            console.log(Bot instanceof constructor);
+            const Bots = this.user.bots.map(bot => new Bot(bot));
+            return Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
+        }
+    }
 
-        /** @type {String} */
-        const description = user.short_description;
-        this.description = description;
-     }
+    /**
+     * Fetches all guilds that the user owns.
+     * @param {FetchOptions} [options={}] Fetch options.
+     * @returns {Array<Guild>} An array of guilds.
+     */
+    guilds(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
 
-     toString() {
-         return `<@${this.id}>`;
-     }
+        if (Options.normal) {
+            return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;
+        } else {
+            const Guilds = this.user.servers.map(guild => new Guild(guild));
+            return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
+        }
+    }
 }
 
 module.exports = User;

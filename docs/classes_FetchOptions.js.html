@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: classes/FetchOptions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,31 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: classes/FetchOptions.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Fetch options when fetching for a User/Bot/Guild.
+ * @typedef {Object} FetchOptions
+ * @property {String} [specified=false] The specific value when fetching something.
+ * @property {Boolean} [normal=false] Whether or not to only return the plain object, and not the custom class.
+ */
+class FetchOptions {
+    constructor(opts) {
+        this.specified = opts.specified ? opts.specified : false;
+        this.normal = opts.normal ? opts.normal : false;
+    }
+}
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = FetchOptions;</code></pre>
+        </article>
+    </section>
 
 
 

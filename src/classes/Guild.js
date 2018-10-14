@@ -1,7 +1,11 @@
-const Base = require('./Base');
+const Base = require('./bases/Base');
 const FetchOptions = require('./FetchOptions');
 const User = require('./User');
 
+/**
+ * Represents any guild that has been submitted onto botlist.space.
+ * @extends {Base}
+ */
 class Guild extends Base {
     constructor(guild) {
         super(guild);
@@ -51,11 +55,11 @@ class Guild extends Base {
 
         /** @type {String} */
         const short = guild.short_description;
+        this.shortDescription = short;
 
         /** @type {String} */
         const long = guild.full_description;
-
-        this.description = { short, long };
+        this.fullDescription = long;
 
         /** @type {Date} */
         const date = new Date(guild.timestamp);
@@ -66,13 +70,17 @@ class Guild extends Base {
         this.vanity = vanity;
     }
 
+    /**
+     * Returns a string containing the guild name.
+     * @returns The guild name.
+     */
     toString() {
         return this.name;
     }
 
     /**
      * Get the guild owners.
-     * @param {FetchOptions} options Fetch options.
+     * @param {FetchOptions} [options={}] Fetch options.
      * @returns {Array<User>} An array of owners.
      */
     owners(options = {}) {

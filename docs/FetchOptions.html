@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Base</title>
+    <title>JSDoc: Class: FetchOptions</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Base</h1>
+    <h1 class="page-title">Class: FetchOptions</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Base<span class="signature">(base)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>FetchOptions<span class="signature">(opts)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">The universal base for Bot/Guild/User classes.</div>
+            <div class="class-description">The fetch options when fetching for a Bot/Guild/User on the site.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="Base"><span class="type-signature"></span>new Base<span class="signature">(base)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FetchOptions"><span class="type-signature"></span>new FetchOptions<span class="signature">(opts)</span><span class="type-signature"></span></h4>
     
 
     
@@ -85,7 +85,7 @@
 
         <tr>
             
-                <td class="name"><code>base</code></td>
+                <td class="name"><code>opts</code></td>
             
 
             <td class="type">
@@ -101,7 +101,7 @@
 
             
 
-            <td class="description last">The Bot/Guild/User object fetched from the API.</td>
+            <td class="description last">The selected object.</td>
         </tr>
 
     
@@ -142,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_bases_Base.js.html">structures/bases/Base.js</a>, <a href="structures_bases_Base.js.html#line5">line 5</a>
+        <a href="structures_FetchOptions.js.html">structures/FetchOptions.js</a>, <a href="structures_FetchOptions.js.html#line5">line 5</a>
     </li></ul></dd>
     
 
@@ -190,13 +190,13 @@
 
         
             
-<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :String</span></h4>
+<h4 class="name" id="normal"><span class="type-signature"></span>normal<span class="type-signature"> :Boolean</span></h4>
 
 
 
 
 <div class="description">
-    The ID of the base object.
+    Whether or not to only return the plain object.
 </div>
 
 
@@ -205,7 +205,7 @@
     <ul>
         <li>
             
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
         </li>
@@ -244,7 +244,82 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_bases_Base.js.html">structures/bases/Base.js</a>, <a href="structures_bases_Base.js.html#line14">line 14</a>
+        <a href="structures_FetchOptions.js.html">structures/FetchOptions.js</a>, <a href="structures_FetchOptions.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="specified"><span class="type-signature"></span>specified<span class="type-signature"> :String|false</span></h4>
+
+
+
+
+<div class="description">
+    Whether or not to only get a specific value from the object.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+|
+
+<span class="param-type">false</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="structures_FetchOptions.js.html">structures/FetchOptions.js</a>, <a href="structures_FetchOptions.js.html#line15">line 15</a>
     </li></ul></dd>
     
 

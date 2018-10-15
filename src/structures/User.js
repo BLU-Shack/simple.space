@@ -1,47 +1,56 @@
-const NonGuildBase = require('./bases/NonGuildBase');
+const NonGuildBase = require('./bases/NonGuildBase.js').NonGuildBase;
 const FetchOptions = require('./FetchOptions');
-const Guild = require('./Guild');
-const Bot = require('./Bot');
+const Guild = require('./Guild.js');
+const Bot = require('./Bot.js');
 
 /**
  * Represents any user logged onto botlist.space.
+ * @class
  * @extends {NonGuildBase}
  */
 class User extends NonGuildBase {
     /**
+     * @constructor
      * @param {Object} user The default user object from the API.
-     * @property {Object} user The default user object received from fetching.
-     * @property {String} [github] The user's github link, if any.
-     * @property {String} [gitlab] The user's gitlab link, if any.
-     * @property {String} [shortDescription] The user's description, if any.
      */
     constructor(user) {
         super(user);
 
+        /**
+         * The plain user object itself.
+         * @type {Object}
+         */
         this.user = user;
 
+        /**
+         * The user's GitHub url, if any is available.
+         * @type {String|null}
+         */
         this.github = user.links.github;
 
+        /**
+         * The user's GitLab url, if any is available.
+         */
         this.gitlab = user.links.gitlab;
-
-        this.shortDescription = user.short_description;
     }
 
     /**
      * Fetches all bots that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
      * @returns {Array<Bot>} An array of bots.
+     * @example
+     * User.bots({ specified: 'username' })
+     *  .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
+     *  .catch(console.log);
      */
     bots(options = {}) {
-        console.warn('We have some technical difficulties here.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions.FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.user.bots.map(bot => bot[Options.specified]) : this.user.bots;
         } else {
-            console.log(Bot instanceof constructor);
-            const Bots = this.user.bots.map(bot => new Bot(bot));
+            const Bots = this.user.bots.map(bot => new Bot.Bot(bot));
             return Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
         }
     }
@@ -50,18 +59,22 @@ class User extends NonGuildBase {
      * Fetches all guilds that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
      * @returns {Array<Guild>} An array of guilds.
+     * @example
+     * User.guilds({ specified: 'name' })
+     *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
+     *  .catch(console.log);
      */
     guilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions.FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;
         } else {
-            const Guilds = this.user.servers.map(guild => new Guild(guild));
+            const Guilds = this.user.servers.map(guild => new Guild.Guild(guild));
             return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
         }
     }
 }
 
-module.exports = User;
+exports.User = User;

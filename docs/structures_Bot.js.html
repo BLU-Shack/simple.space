@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Bot.js</title>
+    <title>JSDoc: Source: structures/Bot.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Bot.js</h1>
+    <h1 class="page-title">Source: structures/Bot.js</h1>
 
     
 
@@ -26,49 +26,66 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const NonGuildBase = require('./bases/NonGuildBase');
+            <pre class="prettyprint source linenums"><code>const FetchOptions = require('./FetchOptions');
 const User = require('./User');
-const FetchOptions = require('./FetchOptions');
+const NonGuildBase = require('./bases/NonGuildBase').NonGuildBase;
 
 /**
  * Represents any bot that has been submitted onto botlist.space.
+ * @class
  * @extends {NonGuildBase}
  */
 class Bot extends NonGuildBase {
     /**
+     * @constructor
      * @param {Object} bot The bot object, fetched from the API.
-     * @property {Object} bot The plain bot object itself.
-     * @property {Boolean} childFriendly Whether or not the bot's avatar is NSFW.
-     * @property {Boolean} approved Whether or not the bot has been approved.
-     * @property {Boolean} featured Whether or not the bot is featured on the front page.
-     * @property {String} prefix The bot's main prefix.
-     * @property {String} library The bot's library/framework.
-     * @property {String} shortDescription The bot's short description.
-     * @property {String|null} fullDescription The bot's full description, if any.
-     * @property {Number} timestamp The timestamp in which the bot has been accepted.
-     * @property {String|null} vanity The bot's vanity, if any.
      */
     constructor(bot) {
         super(bot);
-
+        /**
+         * The plain bot object itself.
+         * @type {Object}
+         */
         this.bot = bot;
-
+        /**
+         * Whether or not the bot's avatar is child friendly.
+         * @type {Boolean}
+         */
         this.childFriendly = bot.avatarChildFriendly;
-
+        /**
+         * Whether or not the bot has been approved by the mods.
+         * @type {Boolean}
+         */
         this.approved = bot.approved;
-
+        /**
+         * Whether or not the bot is featured on the front page.
+         * @type {Boolean}
+         */
         this.featured = bot.featured;
-
+        /**
+         * The bot's default prefix.
+         * @type {String}
+         */
         this.prefix = bot.prefix;
-
+        /**
+         * The bot's library/language.
+         * @type {String}
+         */
         this.library = bot.library;
-
-        this.shortDescription = bot.short_description;
-
+        /**
+         * The bot's full description, if any is set.
+         * @type {String|null}
+         */
         this.fullDescription = bot.full_description;
-
+        /**
+         * The bot's timestamp in which it was submitted.
+         * @type {Number}
+         */
         this.timestamp = new Date(bot.timestamp).getTime();
-
+        /**
+         * The bot's vanity, if any.
+         * @type {String|null}
+         */
         this.vanity = bot.vanity;
     }
 
@@ -95,21 +112,25 @@ class Bot extends NonGuildBase {
      * Get the bot's owners, including the secondary ones.
      * @param {FetchOptions} [options={}] Fetch options.
      * @returns {Array&lt;User>} An array of the bot's owners.
+     * @example
+     * Bot.owners({ specified: 'username' })
+     *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
+     *  .catch(console.log);
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions.FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
-            const Owners = this.bot.owners.map(owner => new User(owner));
+            const Owners = this.bot.owners.map(owner => new User.User(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
     }
 }
 
-module.exports = Bot;</code></pre>
+exports.Bot = Bot;</code></pre>
         </article>
     </section>
 
@@ -119,13 +140,13 @@ module.exports = Bot;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bot.html">Bot</a></li><li><a href="Guild.html">Guild</a></li><li><a href="global.html#SpaceOptions">SpaceOptions</a></li><li><a href="User.html">User</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Bot.html">Bot</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientOptions.html">ClientOptions</a></li><li><a href="FetchOptions.html">FetchOptions</a></li><li><a href="Guild.html">Guild</a></li><li><a href="NonGuildBase.html">NonGuildBase</a></li><li><a href="User.html">User</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Oct 14 2018 08:14:20 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Oct 14 2018 17:35:42 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

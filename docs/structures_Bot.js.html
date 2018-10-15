@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>structures/Bot.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,119 +28,122 @@
 
 <div id="main">
     
+    <h1 class="page-title">structures/Bot.js</h1>
+    
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const FetchOptions = require('./FetchOptions');
+const User = require('./User');
+const NonGuildBase = require('./bases/NonGuildBase').NonGuildBase;
 
+/**
+ * Represents any bot that has been submitted onto botlist.space.
+ * @class
+ * @extends {NonGuildBase}
+ */
+class Bot extends NonGuildBase {
+    /**
+     * @constructor
+     * @param {Object} bot The plain bot object, fetched from the API.
+     */
+    constructor(bot) {
+        super(bot);
+        /**
+         * The plain bot object itself.
+         * @type {Object}
+         */
+        this.bot = bot;
+        /**
+         * Whether or not the bot's avatar is child friendly.
+         * @type {Boolean}
+         */
+        this.childFriendly = bot.avatarChildFriendly;
+        /**
+         * Whether or not the bot has been approved by the mods.
+         * @type {Boolean}
+         */
+        this.approved = bot.approved;
+        /**
+         * Whether or not the bot is featured on the front page.
+         * @type {Boolean}
+         */
+        this.featured = bot.featured;
+        /**
+         * The bot's default prefix.
+         * @type {String}
+         */
+        this.prefix = bot.prefix;
+        /**
+         * The bot's library/language.
+         * @type {String}
+         */
+        this.library = bot.library;
+        /**
+         * The bot's full description, if any is set.
+         * @type {String|null}
+         */
+        this.fullDescription = bot.full_description;
+        /**
+         * The bot's timestamp in which it was submitted.
+         * @type {Number}
+         */
+        this.timestamp = new Date(bot.timestamp).getTime();
+        /**
+         * The bot's vanity, if any.
+         * @type {String|null}
+         */
+        this.vanity = bot.vanity;
+    }
 
+    /**
+     * Get the invite link for the bot.
+     * @param {Boolean} [perms=true] Whether or not to return the invite link with set permissions.
+     * @returns {String} The invite URL for inviting the bot to your server.
+     */
+    invite(perms = true) {
+        return !perms ? this.bot.invite.replace(/&amp;permissions=[0-9]*/gi, '') : this.bot.invite;
+    }
 
+    /**
+     * Get the support server invite URL/code for the bot.
+     * @param {Boolean} [code=false] Whether or not to return only the plain code.
+     * @returns {String} The support server invite URL/code or null, if there is no link.
+     */
+    support(code = false) {
+        if (!this.bot.links.support) return null;
+        return code ? this.bot.links.support : `https://discord.gg/${this.bot.links.support}`;
+    }
 
+    /**
+     * Get the bot's owners, including the secondary ones.
+     * @param {FetchOptions} [options={}] Fetch options.
+     * @returns {Array&lt;User>} An array of the bot's owners.
+     * @example
+     * Bot.owners({ specified: 'username' })
+     *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
+     *  .catch(console.log);
+     */
+    owners(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions.FetchOptions(options);
 
+        if (Options.normal) {
+            return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
+        } else {
+            const Owners = this.bot.owners.map(owner => new User.User(owner));
+            return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+        }
+    }
+}
 
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>botlist.space - Alternate Package</h1><p><a href="https://nodei.co/npm/simple.space/"><img src="https://nodei.co/npm/simple.space.png" alt="NPM"></a></p>
-<p>A simplified alternative package to <a href="https://www.npmjs.com/package/botlist.space">the official</a>. :)</p>
-<p>To install, use <code>npm i simple.space</code>; But you already know that, right?</p>
-<h2>What sets the difference than the original?</h2><ul>
-<li>Servers are named &quot;Guilds&quot;</li>
-<li>Functions are typically easier to remember.</li>
-</ul>
-<h2>Examples</h2><p>Wait, before we get in, let me explain things.</p>
-<ul>
-<li>The <code>value = example</code> part is the default value if not supplied. If there is none, either it's required, or it doesn't supply a default value since it's not needed.</li>
-<li>The function formats are as follows:<pre class="prettyprint source lang-js"><code>// Small description of what thing does
-// For each value: valueExample (TypeOfValue) => Description of how value affects function.
-// EXAMPLE: token (String) => This value requires a String-type value to be passed in.
-// Sometimes, there is a ? before the Type, which means Optional.</code></pre></li>
-</ul>
-<pre class="prettyprint source lang-js"><code>// First, you have to initialize the package. Obviously.
-const SimpleSpace = require('simple.space');
-
-// options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log FETCH actions.
-const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
-
-// Fetches the site statistics.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchStats(?options);
-Example.fetchStats(); // Example varies
-Example.fetchStats({ specified: 'total' }); // Example varies.
-
-// Post your guild count onto the site.
-// guildSize (?Number) => The number OR array (for shards) provided. If you provide a client object on initialization, this is not needed. Providing a value overrides the autofill.
-Example.setGuilds(?guildSize);
-Example.setGuilds(10); // A message, code, and whether or not it succeeded.
-
-// Fetch a bot from the site.
-// botID (String) => The bot ID to fetch from the site.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchBot(botID, ?options);
-Example.fetchBot('463803888072523797'); // Example too large to show.
-Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
-
-// Fetches the bot by using the ID supplied during initialization.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchSelf(?options);
-Example.fetchSelf(); // Example varies
-Example.fetchSelf({ specified: 'username' }); // Example varies
-
-// Fetches a server in the database.
-// guildID (String) => The server ID to fetch.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchGuild(guildID, ?options);
-Example.fetchGuild('467868565073035284');
-Example.fetchGuild('467868565073035284', { specified: 'username' });
-
-// Fetch every bot that had been logged onto the site.
-// kind (String) => To get either &quot;bots&quot; or &quot;guilds&quot;
-// options (?FetchOptions) Fetch Options.
-Example.fetchAll(kind, ?options);
-Example.fetchAll('guilds'); // Example too large to show.
-Example.fetchAll('bots', 'prefix'); // ['!', '.', '$', ...a lot more];
-
-// Fetch a user that has logged onto the site.
-// userID (String) => The user ID to fetch.
-// options (?FetchOptions) Fetch Options.
-Example.fetchUser(userID, ?options);
-Example.fetchUser('235593018332282884'); // Example too large to show
-Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED
-
-// Fetch a bot's upvotes in the past 24 hours.
-// botID (String) => The bot ID to fetch upvotes from.
-// ids (?Boolean) => Whether or not to return user IDs in place of the user objects.
-Example.fetchUpvotes(botID, ?ids = false);
-Example.fetchUpvotes('463803888072523797'); // Example varies
-Example.fetchUpvotes('463803888072523797', true); // Example varies
-
-// Fetch a bot's upvotes using the bot ID supplied on initialization.
-// ids (?Boolean) => Whether or not to return user IDs in place of the user objects.
-Example.fetchUpvotesSelf(?ids = false);
-Example.fetchUpvotesSelf(); // Example varies
-Example.fetchUpvotesSelf(true); // Example varies
-
-// Edit a key-value pair in the instance.
-// options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log POST actions.
-Example.edit(options);
-Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };</code></pre><h2>Update Notes</h2><h3>UPDATE!</h3><p>Check <a href="https://github.com/iREDMe/simple.space/releases">here</a> for releases; Check <a href="https://github.com/iREDMe/simple.space/projects">here</a> for Projects and to know what's coming next.</p>
-<p>If you want to get notified for whenever a release is up, join my <a href="https://discord.gg/eB3gK72">main server</a>!</p></article>
+exports.Bot = Bot;</code></pre>
+        </article>
     </section>
-
-
 
 
 

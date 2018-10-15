@@ -10,7 +10,7 @@ const User = require('./User');
 class Guild extends Base {
     /**
      * @constructor
-     * @param {Object} guild The guild object, fetched from the API.
+     * @param {Object} guild The plain guild object, fetched from the API.
      */
     constructor(guild) {
         super(guild);

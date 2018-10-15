@@ -1,7 +1,7 @@
 .eslintrc.json
 node_modules
 package-lock.json
-examples/
+examples-private/
 filekey
 filekey.pub
 docs/

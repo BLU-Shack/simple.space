@@ -1,12 +1,11 @@
 /* eslint-disable */
-const Package = require('../src/source.js');
-const Client = new Package({ token: 'xxx', botID: '463803888072523797', client: 'none', log: false });
+const Package = require('../src/index.js');
+const Options = { token: 'TOKEN_HERE', botID: 'Bot_ID', client: 'none', log: false };
+const Client = new Package(Options);
 
 /*
 Edit the function as needed.
-If you want to log the output, use ".then(console.log)".
-Use ``npm run test`` at the command line when you are ready.
-
-Removing the ; at the end gives me pain.
+If you want to log the output, change the "log" value of Options to true
+Use ``npm run test`` at the command line when you are ready to test the commands.
 */
-Client.exampleFunction()
+Client.example();

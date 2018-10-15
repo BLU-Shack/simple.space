@@ -1,14 +1,17 @@
 {
   "name": "simple.space",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Simplified alternative for botlist.space API",
-  "main": "src/source.js",
+  "main": "src/index.js",
   "dependencies": {
-    "snekfetch": "^4.0.4"
+    "snekfetch": "^4.0.4",
+    "toast-jsdoc": "^1.0.2"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node examples/test.js"
+    "test": "node examples/test.js",
+    "dev": "node examples-private/test.js",
+    "docs": "jsdoc src/ -R README.md -c .jsdoc.json -d docs/"
   },
   "keywords": [
     "botlist.space",

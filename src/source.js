@@ -1,22 +1,23 @@
 const snekfetch = require('snekfetch');
-const Classes = require('./classes/Classes');
 const util = require('util'); // eslint-disable-line no-unused-vars
 const apiLink = 'https://botlist.space/api';
-
-const SpaceOptions = Classes.SpaceOptions;
-const Bot = Classes.Bot;
-const Guild = Classes.Guild;
-const User = Classes.User;
-const FetchOptions = Classes.FetchOptions;
+const ClientOptions = require('./structures/ClientOptions.js').ClientOptions;
+const Bot = require('./structures/Bot.js').Bot;
+const Guild = require('./structures/Guild.js').Guild;
+const User = require('./structures/User.js').User;
+const FetchOptions = require('./structures/FetchOptions').FetchOptions;
 
 /**
- * Main initialization class for interacting to botlist.space
+ * Main client class for interacting to botlist.space
+ * @class
+ * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
  */
-class BLSpaceAPI {
+class Client {
     /**
-     * @param {SpaceOptions} [options=SpaceOptions.default] The configuration options.
+     * @constructor
+     * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
      */
-    constructor(options = SpaceOptions.default) {
+    constructor(options = ClientOptions.default) {
         if ((options) !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
 
         if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
@@ -25,7 +26,7 @@ class BLSpaceAPI {
 
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
 
-        this.options = new SpaceOptions(options, SpaceOptions.default);
+        this.options = new ClientOptions(options, ClientOptions.default);
     }
     /**
      * @param {Number|Array<Number>} [guildSize] Post your guild count/array of numbers to the site. If a client is supplied during initialization, this is unnecessary, unless you are sharding. Supplying a value overrides the autofill.
@@ -200,11 +201,13 @@ class BLSpaceAPI {
 
     }
     /**
-     * Edit a key-value pair in the instance.
-     * @param {SpaceOptions} [options=SpaceOptions.default] A thing.
+     * Edit at least one or more key-value pair in the instance.
+     * @param {ClientOptions} [options=ClientOptions.default] A thing.
      * @returns {this} Returns itself for edit chains.
+     * @example
+     * console.log(Client.edit({ log: false }).options);
      */
-    edit(options = SpaceOptions.default) {
+    edit(options = ClientOptions.default) {
         if (!options) throw new ReferenceError('options must be defined.');
 
         if ((options) !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -215,7 +218,7 @@ class BLSpaceAPI {
 
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
 
-        this.options = new SpaceOptions(options, this.options);
+        this.options = new ClientOptions(options, this.options);
 
         return this;
     }
@@ -250,7 +253,7 @@ class BLSpaceAPI {
  * @type {String}
  * @static
  */
-BLSpaceAPI.link = apiLink;
+Client.link = apiLink;
 
 /**
  * The Classes object for creating things.
@@ -258,6 +261,6 @@ BLSpaceAPI.link = apiLink;
  * @static
  * @private
  */
-BLSpaceAPI.Classes = Classes;
+Client.Classes = { Bot: Bot, User: User, Guild: Guild, FetchOptions: FetchOptions, ClientOptions: ClientOptions };
 
-module.exports = BLSpaceAPI;
+module.exports = Client;

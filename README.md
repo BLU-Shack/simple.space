@@ -29,7 +29,7 @@ Wait, before we get in, let me explain things.
 const SimpleSpace = require('simple.space');
 
 // options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token for specified actions.
+// options.token (?String) => The API token, required for some actions.
 // options.botID (?String) => The bot ID for self functions.
 // options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
 // options.log (?Boolean) => Whether or not to log POST actions.
@@ -48,37 +48,37 @@ Example.setGuilds(10); // A message, code, and whether or not it succeeded.
 
 // Fetch a bot from the site.
 // botID (String) => The bot ID to fetch from the site.
-// options (?FetchOptions) => Options when fetching.
+// options (?FetchOptions) => Fetch Options.
 Example.fetchBot(botID, ?options);
 Example.fetchBot('463803888072523797'); // Example too large to show.
 Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
 
 // Fetches the bot by using the ID supplied during initialization.
-// specified (?String) => The specific value to receive.
-Example.fetchSelf(?specified);
+// options (?FetchOptions) => Fetch Options.
+Example.fetchSelf(?options);
 Example.fetchSelf(); // Example varies
-Example.fetchSelf('username'); // Example varies
+Example.fetchSelf({ specified: 'username' }); // Example varies
 
 // Fetches a server in the database.
 // guildID (String) => The server ID to fetch.
-// options (?FetchOptions) => Options when fetching.
+// options (?FetchOptions) => Fetch Options.
 Example.fetchGuild(guildID, ?options);
 Example.fetchGuild('467868565073035284');
 Example.fetchGuild('467868565073035284', { specified: 'username' });
 
 // Fetch every bot that had been logged onto the site.
 // kind (String) => To get either "bots" or "guilds"
-// specified (?String) The specific value to receive.
-Example.fetchAll(kind, ?specified);
+// options (?FetchOptions) Fetch Options.
+Example.fetchAll(kind, ?options);
 Example.fetchAll('guilds'); // Example too large to show.
 Example.fetchAll('bots', 'prefix'); // ['!', '.', '$', ...a lot more];
 
 // Fetch a user that has logged onto the site.
 // userID (String) => The user ID to fetch.
-// specified (?String) => The specific value to receive.
-Example.fetchUser(userID, ?specified);
+// options (?FetchOptions) Fetch Options.
+Example.fetchUser(userID, ?options);
 Example.fetchUser('235593018332282884'); // Example too large to show
-Example.fetchUser('235593018332282884', 'username'); // iRED
+Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED
 
 // Fetch a bot's upvotes in the past 24 hours.
 // botID (String) => The bot ID to fetch upvotes from.
@@ -95,7 +95,7 @@ Example.fetchUpvotesSelf(true); // Example varies
 
 // Edit a key-value pair in the instance.
 // options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token for specified actions.
+// options.token (?String) => The API token, required for some actions.
 // options.botID (?String) => The bot ID for self functions.
 // options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
 // options.log (?Boolean) => Whether or not to log POST actions.

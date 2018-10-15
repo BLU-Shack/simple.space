@@ -1,46 +1,63 @@
-const NonGuildBase = require('./bases/NonGuildBase');
-const User = require('./User');
 const FetchOptions = require('./FetchOptions');
+const User = require('./User');
+const NonGuildBase = require('./bases/NonGuildBase').NonGuildBase;
 
 /**
  * Represents any bot that has been submitted onto botlist.space.
+ * @class
  * @extends {NonGuildBase}
  */
 class Bot extends NonGuildBase {
     /**
+     * @constructor
      * @param {Object} bot The bot object, fetched from the API.
-     * @property {Object} bot The plain bot object itself.
-     * @property {Boolean} childFriendly Whether or not the bot's avatar is NSFW.
-     * @property {Boolean} approved Whether or not the bot has been approved.
-     * @property {Boolean} featured Whether or not the bot is featured on the front page.
-     * @property {String} prefix The bot's main prefix.
-     * @property {String} library The bot's library/framework.
-     * @property {String} shortDescription The bot's short description.
-     * @property {String|null} fullDescription The bot's full description, if any.
-     * @property {Number} timestamp The timestamp in which the bot has been accepted.
-     * @property {String|null} vanity The bot's vanity, if any.
      */
     constructor(bot) {
         super(bot);
-
+        /**
+         * The plain bot object itself.
+         * @type {Object}
+         */
         this.bot = bot;
-
+        /**
+         * Whether or not the bot's avatar is child friendly.
+         * @type {Boolean}
+         */
         this.childFriendly = bot.avatarChildFriendly;
-
+        /**
+         * Whether or not the bot has been approved by the mods.
+         * @type {Boolean}
+         */
         this.approved = bot.approved;
-
+        /**
+         * Whether or not the bot is featured on the front page.
+         * @type {Boolean}
+         */
         this.featured = bot.featured;
-
+        /**
+         * The bot's default prefix.
+         * @type {String}
+         */
         this.prefix = bot.prefix;
-
+        /**
+         * The bot's library/language.
+         * @type {String}
+         */
         this.library = bot.library;
-
-        this.shortDescription = bot.short_description;
-
+        /**
+         * The bot's full description, if any is set.
+         * @type {String|null}
+         */
         this.fullDescription = bot.full_description;
-
+        /**
+         * The bot's timestamp in which it was submitted.
+         * @type {Number}
+         */
         this.timestamp = new Date(bot.timestamp).getTime();
-
+        /**
+         * The bot's vanity, if any.
+         * @type {String|null}
+         */
         this.vanity = bot.vanity;
     }
 
@@ -67,18 +84,22 @@ class Bot extends NonGuildBase {
      * Get the bot's owners, including the secondary ones.
      * @param {FetchOptions} [options={}] Fetch options.
      * @returns {Array<User>} An array of the bot's owners.
+     * @example
+     * Bot.owners({ specified: 'username' })
+     *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
+     *  .catch(console.log);
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions.FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
-            const Owners = this.bot.owners.map(owner => new User(owner));
+            const Owners = this.bot.owners.map(owner => new User.User(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
     }
 }
 
-module.exports = Bot;
+exports.Bot = Bot;

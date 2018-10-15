@@ -32,14 +32,14 @@ const SimpleSpace = require('simple.space');
 // options.token (?String) => The API token, required for some actions.
 // options.botID (?String) => The bot ID for self functions.
 // options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log POST actions.
+// options.log (?Boolean) => Whether or not to log FETCH actions.
 const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
 
 // Fetches the site statistics.
-// specified (?String) => The specific value to receive.
-Example.fetchStats(?specified);
+// options (?FetchOptions) => Fetch Options.
+Example.fetchStats(?options);
 Example.fetchStats(); // Example varies
-Example.fetchStats('users'); // Example varies
+Example.fetchStats({ specified: 'total' }); // Example varies.
 
 // Post your guild count onto the site.
 // guildSize (?Number) => The number OR array (for shards) provided. If you provide a client object on initialization, this is not needed. Providing a value overrides the autofill.
@@ -103,36 +103,10 @@ Example.edit(options);
 Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 ```
 
-## Update Notes Section
+## Update Notes
 
-### v2 Section
+### UPDATE!
 
-#### v2.1.0.
+Check [here](https://github.com/iREDMe/simple.space/releases) for releases; Check [here](https://github.com/iREDMe/simple.space/projects) for Projects and to know what's coming next.
 
-[Here](https://github.com/iREDMe/simple.space/releases/tag/v2.1.0)
-
-#### v2.0.0
-~~Releases will now be on the github page/releases! You can get notified by joining [my main server](https://discord.gg/eB3gK72)!~~ No: [here](https://github.com/iREDMe/simple.space/releases/tag/v2.0.0)
-
-### v1 Section
-#### v1.0.6
-* Introduced three new functions (read them in the examples):
-	1. ``fetchUser(userID, ?specified);``
-	2. ``fetchUpvotes(botID, ?ids);``
-	3. ``fetchUpvotesSelf(?ids);``
-* Updated some functions.
-
-__Minor Update Notes__
-* Changed the license to MIT.
-* Updated the examples and an explanation as to how the comments work.
-
-#### v1.0.4
-* Fixed the fetchBot() function.
-
-#### v1.0.3
-* Updated values, specifically ``token`` and ``botID`` if you supply ``'none'``; It will turn into false.
-
-#### v1.0.1
-* First things. Lol.
-* Thing here.
-* Thing there.
+If you want to get notified for whenever a release is up, join my [main server](https://discord.gg/eB3gK72)!

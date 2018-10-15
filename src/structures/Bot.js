@@ -10,7 +10,7 @@ const NonGuildBase = require('./bases/NonGuildBase').NonGuildBase;
 class Bot extends NonGuildBase {
     /**
      * @constructor
-     * @param {Object} bot The bot object, fetched from the API.
+     * @param {Object} bot The plain bot object, fetched from the API.
      */
     constructor(bot) {
         super(bot);

@@ -11,7 +11,7 @@ const Bot = require('./Bot.js');
 class User extends NonGuildBase {
     /**
      * @constructor
-     * @param {Object} user The default user object from the API.
+     * @param {Object} user The plain user object from the API.
      */
     constructor(user) {
         super(user);

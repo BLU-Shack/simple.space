@@ -5,8 +5,8 @@
 class ClientOptions {
     /**
      * @constructor
-     * @param {Object} newObj
-     * @param {Object} oldObj
+     * @param {Object} newObj The new client options.
+     * @param {Object} oldObj The preset or default client options.
      */
     constructor(newObj, oldObj) {
         /**
@@ -25,7 +25,7 @@ class ClientOptions {
          */
         this.botID = newObj.hasOwnProperty('botID') ? newObj.botID !== 'none' ? newObj.botID : false : oldObj.botID;
         /**
-         * Whether or not to log POST actions.
+         * Whether or not to log FETCH actions.
          * @type {Boolean}
          */
         this.log = newObj.hasOwnProperty('log') ? newObj.log !== 'none' ? newObj.log : false : oldObj.log;
@@ -34,10 +34,10 @@ class ClientOptions {
 
 /**
  * The default client options.
- * @property {String} token
- * @property {String} botID
- * @property {Object} client
- * @property {Boolean} log
+ * @property {String} token The API token, required for some actions.
+ * @property {String} botID The Bot ID, needed for "self" actions and to set guild count.
+ * @property {Object} client The discord.js#Client object.
+ * @property {Boolean} log Whether or not to log FETCH actions.
  * @static
  */
 ClientOptions.default = { token: 'none', botID: 'none', client: 'none', log: false };

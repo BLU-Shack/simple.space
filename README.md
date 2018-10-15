@@ -1,5 +1,7 @@
 # botlist.space - Alternate Package
 
+[DOCUMENTATION](https://iredme.github.io/simple.space/)
+
 [![NPM](https://nodei.co/npm/simple.space.png)](https://nodei.co/npm/simple.space/)
 
 A simplified alternative package to [the official](https://www.npmjs.com/package/botlist.space). :)

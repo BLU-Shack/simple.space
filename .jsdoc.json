@@ -1,5 +1,6 @@
 {
     "opts": {
-        "template": "node_modules/toast-jsdoc"
+        "template": "node_modules/toast-jsdoc",
+        "recursive": true
     }
 }

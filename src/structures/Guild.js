@@ -23,7 +23,7 @@ class Guild extends Base {
          * Whether or not the guild is featured on the front page.
          * @type {Boolean}
          */
-        this.featured = guild.featured;
+        this.isFeatured = guild.featured;
 
         /**
          * The guild's icon URL.
@@ -35,7 +35,7 @@ class Guild extends Base {
          * Whether or not the guild's icon is child friendly.
          * @type {Boolean}
          */
-        this.childFriendly = guild.iconChildFriendly;
+        this.isChildFriendly = guild.iconChildFriendly;
 
         /**
          * How many members are in the Guild (estimate.)
@@ -53,13 +53,13 @@ class Guild extends Base {
          * Whether or not the guild is public to everyone.
          * @type {Boolean}
          */
-        this.public = guild.public;
+        this.isPublic = guild.public;
 
         /**
          * Whether or not the guild is Premium.
          * @type {Boolean}
          */
-        this.premium = guild.premium;
+        this.isPremium = guild.premium;
 
         /**
          * The guild's short description.
@@ -97,7 +97,7 @@ class Guild extends Base {
     /**
      * Get the guild's owners.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<User>} An array of the guild's owners.
+     * @returns {Array<User.User>} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
      *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))

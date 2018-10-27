@@ -16,7 +16,7 @@ class Stats {
 
         /**
          * All bot information.
-         * @type {Object}
+         * @returns {Object}
          * @property {Number} total The total number of bots that have been submitted to the site.
          * @property {Number} approved The total number of approved bots.
          * @property {Number} unapproved The total number of unapproved bots.
@@ -38,24 +38,14 @@ class Stats {
          * @type {Number}
          */
         this.users = stats.users;
+    }
 
-        /**
-         * The total number of bots.
-         * @type {Number}
-         */
-        this.total = this.bots.total;
-
-        /**
-         * The total number of approved bots.
-         * @type {Number}
-         */
-        this.totalApproved = this.bots.approved;
-
-        /**
-         * The total number of unapproved bots.
-         * @type {Number}
-         */
-        this.totalUnapproved = this.bots.unapproved;
+    /**
+     * Fetch the total number of bots, servers, and users on the site.
+     * @type {Number}
+     */
+    get total() {
+        return this.bots.total + this.servers + this.users;
     }
 }
 

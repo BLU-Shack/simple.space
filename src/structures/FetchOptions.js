@@ -5,7 +5,7 @@
 class FetchOptions {
     /**
      * @constructor
-     * @param {Object} opts The selected object.
+     * @param {FetchOptions} opts The selected object.
      */
     constructor(opts) {
         /**

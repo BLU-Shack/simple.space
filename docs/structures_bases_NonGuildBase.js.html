@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>structures/bases/NonGuildBase.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,128 +28,66 @@
 
 <div id="main">
     
+    <h1 class="page-title">structures/bases/NonGuildBase.js</h1>
+    
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Base = require('./Base').Base;
 
+/**
+ * Represents any Non-Guild object.
+ * @class
+ * @extends {Base}
+ */
+class NonGuildBase extends Base {
+    /**
+     * @param {Object} base Any Non-Guild object fetched from the API.
+     */
+    constructor(base) {
+        super(base);
+        /**
+         * The Non-Guild's avatar URL.
+         * @type {String}
+         */
+        this.avatar = base.avatar;
+        /**
+         * The Non-Guild's discriminator.
+         * @type {String}
+         */
+        this.discriminator = base.discriminator;
+        /**
+         * The Non-Guild's username.
+         * @type {String}
+         */
+        this.username = base.username;
+        /**
+         * The Non-Guild's tag.
+         * @type {String}
+         */
+        this.tag = `${this.username}#${this.discriminator}`;
+        /**
+         * The Non-Guild's short description.
+         * @type {String}
+         */
+        this.shortDescription = base.short_description;
+    }
+    /**
+     * Returns a string containing the Non-Guild's mention.
+     * @returns {String} The Non-Guild mention.
+     */
+    toString() {
+        return `&lt;@${this.id}>`;
+    }
+}
 
-
-
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><div style='text-align: center'>
-    <p>
-        <img src='https://i.imgur.com/j5gEcTf.png' width=500 height=150>
-    </p>
-    <p>
-        <a href='https://www.npmjs.com/package/simple.space'><img src='https://nodei.co/npm/simple.space.png'>
-    </p>
-</div>
-
-<h1>botlist.space - Alternative Wrapper</h1><p>A simplified alternative package to <a href="https://www.npmjs.com/package/botlist.space">the official</a>. :)</p>
-<p>To install, use <code>npm i simple.space</code>; But you already know that, right?</p>
-<h2>What sets the difference than the original?</h2><ul>
-<li>Servers are named &quot;Guilds&quot;</li>
-<li>Functions are typically easier to remember.</li>
-</ul>
-<h2>Examples</h2><p>Wait, before we get in, let me explain things.</p>
-<ul>
-<li>The <code>value = example</code> part is the default value if not supplied. If there is none, either it's required, or it doesn't supply a default value since it's not needed.</li>
-<li>The function formats are as follows:<pre class="prettyprint source lang-js"><code>// Small description of what thing does
-// For each value: valueExample (TypeOfValue) => Description of how value affects function.
-// EXAMPLE: token (String) => This value requires a String-type value to be passed in.
-// Sometimes, there is a ? before the Type, which means Optional.</code></pre></li>
-</ul>
-<pre class="prettyprint source lang-js"><code>// First, you have to initialize the package. Obviously.
-const SimpleSpace = require('simple.space');
-
-// options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log FETCH actions.
-const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
-
-// Fetches the site statistics.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchStats(?options);
-Example.fetchStats(); // Example varies
-Example.fetchStats({ specified: 'total' }); // Example varies.
-
-// Post your guild count onto the site.
-// guildSize (?Number) => The number OR array (for shards) provided. If you provide a client object on initialization, this is not needed. Providing a value overrides the autofill.
-Example.setGuilds(?guildSize);
-Example.setGuilds(10); // A message, code, and whether or not it succeeded.
-
-// Fetch a bot from the site.
-// botID (String) => The bot ID to fetch from the site.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchBot(botID, ?options);
-Example.fetchBot('463803888072523797'); // Example too large to show.
-Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
-
-// Fetches the bot by using the ID supplied during initialization.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchSelf(?options);
-Example.fetchSelf(); // Example varies
-Example.fetchSelf({ specified: 'username' }); // Example varies
-
-// Fetches a server in the database.
-// guildID (String) => The server ID to fetch.
-// options (?FetchOptions) => Fetch Options.
-Example.fetchGuild(guildID, ?options);
-Example.fetchGuild('467868565073035284');
-Example.fetchGuild('467868565073035284', { specified: 'username' });
-
-// Fetch every bot that had been logged onto the site.
-// kind (String) => To get either &quot;bots&quot; or &quot;guilds&quot;
-// options (?FetchOptions) Fetch Options.
-Example.fetchAll(kind, ?options);
-Example.fetchAll('guilds'); // Example too large to show.
-Example.fetchAll('bots', 'prefix'); // ['!', '.', '$', ...a lot more];
-
-// Fetch a user that has logged onto the site.
-// userID (String) => The user ID to fetch.
-// options (?FetchOptions) Fetch Options.
-Example.fetchUser(userID, ?options);
-Example.fetchUser('235593018332282884'); // Example too large to show
-Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED
-
-// Fetch a bot's upvotes in the past 24 hours.
-// botID (String) => The bot ID to fetch upvotes from.
-// ids (?Boolean) => Whether or not to return user IDs in place of the user objects.
-Example.fetchUpvotes(botID, ?ids = false);
-Example.fetchUpvotes('463803888072523797'); // Example varies
-Example.fetchUpvotes('463803888072523797', true); // Example varies
-
-// Fetch a bot's upvotes using the bot ID supplied on initialization.
-// ids (?Boolean) => Whether or not to return user IDs in place of the user objects.
-Example.fetchUpvotesSelf(?ids = false);
-Example.fetchUpvotesSelf(); // Example varies
-Example.fetchUpvotesSelf(true); // Example varies
-
-// Edit a key-value pair in the instance.
-// options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log POST actions.
-Example.edit(options);
-Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };</code></pre><h2>Documentation</h2><p>https://iredme.github.io/simple.space/</p>
-<h2>Update Notes</h2><h3>UPDATE!</h3><p>Check <a href="https://github.com/iREDMe/simple.space/releases">here</a> for releases; Check <a href="https://github.com/iREDMe/simple.space/projects">here</a> for Projects and to know what's coming next.</p>
-<p>If you want to get notified for whenever a release is up, join my <a href="https://discord.gg/eB3gK72">main server</a>!</p></article>
+exports.NonGuildBase = NonGuildBase;</code></pre>
+        </article>
     </section>
-
-
 
 
 

@@ -1,5 +1,5 @@
 const NonGuildBase = require('./bases/NonGuildBase.js').NonGuildBase;
-const FetchOptions = require('./FetchOptions');
+const FetchOptions = require('./FetchOptions').FetchOptions;
 const Guild = require('./Guild.js');
 const Bot = require('./Bot.js');
 
@@ -23,13 +23,14 @@ class User extends NonGuildBase {
         this.user = user;
 
         /**
-         * The user's GitHub url, if any is available.
+         * The user's GitHub username, if any is available.
          * @type {String|null}
          */
         this.github = user.links.github;
 
         /**
-         * The user's GitLab url, if any is available.
+         * The user's GitLab username, if any is available.
+         * @type {String|null}
          */
         this.gitlab = user.links.gitlab;
     }
@@ -37,7 +38,7 @@ class User extends NonGuildBase {
     /**
      * Fetches all bots that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Bot>} An array of bots.
+     * @returns {Array<Bot.Bot>} An array of bots.
      * @example
      * User.bots({ specified: 'username' })
      *  .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
@@ -45,7 +46,7 @@ class User extends NonGuildBase {
      */
     bots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions.FetchOptions(options);
+        const Options = new FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.user.bots.map(bot => bot[Options.specified]) : this.user.bots;
@@ -58,7 +59,7 @@ class User extends NonGuildBase {
     /**
      * Fetches all guilds that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Guild>} An array of guilds.
+     * @returns {Array<Guild.Guild>} An array of guilds.
      * @example
      * User.guilds({ specified: 'name' })
      *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
@@ -66,7 +67,7 @@ class User extends NonGuildBase {
      */
     guilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions.FetchOptions(options);
+        const Options = new FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;

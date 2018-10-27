@@ -1,8 +1,13 @@
-# botlist.space - Alternate Package
+<div style='text-align: center'>
+    <p>
+        <img src='https://i.imgur.com/j5gEcTf.png' width=500 height=150>
+    </p>
+    <p>
+        <a href='https://www.npmjs.com/package/simple.space'><img src='https://nodei.co/npm/simple.space.png'>
+    </p>
+</div>
 
-[DOCUMENTATION](https://iredme.github.io/simple.space/)
-
-[![NPM](https://nodei.co/npm/simple.space.png)](https://nodei.co/npm/simple.space/)
+# botlist.space - Alternative Wrapper
 
 A simplified alternative package to [the official](https://www.npmjs.com/package/botlist.space). :)
 
@@ -104,6 +109,10 @@ Example.fetchUpvotesSelf(true); // Example varies
 Example.edit(options);
 Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 ```
+
+## Documentation
+
+https://iredme.github.io/simple.space/
 
 ## Update Notes
 

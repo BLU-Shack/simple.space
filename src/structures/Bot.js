@@ -76,7 +76,7 @@ class Bot extends NonGuildBase {
         this.serverCount = bot.server_count;
 
         /**
-         * The bot's shards array, if passed.
+         * The bot's array of guild count per shard, if passed.
          * @type {Array<Number>|null}
          */
         this.shards = bot.shards || null;

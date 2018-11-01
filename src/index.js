@@ -1,14 +1,16 @@
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
-const endpoint = 'https://botlist.space/api';
 const ClientOptions = require('./structures/ClientOptions.js').ClientOptions;
 const Bot = require('./structures/Bot.js').Bot;
 const Guild = require('./structures/Guild.js').Guild;
 const User = require('./structures/User.js').User;
+const FetchError = require('./structures/FetchError.js').FetchError;
 const FetchOptions = require('./structures/FetchOptions').FetchOptions;
 const Stats = require('./structures/Stats').Stats;
 const PostOptions = require('./structures/PostOptions').PostOptions;
 const UpvoteFetchOptions = require('./structures/UpvoteFetchOptions.js').UpvoteFetchOptions;
+
+const endpoint = 'https://botlist.space/api';
 
 /**
  * Main client class for interacting to botlist.space
@@ -34,15 +36,10 @@ class Client {
      */
     edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
-
         if ((options) !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-
         if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
-
         if (options.botID && typeof options.botID !== 'string') throw new TypeError('botID must be a string.');
-
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
-
         this.options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
 
         return this;
@@ -59,8 +56,8 @@ class Client {
         if (typeof options !== 'number' && (options !== Object(options) || options instanceof Array)) throw new TypeError('options must be an object.');
         const Options = new PostOptions(typeof options === 'number' ? { guildSize: options } : options, this.options);
         if (typeof options === 'number') process.emitWarning(`Client#setGuilds() => Pass { guildSize: ${options} }`);
-        if (!Options.token || Options.token === 'none') throw new ReferenceError('options.token must be defined.');
-        if (!Options.botID || Options.botID === 'none') throw new ReferenceError('options.botID must be defined.');
+        if (!Options.token) throw new ReferenceError('options.token must be defined.');
+        if (!Options.botID) throw new ReferenceError('options.botID must be defined.');
         if (typeof Options.token !== 'string') throw new TypeError('options.token must be a string.');
         if (typeof Options.botID !== 'string') throw new TypeError('options.botID must be a string.');
         return new Promise((resolve, reject) => {
@@ -68,6 +65,7 @@ class Client {
             Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json' }, body: JSON.stringify(size) })
                 .then(async resolved => {
                     const body = await resolved.json();
+                    if (body.code) throw new FetchError(body, 'Guild');
                     resolve(body);
                 })
                 .catch(reject);
@@ -91,13 +89,14 @@ class Client {
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${botID}`)
                 .then(async bot => {
-                    const Body = await bot.json();
+                    const body = await bot.json();
+                    if (body.code) throw new FetchError(body, 'Bot');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? Body[Options.specified] : Body);
-                        resolve(Options.specified ? Body[Options.specified] : Body);
+                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
+                        resolve(Options.specified ? body[Options.specified] : body);
                     } else {
-                        const SpaceBot = new Bot(Body);
+                        const SpaceBot = new Bot(body);
                         if (this.options.log) console.log(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
                         resolve(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
                     }
@@ -112,11 +111,7 @@ class Client {
      * @returns {Promise<Bot>} Returns the bot contents/specified item.
      */
     fetchSelf(options = {}) {
-        return new Promise((resolve, reject) => {
-            this.fetchBot(this.options.botID, options)
-                .then(resolve)
-                .catch(reject);
-        });
+        return this.fetchBot(this.options.botID, options);
     }
 
     /**
@@ -132,14 +127,15 @@ class Client {
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}`)
                 .then(async guild => {
-                    const Body = await guild.json();
+                    const body = await guild.json();
+                    if (body.code) throw new FetchError(body, 'Guild');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? Body[Options.specified] : Body);
-                        resolve(Options.specified ? Body[Options.specified] : Body);
+                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
+                        resolve(Options.specified ? body[Options.specified] : body);
                     } else {
-                        const SpaceGuild = new Guild(Body);
-                        if (this.options.log) console.log(Options.specified ? Body[Options.specified] : Body);
+                        const SpaceGuild = new Guild(body);
+                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
                         resolve(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
                     }
                 })
@@ -157,6 +153,7 @@ class Client {
             Fetch(`${endpoint}/stats`)
                 .then(async stats => {
                     const body = await stats.json();
+                    if (body.code) throw new FetchError(body, 'Stats');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
@@ -185,6 +182,7 @@ class Client {
             Fetch(`${endpoint}/users/${userID}`)
                 .then(async user => {
                     const body = await user.json();
+                    if (body.code) throw new FetchError(body, 'User');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
@@ -200,23 +198,23 @@ class Client {
     }
 
     /**
-     * Fetch a bot's upvotes from the past 24 hours.
-     * @param {String} botID The bot ID to fetch upvotes from.
+     * Fetch used in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Whether or not to output an array of user IDs instead of user objects.
      * @returns {Promise<Array<User|String>>} The array of the user objects/user IDs.
      * @example
-     * Client.fetchUpvotes('499383675155120139', { specified: '' })
+     * Client.fetchUpvotes({ ids: true });
      */
-    fetchUpvotes(botID, options = {}) {
+    fetchUpvotes(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        if (!this.options.token || this.options.token === 'none') throw new ReferenceError('A token must have been supplied during initialization.');
-        if (!botID) throw new ReferenceError('botID must be supplied.');
-        if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
         const Options = new UpvoteFetchOptions(options);
+        if (!Options.token && !this.options.token) throw new ReferenceError('A token must have been supplied during initialization, or in the UpvoteFetchOptions (etc. { token: \'token here\', ... })');
+        if (!this.options.botID) throw new ReferenceError('options.botID must be supplied.');
+        if (typeof this.options.botID !== 'string') throw new TypeError('options.botID must be a string.');
         return new Promise((resolve, reject) => {
-            Fetch(`${endpoint}/bots/${botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
+            Fetch(`${endpoint}/bots/${this.options.botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
                 .then(async upvotes => {
                     const body = await upvotes.json();
+                    if (body.code) throw new FetchError(body, 'Bot');
                     if (Options.ids) Options.specified = null;
                     if (Options.normal) {
                         if (this.options.log) console.log(Options.specified ? body.map(user => user[Options.specified]) : body);
@@ -227,20 +225,6 @@ class Client {
                         resolve(Options.specified ? SpaceUpvotes.map(v => v[Options.specified]) : SpaceUpvotes);
                     }
                 })
-                .catch(reject);
-        });
-    }
-
-    /**
-     * Fetch your bot's upvotes from the past 24 hours.
-     * @param {UpvoteFetchOptions} [options={}] Whether or not to output an array of user IDs instead of user objects.
-     * @returns {Promise<Array<User|String>>} The array of the users who had upvoted within the past 24 hours.
-     */
-    fetchUpvotesSelf(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        return new Promise((resolve, reject) => {
-            this.fetchUpvotes(this.options.botID, options)
-                .then(resolve)
                 .catch(reject);
         });
     }
@@ -262,6 +246,7 @@ class Client {
                 Fetch(`${endpoint}/bots`)
                     .then(async bots => {
                         const body = await bots.json();
+                        if (body.code) throw new FetchError(body, 'Bots');
                         if (Options.normal) {
                             if (this.options.log) console.log(Options.specified ? body.map(bot => bot[Options.specified]) : body);
                             resolve(Options.specified ? body.map(bot => bot[Options.specified]) : body);
@@ -276,6 +261,7 @@ class Client {
                 Fetch(`${endpoint}/servers`)
                     .then(async guilds => {
                         const body = await guilds.json();
+                        if (body.code) throw new FetchError(body, 'Guilds');
                         if (Options.normal) {
                             if (this.options.log) console.log(Options.specified ? body.map(guild => guild[Options.specified]) : body);
                             resolve(Options.specified ? body.map(guild => guild[Options.specified]) : body);
@@ -291,22 +277,23 @@ class Client {
     }
 
     /**
-     * The endpoint URL, used to interact with the site.
-     * @type {String}
-     */
-    static get endpoint() {
-        return endpoint;
-    }
-
-    /**
      * All of the classes used.
      * @type {Object}
      * @static
      * @private
      */
     static get Classes() {
-        return { Bot, ClientOptions, FetchOptions, Guild, PostOptions, Stats, User };
+        return { Bot, ClientOptions, FetchError, FetchOptions, Guild, PostOptions, Stats, UpvoteFetchOptions, User };
+    }
+
+    /**
+     * The endpoint URL, used to interact with the site.
+     * @type {String}
+     */
+    static get endpoint() {
+        return endpoint;
     }
 }
 
 module.exports = Client;
+module.exports.version = 'v2.2.3';

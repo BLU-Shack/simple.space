@@ -3,20 +3,21 @@
         <img src='https://i.imgur.com/j5gEcTf.png' width=500 height=150>
     </p>
     <p>
-        <a href='https://www.npmjs.com/package/simple.space'><img src='https://nodei.co/npm/simple.space.png'>
+        <a href='https://www.npmjs.com/package/simple.space'><img src='https://nodei.co/npm/simple.space.png'></a>
     </p>
 </div>
 
 # botlist.space - Alternative Wrapper
 
-A simplified alternative package to [the official](https://www.npmjs.com/package/botlist.space). :)
-
 To install, use ``npm i simple.space``; But you already know that, right?
 
 ## What sets the difference than the original?
 
-* Servers are named "Guilds"
-* Functions are typically easier to remember.
+|Key Differences from [Main Package](https://www.npmjs.com/package/botlist.space)|Examples|
+|-|-|
+|Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
+|Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|
+|
 
 ## Examples
 
@@ -113,6 +114,12 @@ Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 ## Documentation
 
 https://iredme.github.io/simple.space/
+
+## Want to contribute?
+
+### If You Find A Bug:
+
+1)
 
 ## Update Notes
 

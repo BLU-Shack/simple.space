@@ -30,16 +30,19 @@ class ClientOptions {
          */
         this.log = newObj.hasOwnProperty('log') ? newObj.log !== 'none' ? newObj.log : false : oldObj.log;
     }
-}
 
-/**
- * The default client options.
- * @property {String} token The API token, required for some actions.
- * @property {String} botID The Bot ID, needed for "self" actions and to set guild count.
- * @property {Object} client The discord.js#Client object.
- * @property {Boolean} log Whether or not to log FETCH actions.
- * @static
- */
-ClientOptions.default = { token: 'none', botID: 'none', client: 'none', log: false };
+    /**
+     * The default client options.
+     * @property {String} token The API token, required for some actions.
+     * @property {String} botID The Bot ID, needed for "self" actions and to set guild count.
+     * @property {Object} client The discord.js#Client object.
+     * @property {Boolean} log Whether or not to log FETCH actions.
+     * @type {Object}
+     * @static
+     */
+    static get default() {
+        return { token: 'none', botID: 'none', client: 'none', log: false };
+    }
+}
 
 exports.ClientOptions = ClientOptions;

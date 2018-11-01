@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: structures/Stats.js</title>
+    <title>JSDoc: Source: structures/Base.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: structures/Stats.js</h1>
+    <h1 class="page-title">Source: structures/Base.js</h1>
 
     
 
@@ -27,57 +27,24 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Represents the statistics that have been fetched from the API.
+ * The universal base for Bot/Emoji/Guild/User classes.
  * @class
+ * @constructor
  */
-class Stats {
+class Base {
     /**
-     * @constructor
-     * @param {Object} stats The plain stats object, fetched from the API.
+     * @param {Object} base A Bot/Emoji/Guild/User object fetched from the API.
      */
-    constructor(stats) {
+    constructor(base) {
         /**
-         * The plain stats object itself.
-         * @type {Object}
+         * The Base's ID.
+         * @type {String}
          */
-        this.stats = stats;
-
-        /**
-         * All bot information.
-         * @returns {Object}
-         * @property {Number} total The total number of bots that have been submitted to the site.
-         * @property {Number} approved The total number of approved bots.
-         * @property {Number} unapproved The total number of unapproved bots.
-         */
-        this.bots = {
-            total: stats.bots.total,
-            approved: stats.bots.approved,
-            unapproved: stats.bots.unapproved
-        };
-
-        /**
-         * The total number of servers that had been submitted.
-         * @type {Number}
-         */
-        this.servers = stats.servers;
-
-        /**
-         * The total number of users that had logged in.
-         * @type {Number}
-         */
-        this.users = stats.users;
-    }
-
-    /**
-     * Fetch the total number of bots, servers, and users on the site.
-     * @type {Number}
-     */
-    get total() {
-        return this.bots.total + this.servers + this.users;
+        this.id = base.id;
     }
 }
 
-exports.Stats = Stats;</code></pre>
+exports.Base = Base;</code></pre>
         </article>
     </section>
 

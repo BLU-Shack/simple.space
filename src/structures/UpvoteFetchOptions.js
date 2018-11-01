@@ -9,14 +9,23 @@ class UpvoteFetchOptions extends FetchOptions {
     /**
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
      * @param {ClientOptions} [client] The original ClientOptions
-     * @property {Boolean} [ids=false] Whether or not to return only the user IDs.
-     * @property {String} [token=this.options.token] The token to use.
      */
     constructor(options = {}, client = { options: new ClientOptions(ClientOptions.default) }) {
         super(options);
 
+        /**
+         * Whether or not to only fetch the user IDs.
+         * @type {Boolean}
+         */
         this.ids = options.ids || false;
+        if (typeof this.ids !== 'boolean') throw new TypeError('options.ids must be boolean.');
+
+        /**
+         * The API token. ``Overrides this.options.token.``
+         * @type {String}
+         */
         this.token = options.token || client.options.token;
+        if (typeof this.token !== 'string') throw new TypeError('options.token must be a string.');
     }
 }
 

@@ -1,21 +1,20 @@
 const Base = require('./Base.js').Base;
 
 /**
- * Represents any emoji on the site.
+ * Represents any emoji on botlist.space.
  * @class
  * @constructor
  * @extends {Base}
  */
 class Emoji extends Base {
     /**
-     * @constructor
-     * @param {Object} base The Emoji object fetched from the API.
+     * @param {Object} base The emoji object fetched from the API.
      */
     constructor(base) {
         super(base);
 
         /**
-         * The plain emoji object.
+         * The plain emoji object itself.
          * @type {Object}
          */
         this.emoji = base;
@@ -27,7 +26,7 @@ class Emoji extends Base {
         this.name = base.name;
 
         /**
-         * The guild ID in which the emoji comes from.
+         * The emoji's guild ID it's in.
          * @type {String}
          */
         this.guildID = base.server;
@@ -37,6 +36,10 @@ class Emoji extends Base {
          * @type {String}
          */
         this.url = base.url;
+    }
+
+    toString() {
+        return `<:${this.name}:${this.id}>`;
     }
 }
 

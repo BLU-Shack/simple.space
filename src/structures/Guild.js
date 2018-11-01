@@ -1,6 +1,7 @@
-const Base = require('./bases/Base').Base;
-const FetchOptions = require('./FetchOptions');
-const User = require('./User');
+const Base = require('./Base.js').Base;
+const Emoji = require('./Emoji.js').Emoji;
+const FetchOptions = require('./FetchOptions').FetchOptions;
+const User = require('./User.js');
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
@@ -14,11 +15,14 @@ class Guild extends Base {
      */
     constructor(guild) {
         super(guild);
+        this.compliance = guild.compliance;
+
         /**
          * The plain guild object itself.
          * @type {Object}
          */
         this.guild = guild;
+
         /**
          * Whether or not the guild is featured on the front page.
          * @type {Boolean}
@@ -86,12 +90,31 @@ class Guild extends Base {
         this.vanity = guild.vanity;
     }
 
+
     /**
-     * Returns a string containing the guild name.
-     * @returns {String} The guild name.
+     * The guild's vanity URL, if its vanity exists.
+     * @type {String|null}
      */
-    toString() {
-        return this.name;
+    get vanityURL() {
+        if (!this.vanity) return null;
+        return `https://botlist.space/server/${this.vanity}`;
+    }
+
+    /**
+     * Fetch the guild's emojis, if the guild is in compliance.
+     * @param {FetchOptions} options Fetch Options.
+     * @type {Array<Emoji>}
+     */
+    emojis(options = {}) {
+        if (!this.compliance) return 'Guild is not currently in compliance for sharing emojis.';
+        const emojis = this.guild.emojis;
+        const Options = new FetchOptions(options);
+        if (Options.normal) {
+            return Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
+        } else {
+            const SpaceEmojis = emojis.map(emoji => new Emoji(emoji));
+            return Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
+        }
     }
 
     /**
@@ -105,7 +128,7 @@ class Guild extends Base {
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions.FetchOptions(options);
+        const Options = new FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.guild.owners.map(owner => owner[Options.specified]) : this.guild.owners;
@@ -113,6 +136,14 @@ class Guild extends Base {
             const Owners = this.guild.owners.map(owner => new User.User(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
+    }
+
+    /**
+     * Returns a string containing the guild name.
+     * @returns {String} The guild name.
+     */
+    toString() {
+        return this.name;
     }
 }
 

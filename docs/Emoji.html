@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: PostOptions</title>
+    <title>JSDoc: Class: Emoji</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: PostOptions</h1>
+    <h1 class="page-title">Class: Emoji</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>PostOptions<span class="signature">(options, preset)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Emoji<span class="signature">(base)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="PostOptions"><span class="type-signature"></span>new PostOptions<span class="signature">(options, preset)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Emoji"><span class="type-signature"></span>new Emoji<span class="signature">(base)</span><span class="type-signature"></span></h4>
     
 
     
@@ -81,7 +81,7 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>base</code></td>
             
 
             <td class="type">
@@ -97,30 +97,7 @@
 
             
 
-            <td class="description last">Options to override the preconfigured options.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>preset</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Preconfigured options.</td>
+            <td class="description last">The emoji object fetched from the API.</td>
         </tr>
 
     
@@ -161,7 +138,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_PostOptions.js.html">structures/PostOptions.js</a>, <a href="structures_PostOptions.js.html#line6">line 6</a>
+        <a href="structures_Emoji.js.html">structures/Emoji.js</a>, <a href="structures_Emoji.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -193,6 +170,17 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Base.html">Base</a></li>
+    </ul>
+
+
+    
 
     
 
@@ -209,13 +197,85 @@
 
         
             
-<h4 class="name" id="botID"><span class="type-signature"></span>botID<span class="type-signature"> :String</span></h4>
+<h4 class="name" id="emoji"><span class="type-signature"></span>emoji<span class="type-signature"> :Object</span></h4>
 
 
 
 
 <div class="description">
-    The bot ID for posting.
+    The plain emoji object itself.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="structures_Emoji.js.html">structures/Emoji.js</a>, <a href="structures_Emoji.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="guildID"><span class="type-signature"></span>guildID<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    The emoji's guild ID it's in.
 </div>
 
 
@@ -263,7 +323,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_PostOptions.js.html">structures/PostOptions.js</a>, <a href="structures_PostOptions.js.html#line17">line 17</a>
+        <a href="structures_Emoji.js.html">structures/Emoji.js</a>, <a href="structures_Emoji.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -281,13 +341,13 @@
 
         
             
-<h4 class="name" id="guildSize"><span class="type-signature"></span>guildSize<span class="type-signature"> :Number|Array.&lt;Number></span></h4>
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :String</span></h4>
 
 
 
 
 <div class="description">
-    The size number/array for posting.
+    The Base's ID.
 </div>
 
 
@@ -296,10 +356,7 @@
     <ul>
         <li>
             
-<span class="param-type">Number</span>
-|
-
-<span class="param-type">Array.&lt;Number></span>
+<span class="param-type">String</span>
 
 
         </li>
@@ -315,6 +372,11 @@
 
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Base.html#id">Base#id</a>
+    </li></ul></dd>
     
 
     
@@ -338,7 +400,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_PostOptions.js.html">structures/PostOptions.js</a>, <a href="structures_PostOptions.js.html#line23">line 23</a>
+        <a href="structures_Base.js.html">structures/Base.js</a>, <a href="structures_Base.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -356,13 +418,13 @@
 
         
             
-<h4 class="name" id="token"><span class="type-signature"></span>token<span class="type-signature"> :String</span></h4>
+<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :String</span></h4>
 
 
 
 
 <div class="description">
-    The API token for posting.
+    The emoji's name.
 </div>
 
 
@@ -410,7 +472,79 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_PostOptions.js.html">structures/PostOptions.js</a>, <a href="structures_PostOptions.js.html#line11">line 11</a>
+        <a href="structures_Emoji.js.html">structures/Emoji.js</a>, <a href="structures_Emoji.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="url"><span class="type-signature"></span>url<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    The emoji's URL.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="structures_Emoji.js.html">structures/Emoji.js</a>, <a href="structures_Emoji.js.html#line38">line 38</a>
     </li></ul></dd>
     
 

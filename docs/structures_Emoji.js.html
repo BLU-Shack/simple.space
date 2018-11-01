@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: structures/Stats.js</title>
+    <title>JSDoc: Source: structures/Emoji.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: structures/Stats.js</h1>
+    <h1 class="page-title">Source: structures/Emoji.js</h1>
 
     
 
@@ -26,58 +26,52 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Represents the statistics that have been fetched from the API.
+            <pre class="prettyprint source linenums"><code>const Base = require('./Base.js').Base;
+
+/**
+ * Represents any emoji on botlist.space.
  * @class
+ * @constructor
+ * @extends {Base}
  */
-class Stats {
+class Emoji extends Base {
     /**
-     * @constructor
-     * @param {Object} stats The plain stats object, fetched from the API.
+     * @param {Object} base The emoji object fetched from the API.
      */
-    constructor(stats) {
+    constructor(base) {
+        super(base);
+
         /**
-         * The plain stats object itself.
+         * The plain emoji object itself.
          * @type {Object}
          */
-        this.stats = stats;
+        this.emoji = base;
 
         /**
-         * All bot information.
-         * @returns {Object}
-         * @property {Number} total The total number of bots that have been submitted to the site.
-         * @property {Number} approved The total number of approved bots.
-         * @property {Number} unapproved The total number of unapproved bots.
+         * The emoji's name.
+         * @type {String}
          */
-        this.bots = {
-            total: stats.bots.total,
-            approved: stats.bots.approved,
-            unapproved: stats.bots.unapproved
-        };
+        this.name = base.name;
 
         /**
-         * The total number of servers that had been submitted.
-         * @type {Number}
+         * The emoji's guild ID it's in.
+         * @type {String}
          */
-        this.servers = stats.servers;
+        this.guildID = base.server;
 
         /**
-         * The total number of users that had logged in.
-         * @type {Number}
+         * The emoji's URL.
+         * @type {String}
          */
-        this.users = stats.users;
+        this.url = base.url;
     }
 
-    /**
-     * Fetch the total number of bots, servers, and users on the site.
-     * @type {Number}
-     */
-    get total() {
-        return this.bots.total + this.servers + this.users;
+    toString() {
+        return `&lt;:${this.name}:${this.id}>`;
     }
 }
 
-exports.Stats = Stats;</code></pre>
+exports.Emoji = Emoji;</code></pre>
         </article>
     </section>
 

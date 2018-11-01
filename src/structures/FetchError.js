@@ -1,5 +1,5 @@
 /**
- * CX
+ * FetchError
  * @class
  * @extends {Error}
  */

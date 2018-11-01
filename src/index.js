@@ -15,11 +15,10 @@ const endpoint = 'https://botlist.space/api';
 /**
  * Main client class for interacting to botlist.space
  * @class
- * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
+ * @constructor
  */
 class Client {
     /**
-     * @constructor
      * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
      */
     constructor(options = ClientOptions.default) {
@@ -213,7 +212,7 @@ class Client {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         const Options = new UpvoteFetchOptions(options);
         if (!Options.token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
-        if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { token: \'BOT_ID\', ... }) ');
+        if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { botID: \'BOT_ID\', ... }) ');
         if (typeof this.options.botID !== 'string') throw new TypeError('options.botID must be a string.');
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${this.options.botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
@@ -299,6 +298,5 @@ class Client {
         return endpoint;
     }
 }
-
 module.exports = Client;
 module.exports.version = 'v2.2.3';

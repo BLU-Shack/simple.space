@@ -17,10 +17,16 @@ class User extends NonGuildBase {
         super(user);
 
         /**
-         * The plain user object itself.
-         * @type {Object}
+         * The avatar of the user.
+         * @type {String}
          */
-        this.user = user;
+        this.avatar = user.avatar;
+
+        /**
+         * The user's discriminator.
+         * @type {String}
+         */
+        this.discriminator = user.discriminator;
 
         /**
          * The user's GitHub username, if any is available.
@@ -33,6 +39,28 @@ class User extends NonGuildBase {
          * @type {String|null}
          */
         this.gitlab = user.links.gitlab;
+        /**
+         * The user's description.
+         * @type {String}
+         */
+        this.shortDescription = user.short_description;
+
+        /**
+         * The user's tag.
+         */
+        this.tag = `${this.username}#${this.discriminator}`;
+
+        /**
+         * The plain user object itself.
+         * @type {Object}
+         */
+        this.user = user;
+
+        /**
+         * The username of the user.
+         * @type {String}
+         */
+        this.username = user.username;
     }
 
     /**
@@ -75,6 +103,16 @@ class User extends NonGuildBase {
             const Guilds = this.user.servers.map(guild => new Guild.Guild(guild));
             return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
         }
+    }
+
+    /**
+     * Returns the user's mention, rather than the user object.
+     * @type {String}
+     * @example
+     * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
+     */
+    toString() {
+        return `<@${this.id}>`;
     }
 }
 

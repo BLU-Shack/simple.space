@@ -23,6 +23,11 @@ class Client {
      * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
      */
     constructor(options = ClientOptions.default) {
+        /**
+         * @ignore
+         * @type {ClientOptions}
+         */
+        this.options;
         this.edit(options, true); // Note from the Developer: Do Not Touch.
     }
 
@@ -207,8 +212,8 @@ class Client {
     fetchUpvotes(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         const Options = new UpvoteFetchOptions(options);
-        if (!Options.token && !this.options.token) throw new ReferenceError('A token must have been supplied during initialization, or in the UpvoteFetchOptions (etc. { token: \'token here\', ... })');
-        if (!this.options.botID) throw new ReferenceError('options.botID must be supplied.');
+        if (!Options.token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
+        if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { token: \'BOT_ID\', ... }) ');
         if (typeof this.options.botID !== 'string') throw new TypeError('options.botID must be a string.');
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${this.options.botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
@@ -278,7 +283,7 @@ class Client {
 
     /**
      * All of the classes used.
-     * @type {Object}
+     * @namespace
      * @static
      * @private
      */

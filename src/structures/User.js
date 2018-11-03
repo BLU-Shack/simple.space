@@ -1,6 +1,6 @@
 const FetchOptions = require('./FetchOptions').FetchOptions;
 const Guild = require('./Guild.js');
-const Bot = require('./Bot.js');
+const Bot = require('./Bot.js').Bot;
 const PartialUser = require('./PartialUser.js').PartialUser;
 
 /**

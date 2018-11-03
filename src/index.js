@@ -2,11 +2,12 @@ const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 const ClientOptions = require('./structures/ClientOptions.js').ClientOptions;
 const Bot = require('./structures/Bot.js').Bot;
+const Emoji = require('./structures/Emoji.js').Emoji;
 const Guild = require('./structures/Guild.js').Guild;
 const User = require('./structures/User.js').User;
 const FetchError = require('./structures/FetchError.js').FetchError;
 const FetchOptions = require('./structures/FetchOptions').FetchOptions;
-const Stats = require('./structures/Stats').Stats;
+const Stats = require('./structures/Stats.js').Stats;
 const PartialUser = require('./structures/PartialUser.js').PartialUser;
 const PostOptions = require('./structures/PostOptions').PostOptions;
 const UpvoteFetchOptions = require('./structures/UpvoteFetchOptions.js').UpvoteFetchOptions;
@@ -204,7 +205,7 @@ class Client {
 
     /**
      * Fetch users in the last 24 hours who have upvoted your bot.
-     * @param {UpvoteFetchOptions} [options={}] Whether or not to output an array of user IDs instead of user objects.
+     * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
      * @returns {Promise<Array<PartialUser>>} The array of the user objects/user IDs.
      * @example
      * Client.fetchUpvotes({ ids: true });
@@ -240,7 +241,7 @@ class Client {
     /**
      * Fetches all bots that had been logged on to the site.
      * @param {String} kind Whether or not to get bots or
-     * @param {FetchOptions} [options={}] What you want specifically from the array of the kind.
+     * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Array<Bot|Guild>>} The array of the bot objects.
      */
     fetchAll(kind, options = {}) {
@@ -281,6 +282,37 @@ class Client {
                     })
                     .catch(reject);
             }
+        });
+    }
+
+    /**
+     * Fetch an emoji listed on the site.
+     * @param {String} emojiID The emoji ID to fetch.
+     * @param {FetchOptions} options Fetch Options.
+     * @returns {Promise<Emoji>}
+     */
+    fetchEmoji(emojiID, options = {}) {
+        if (!emojiID) throw new ReferenceError('emojiID must be defined.');
+        if (typeof emojiID !== 'string') throw new TypeError('emojiID must be a string.');
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
+        return new Promise((resolve, reject) => {
+            Fetch(`${endpoint}/emojis/${emojiID}`)
+                .then(async body => {
+                    const emoji = await body.json();
+                    if (emoji.code) throw new FetchError(emoji, 'Emoji');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? emoji[Options.specified] : emoji;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceEmoji = Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji);
+                        const resolved = Options.specified ? SpaceEmoji[Options.specified] : SpaceEmoji;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
+                .catch(reject);
         });
     }
 

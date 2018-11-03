@@ -214,6 +214,6 @@ class Bot extends Base {
 }
 
 Bot.prototype.invite = util.deprecate(Bot.prototype.invite, 'Bot#invite() => Use Bot#inviteURL or Bot#inviteNoPerms');
-Bot.prototype.support = util.deprecate(Bot.prototype.support, 'Bot#support => Use Bot#supportCode or Bot#supportURL');
+Bot.prototype.support = util.deprecate(Bot.prototype.support, 'Bot#support() => Use Bot#supportCode or Bot#supportURL');
 
 exports.Bot = Bot;

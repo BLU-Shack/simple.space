@@ -16,7 +16,6 @@ class Stats {
 
         /**
          * All bot information.
-         * @returns {Object}
          * @property {Number} total The total number of bots that have been submitted to the site.
          * @property {Number} approved The total number of approved bots.
          * @property {Number} unapproved The total number of unapproved bots.

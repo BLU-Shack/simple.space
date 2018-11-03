@@ -1,5 +1,4 @@
 const Base = require('./Base.js').Base;
-const Emoji = require('./Emoji.js').Emoji;
 const FetchOptions = require('./FetchOptions').FetchOptions;
 const User = require('./User.js');
 
@@ -59,7 +58,7 @@ class Guild extends Base {
         this.name = guild.name;
 
         /**
-         * Whether or not the guild's invite is active.
+         * Whether or not the guild's not listed publicly (due to inactive invite)
          * @type {Boolean}
          */
         this.isPublic = guild.public;
@@ -96,6 +95,14 @@ class Guild extends Base {
     }
 
     /**
+     * An array of emoji IDs the guild has.
+     * @type {Array<String>}
+     */
+    get emojis() {
+        return this.guild.emojis;
+    }
+
+    /**
      * Returns the guild's page URL.
      * @type {String}
      */
@@ -110,23 +117,6 @@ class Guild extends Base {
     get vanityURL() {
         if (!this.vanity) return null;
         return `https://botlist.space/server/${this.vanity}`;
-    }
-
-    /**
-     * Fetch the guild's emojis, if the guild is in compliance.
-     * @param {FetchOptions} options Fetch Options.
-     * @returns {Array<Emoji>}
-     */
-    emojis(options = {}) {
-        if (!this.compliance) return 'Guild is not currently in compliance for listing its emojis.';
-        const emojis = this.guild.emojis;
-        const Options = new FetchOptions(options);
-        if (Options.normal) {
-            return Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
-        } else {
-            const SpaceEmojis = emojis.map(emoji => new Emoji(emoji));
-            return Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
-        }
     }
 
     /**

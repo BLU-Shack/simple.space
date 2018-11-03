@@ -7,6 +7,7 @@ const User = require('./structures/User.js').User;
 const FetchError = require('./structures/FetchError.js').FetchError;
 const FetchOptions = require('./structures/FetchOptions').FetchOptions;
 const Stats = require('./structures/Stats').Stats;
+const PartialUser = require('./structures/PartialUser.js').PartialUser;
 const PostOptions = require('./structures/PostOptions').PostOptions;
 const UpvoteFetchOptions = require('./structures/UpvoteFetchOptions.js').UpvoteFetchOptions;
 
@@ -100,7 +101,7 @@ class Client {
                         if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
                         resolve(Options.specified ? body[Options.specified] : body);
                     } else {
-                        const SpaceBot = new Bot(body);
+                        const SpaceBot = Options.stringify ? new Bot(body).toString() : new Bot(body);
                         if (this.options.log) console.log(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
                         resolve(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
                     }
@@ -138,8 +139,8 @@ class Client {
                         if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
                         resolve(Options.specified ? body[Options.specified] : body);
                     } else {
-                        const SpaceGuild = new Guild(body);
-                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
+                        const SpaceGuild = Options.stringify ? new Guild(body).toString() : new Guild(body);
+                        if (this.options.log) console.log(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
                         resolve(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
                     }
                 })
@@ -192,7 +193,7 @@ class Client {
                         if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
                         resolve(Options.specified ? body[Options.specified] : body);
                     } else {
-                        const SpaceUser = new User(body);
+                        const SpaceUser = Options.stringify ? new User(body).toString() : new User(body);
                         if (this.options.log) console.log(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
                         resolve(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
                     }
@@ -202,9 +203,9 @@ class Client {
     }
 
     /**
-     * Fetch used in the last 24 hours who have upvoted your bot.
+     * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Whether or not to output an array of user IDs instead of user objects.
-     * @returns {Promise<Array<User|String>>} The array of the user objects/user IDs.
+     * @returns {Promise<Array<PartialUser>>} The array of the user objects/user IDs.
      * @example
      * Client.fetchUpvotes({ ids: true });
      */
@@ -224,7 +225,10 @@ class Client {
                         if (this.options.log) console.log(Options.specified ? body.map(user => user[Options.specified]) : body);
                         resolve(Options.specified ? body.map(user => user[Options.specified]) : body);
                     } else {
-                        const SpaceUpvotes = body.map(user => new User(user.user));
+                        const SpaceUpvotes = body.map(info => {
+                            const obj = { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
+                            return obj;
+                        });
                         if (this.options.log) console.log(Options.specified ? SpaceUpvotes.map(v => v[Options.specified]) : SpaceUpvotes);
                         resolve(Options.specified ? SpaceUpvotes.map(v => v[Options.specified]) : SpaceUpvotes);
                     }

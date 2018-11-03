@@ -10,9 +10,9 @@ class FetchOptions {
     constructor(options = {}) {
         /**
          * Whether or not to only get a specific value from the object.
-         * @type {String|false}
+         * @type {String|Boolean}
          */
-        this.specified = options.specified ? options.specified : false;
+        this.specified = options.specified || false;
         if (typeof this.specified !== 'string' && typeof this.specified !== 'boolean') throw new TypeError('options.specified must be a string.');
 
         /**
@@ -21,6 +21,17 @@ class FetchOptions {
          */
         this.normal = options.normal || false;
         if (typeof this.normal !== 'boolean') throw new TypeError('options.normal must be boolean.');
+
+        /**
+         * Whether or not to return the stringified form of the object. This will override the specified and normal parameters to false.
+         * @type {Boolean}
+         */
+        this.stringify = options.stringify || false;
+        if (typeof this.stringify !== 'boolean') throw new TypeError('options.stringify must be boolean.');
+        if (this.stringify) {
+            this.specified = false;
+            this.normal = false;
+        }
     }
 }
 

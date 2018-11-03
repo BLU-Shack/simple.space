@@ -25,7 +25,7 @@ class UpvoteFetchOptions extends FetchOptions {
          * @type {String}
          */
         this.token = options.token || client.options.token;
-        if (typeof this.token !== 'string') throw new TypeError('options.token must be a string.');
+        if (typeof this.token !== 'string' && typeof this.token !== 'boolean') throw new TypeError('options.token must be a string.');
     }
 }
 

@@ -1,6 +1,6 @@
 const FetchOptions = require('./FetchOptions').FetchOptions;
 const Base = require('./Base').Base;
-const User = require('./User');
+const PartialUser = require('./PartialUser.js').PartialUser;
 const util = require('util');
 
 /**
@@ -17,7 +17,7 @@ class Bot extends Base {
         super(bot);
 
         /**
-         * The avatar of the bot.
+         * The avatar URL of the bot.
          * @type {String}
          */
         this.avatar = bot.avatar;
@@ -44,7 +44,7 @@ class Bot extends Base {
          * The amount of guilds the bot is currently in, if the owner posted anything.
          * @type {Number|null}
          */
-        this.guildSize = bot.count;
+        this.guildSize = bot.server_count;
 
         /**
          * Returns the bot's invite URL.
@@ -86,13 +86,13 @@ class Bot extends Base {
          * Identical to {@link Bot#guildSize}
          * @type {Number|null}
          */
-        this.serverCount = this.guildSize;
+        this.serverCount = this.guildSize || null;
 
         /**
          * Returns, if any, an array of the bot's guild count for each of its shard.
          * @type {Array<Number>|null}
          */
-        this.shards = bot.shards;
+        this.shards = bot.shards || null;
 
         /**
          * The short description of the bot.
@@ -107,16 +107,10 @@ class Bot extends Base {
         this.supportCode = bot.links.support;
 
         /**
-         * The tag of the bot.
-         * @type {String}
-         */
-        this.tag = `${this.username}#${this.discriminator}`;
-
-        /**
          * The bot's timestamp in which it was submitted to the site.
          * @type {Number}
          */
-        this.timestamp = bot.timestamp;
+        this.timestamp = new Date(bot.timestamp).getTime();
 
         /**
          * The username of the bot.
@@ -149,6 +143,22 @@ class Bot extends Base {
     }
 
     /**
+     * The tag of the bot.
+     * @type {String}
+     */
+    get tag() {
+        return `${this.username}#${this.discriminator}`;
+    }
+
+    /**
+     * Returns the bot's page URL.
+     * @type {String}
+     */
+    get url() {
+        return `https://botlist.space/bot/${this.id}`;
+    }
+
+    /**
      * Returns the bot's vanity in the form of a URL, if the bot has a vanity.
      * @type {String|null}
      */
@@ -160,7 +170,7 @@ class Bot extends Base {
     /**
      * Fetches all of the bot's owners, including the secondary ones.
      * @param {FetchOptions} [options={}] Fetch Options.
-     * @returns {Array<User.User>} An array of the bot's owners.
+     * @returns {Array<PartialUser>} An array of the bot's owners.
      * @example
      * Bot.owners({ specified: 'username' })
      *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
@@ -173,7 +183,7 @@ class Bot extends Base {
         if (Options.normal) {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
-            const Owners = this.bot.owners.map(owner => new User.User(owner));
+            const Owners = this.bot.owners.map(owner => new PartialUser(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
     }

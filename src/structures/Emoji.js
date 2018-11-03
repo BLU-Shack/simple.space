@@ -14,6 +14,12 @@ class Emoji extends Base {
         super(base);
 
         /**
+         * Whether or not the emoji is animated.
+         * @type {Boolean}
+         */
+        this.animated = base.animated;
+
+        /**
          * The plain emoji object itself.
          * @type {Object}
          */
@@ -39,7 +45,7 @@ class Emoji extends Base {
     }
 
     toString() {
-        return `<:${this.name}:${this.id}>`;
+        return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;
     }
 }
 

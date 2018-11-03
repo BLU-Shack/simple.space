@@ -15,6 +15,11 @@ class Guild extends Base {
      */
     constructor(guild) {
         super(guild);
+
+        /**
+         * Whether or not the guild is in compliance with listing its emojis.
+         * @type {Boolean}
+         */
         this.compliance = guild.compliance;
 
         /**
@@ -36,13 +41,13 @@ class Guild extends Base {
         this.icon = guild.icon;
 
         /**
-         * Whether or not the guild's icon is child friendly.
+         * Whether or not the guild's icon is marked as child friendly.
          * @type {Boolean}
          */
         this.isChildFriendly = guild.iconChildFriendly;
 
         /**
-         * How many members are in the Guild (estimate.)
+         * The number of members there currently are in the Guild
          * @type {Number}
          */
         this.memberCount = guild.member_count;
@@ -54,7 +59,7 @@ class Guild extends Base {
         this.name = guild.name;
 
         /**
-         * Whether or not the guild is public to everyone.
+         * Whether or not the guild's invite is active.
          * @type {Boolean}
          */
         this.isPublic = guild.public;
@@ -90,9 +95,16 @@ class Guild extends Base {
         this.vanity = guild.vanity;
     }
 
+    /**
+     * Returns the guild's page URL.
+     * @type {String}
+     */
+    get url() {
+        return `https://botlist.space/server/${this.id}`;
+    }
 
     /**
-     * The guild's vanity URL, if its vanity exists.
+     * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
      * @type {String|null}
      */
     get vanityURL() {
@@ -103,10 +115,10 @@ class Guild extends Base {
     /**
      * Fetch the guild's emojis, if the guild is in compliance.
      * @param {FetchOptions} options Fetch Options.
-     * @type {Array<Emoji>}
+     * @returns {Array<Emoji>}
      */
     emojis(options = {}) {
-        if (!this.compliance) return 'Guild is not currently in compliance for sharing emojis.';
+        if (!this.compliance) return 'Guild is not currently in compliance for listing its emojis.';
         const emojis = this.guild.emojis;
         const Options = new FetchOptions(options);
         if (Options.normal) {

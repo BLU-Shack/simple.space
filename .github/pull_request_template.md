@@ -4,7 +4,7 @@
 
 **How does it improve the package's usability?** Place package usability here. Or, if it is not a code change, remove this line.
 
-**Reasoning?** Place reasoning behind it. If ONLY JUST a README.md minor change, put "Typo Fixes" OR "Title Rename" OR "Word Replacement"
+**Reasoning?** Place reasoning behind it. If ONLY JUST a README.md minor change, put "Typo Fixes", "Title Rename", and/or "Word Replacement"
 
 - [ ] Includes changing Library Code.
     - [ ] Includes Minor Changes (includes variable changes, method parameters/properties renamed)

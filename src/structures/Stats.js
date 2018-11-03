@@ -33,6 +33,12 @@ class Stats {
         this.servers = stats.servers;
 
         /**
+         * Whether or not it was successful at fetching statistics.
+         * @type {Boolean}
+         */
+        this.successful = stats.success;
+
+        /**
          * The total number of users that had logged in.
          * @type {Number}
          */

@@ -99,12 +99,14 @@ class Client {
                     if (body.code) throw new FetchError(body, 'Bot');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
-                        resolve(Options.specified ? body[Options.specified] : body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
                         const SpaceBot = Options.stringify ? new Bot(body).toString() : new Bot(body);
-                        if (this.options.log) console.log(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
-                        resolve(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
+                        const resolved = Options.specified ? SpaceBot[options.specified] : Options.specified;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -137,12 +139,14 @@ class Client {
                     if (body.code) throw new FetchError(body, 'Guild');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
-                        resolve(Options.specified ? body[Options.specified] : body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
                         const SpaceGuild = Options.stringify ? new Guild(body).toString() : new Guild(body);
-                        if (this.options.log) console.log(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
-                        resolve(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
+                        const resolved = Options.specified ? SpaceGuild[Options.specified] : SpaceGuild;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -162,12 +166,14 @@ class Client {
                     if (body.code) throw new FetchError(body, 'Stats');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
-                        resolve(Options.specified ? body[Options.specified] : body);
+                        const resolved = Options.specified ? body[Options.specified] || body.bots[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
                         const SpaceStats = new Stats(body);
-                        if (this.options.log) console.log(Options.specified ? SpaceStats[Options.specified] : SpaceStats);
-                        resolve(Options.specified ? SpaceStats[Options.specified] : SpaceStats);
+                        const resolved = Options.specified ? SpaceStats[Options.specified] || SpaceStats.bots[Options.specified] : SpaceStats;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -191,12 +197,14 @@ class Client {
                     if (body.code) throw new FetchError(body, 'User');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? body[Options.specified] : body);
-                        resolve(Options.specified ? body[Options.specified] : body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
                         const SpaceUser = Options.stringify ? new User(body).toString() : new User(body);
-                        if (this.options.log) console.log(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
-                        resolve(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
+                        const resolved = Options.specified ? SpaceUser[Options.specified] : SpaceUser;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -223,15 +231,17 @@ class Client {
                     if (body.code) throw new FetchError(body, 'Bot');
                     if (Options.ids) Options.specified = null;
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? body.map(user => user[Options.specified]) : body);
-                        resolve(Options.specified ? body.map(user => user[Options.specified]) : body);
+                        const resolved = Options.specified ? body.map(user => user[Options.specified]) : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
                         const SpaceUpvotes = body.map(info => {
                             const obj = { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
                             return obj;
                         });
-                        if (this.options.log) console.log(Options.specified ? SpaceUpvotes.map(v => v[Options.specified]) : SpaceUpvotes);
-                        resolve(Options.specified ? SpaceUpvotes.map(v => v[Options.specified]) : SpaceUpvotes);
+                        const resolved = Options.specified ? SpaceUpvotes.map(v => v[Options.specified] || v.user[Options.specified]) : SpaceUpvotes;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -257,12 +267,14 @@ class Client {
                         const body = await bots.json();
                         if (body.code) throw new FetchError(body, 'Bots');
                         if (Options.normal) {
-                            if (this.options.log) console.log(Options.specified ? body.map(bot => bot[Options.specified]) : body);
-                            resolve(Options.specified ? body.map(bot => bot[Options.specified]) : body);
+                            const resolved = Options.specified ? body.map(bot => bot[Options.specified]) : body;
+                            if (this.options.log) console.log(resolved);
+                            resolve(resolved);
                         } else {
                             const Bots = body.map(bot => new Bot(bot));
-                            if (this.options.log) console.log(Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots);
-                            resolve(Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots);
+                            const resolved = Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
+                            if (this.options.log) console.log(resolved);
+                            resolve(resolved);
                         }
                     })
                     .catch(reject);
@@ -272,12 +284,14 @@ class Client {
                         const body = await guilds.json();
                         if (body.code) throw new FetchError(body, 'Guilds');
                         if (Options.normal) {
-                            if (this.options.log) console.log(Options.specified ? body.map(guild => guild[Options.specified]) : body);
-                            resolve(Options.specified ? body.map(guild => guild[Options.specified]) : body);
+                            const resolved = Options.specified ? body.map(guild => guild[Options.specified]) : body;
+                            if (this.options.log) console.log(resolved);
+                            resolve(resolved);
                         } else {
                             const Guilds = body.map(bot => new Guild(bot));
-                            if (this.options.log) console.log(Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds);
-                            resolve(Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds);
+                            const resolved = Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds;
+                            if (this.options.log) console.log(resolved);
+                            resolve(resolved);
                         }
                     })
                     .catch(reject);

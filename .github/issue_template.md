@@ -18,7 +18,10 @@
 ```
 
 ```js
-// Place ERROR OUTPUT here.
+// ERROR:
+
+
+// Place ERROR OUTPUT above
 ```
 
 - [ ] Major (must be fixed)

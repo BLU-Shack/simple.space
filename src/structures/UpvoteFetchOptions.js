@@ -14,7 +14,7 @@ class UpvoteFetchOptions extends FetchOptions {
         super(options);
 
         /**
-         * Whether or not to only fetch the user IDs.
+         * Whether or not to only fetch the user IDs. Overrides {@link FetchOptions#specified} to false.
          * @type {Boolean}
          */
         this.ids = options.ids || false;

@@ -40,19 +40,19 @@ class Client {
      * Edit at least one or more key-value pair in the instance.
      * @param {ClientOptions} [options=ClientOptions.default] A thing.
      * @param {Boolean} [preset=false] Whether or not to have preset rules when setting values.
-     * @returns {this} Returns itself for edit chains.
+     * @returns {ClientOptions} The new client options.
      * @example
      * console.log(Client.edit({ log: false }).options);
      */
     edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
-        if ((options) !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
         if (options.botID && typeof options.botID !== 'string') throw new TypeError('botID must be a string.');
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
         this.options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
 
-        return this;
+        return this.options;
     }
 
     /**

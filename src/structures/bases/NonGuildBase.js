@@ -13,7 +13,6 @@ class NonGuildBase extends Base {
      */
     constructor(base) {
         super(base);
-        process.emitWarning('NonGuildBase is now deprecated, as it is no longer in use. All Bot/Emoji/Guild/User objects will now be using BASE. Do not use.', 'DeprecationWarning');
 
         /**
          * The avatar of the non-guild.

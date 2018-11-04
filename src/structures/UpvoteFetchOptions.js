@@ -19,6 +19,7 @@ class UpvoteFetchOptions extends FetchOptions {
          */
         this.ids = options.ids || false;
         if (typeof this.ids !== 'boolean') throw new TypeError('options.ids must be boolean.');
+        if (this.ids) this.specified = false;
 
         /**
          * The API token. ``Overrides this.options.token.``

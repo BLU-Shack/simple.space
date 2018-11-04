@@ -1,6 +1,6 @@
 const Base = require('./Base.js').Base;
-const FetchOptions = require('./FetchOptions').FetchOptions;
-const User = require('./User.js');
+const FetchOptions = require('./FetchOptions.js').FetchOptions;
+const PartialUser = require('./PartialUser.js').PartialUser;
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
@@ -95,14 +95,6 @@ class Guild extends Base {
     }
 
     /**
-     * An array of emoji IDs the guild has.
-     * @type {Array<String>}
-     */
-    get emojis() {
-        return this.guild.emojis;
-    }
-
-    /**
      * Returns the guild's page URL.
      * @type {String}
      */
@@ -122,7 +114,7 @@ class Guild extends Base {
     /**
      * Get the guild's owners.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<User.User>} An array of the guild's owners.
+     * @returns {Array<PartialUser>} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
      *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
@@ -135,7 +127,7 @@ class Guild extends Base {
         if (Options.normal) {
             return Options.specified ? this.guild.owners.map(owner => owner[Options.specified]) : this.guild.owners;
         } else {
-            const Owners = this.guild.owners.map(owner => new User.User(owner));
+            const Owners = this.guild.owners.map(owner => new PartialUser(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
     }

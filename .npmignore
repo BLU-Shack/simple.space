@@ -1,7 +1,8 @@
 .eslintrc.json
-node_modules
+node-modules/
 package-lock.json
 examples-private/
-filekey
-filekey.pub
 docs/
+A1-PROTOCOL-1
+.github
+.vscode

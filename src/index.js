@@ -1,66 +1,130 @@
-const snekfetch = require('snekfetch');
+const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
-const apiLink = 'https://botlist.space/api';
+
 const ClientOptions = require('./structures/ClientOptions.js').ClientOptions;
-const Bot = require('./structures/Bot.js').Bot;
-const Guild = require('./structures/Guild.js').Guild;
-const User = require('./structures/User.js').User;
 const FetchOptions = require('./structures/FetchOptions').FetchOptions;
-const Stats = require('./structures/Stats').Stats;
+const PostOptions = require('./structures/PostOptions').PostOptions;
+const UpvoteFetchOptions = require('./structures/UpvoteFetchOptions.js').UpvoteFetchOptions;
+
+const Bot = require('./structures/Bot.js').Bot;
+const Emoji = require('./structures/Emoji.js').Emoji;
+const Guild = require('./structures/Guild.js').Guild;
+const PartialUser = require('./structures/PartialUser.js').PartialUser;
+const User = require('./structures/User.js').User;
+
+const FetchError = require('./structures/FetchError.js').FetchError;
+const Stats = require('./structures/Stats.js').Stats;
+const endpoint = 'https://botlist.space/api';
+
+const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats };
 
 /**
  * Main client class for interacting to botlist.space
  * @class
- * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
+ * @constructor
  */
 class Client {
     /**
-     * @constructor
      * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
      */
     constructor(options = ClientOptions.default) {
-        this.edit(options, ClientOptions.default);
+        /**
+         * @ignore
+         * @type {ClientOptions}
+         */
+        this.options;
+        this.edit(options, true); // Note from the Developer: Do Not Touch.
     }
 
     /**
      * Edit at least one or more key-value pair in the instance.
      * @param {ClientOptions} [options=ClientOptions.default] A thing.
-     * @returns {this} Returns itself for edit chains.
+     * @param {Boolean} [preset=false] Whether or not to have preset rules when setting values.
+     * @returns {ClientOptions} The new client options.
      * @example
      * console.log(Client.edit({ log: false }).options);
      */
-    edit(options = ClientOptions.default) {
+    edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
-
-        if ((options) !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
-
         if (options.botID && typeof options.botID !== 'string') throw new TypeError('botID must be a string.');
-
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
+        this.options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
 
-        this.options = new ClientOptions(options, this.options);
-
-        return this;
+        return this.options;
     }
 
     /**
-     * @param {Number|Array<Number>} [guildSize] Post your guild count/array of numbers to the site. If a client is supplied during initialization, this is unnecessary, unless you are sharding. Supplying a value overrides the autofill.
-     * @returns {Promise<Object>} Returns the code, success (boolean), and a message.
+     * Fetches all bots that had been logged on to the site.
+     * @deprecated Use {@link Bot#fetchAllBots} or {@link Bot#fetchAllGuilds}
+     * @param {String} kind Whether or not to get bots or
+     * @param {FetchOptions} [options={}] Fetch Options.
+     * @returns {Promise<Array<Bot|Guild>>} The array of the bot objects.
      */
-    setGuilds(guildSize) {
-        if (!this.options.token || this.options.token === 'none') throw new ReferenceError('To post your guild count, you must supply an API token on initialization.');
-        if (!guildSize && !this.options.client) throw new ReferenceError('You must either supply a value for guildSize, or provide a client object on initialization.');
-        if (this.options.client && !guildSize) guildSize = this.options.client.guilds.size;
-        if (typeof guildSize !== 'number' && !(guildSize instanceof Array)) throw new TypeError('guildSize must be either a number or an array of numbers.');
+    fetchAll(kind, options = {}) {
+        if (!kind) throw new ReferenceError('kind must be defined.');
+        if (typeof kind !== 'string') throw new TypeError('kind must be a string.');
+        if (kind === 'bots') {
+            return this.fetchAllBots(options);
+        } else if (kind === 'guilds') {
+            return this.fetchAllGuilds(options);
+        } else {
+            throw new SyntaxError('kind must be either guilds or bots');
+        }
+    }
+
+    /**
+     * Returns all bots on the site.
+     * @param {FetchOptios} options Fetch Options.
+     * @returns {Array<Bot>}
+     */
+    fetchAllBots(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
-            const data = guildSize instanceof Array ? { shards: guildSize } : { server_count: guildSize };
-            snekfetch.post(`${apiLink}/bots/${this.options.botID}`)
-                .send(data)
-                .set({ Authorization: this.options.token, 'Content-Type': 'application/json' })
-                .then(body => {
-                    resolve(body.body);
+            Fetch(`${endpoint}/bots`)
+                .then(async body => {
+                    const bots = await body.json();
+                    if (bots.code) throw new FetchError(bots, 'Bots');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceBots = bots.map(bot => new Bot(bot));
+                        const resolved = Options.specified ? SpaceBots.map(bot => bot[Options.specified]) : SpaceBots;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
+                .catch(reject);
+        });
+    }
+
+    /**
+     * Fetches all guilds on the site.
+     * @param {FetchOptions} options Fetch Options
+     * @returns {Array<Guild>}
+     */
+    fetchAllGuilds(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
+        return new Promise((resolve, reject) => {
+            Fetch(`${endpoint}/servers`)
+                .then(async body => {
+                    const guilds = await body.text();
+                    if (guilds.code) throw new FetchError(guilds, 'Guilds');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceGuilds = guilds.map(guild => new Guild(guild));
+                        const resolved = Options.specified ? SpaceGuilds.map(guild => guild[Options.specified]) : SpaceGuilds;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
                 })
                 .catch(reject);
         });
@@ -81,16 +145,20 @@ class Client {
         if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
-            snekfetch.get(`${apiLink}/bots/${botID}`)
-                .then(bot => {
+            Fetch(`${endpoint}/bots/${botID}`)
+                .then(async bot => {
+                    const body = await bot.json();
+                    if (body.code) throw new FetchError(body, 'Bot');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? bot.body[Options.specified] : bot.body);
-                        resolve(Options.specified ? bot.body[Options.specified] : bot.body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
-                        const SpaceBot = new Bot(bot.body);
-                        if (this.options.log) console.log(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
-                        resolve(Options.specified ? SpaceBot[Options.specified] : SpaceBot);
+                        const SpaceBot = Options.stringify ? new Bot(body).toString() : new Bot(body);
+                        const resolved = Options.specified ? SpaceBot[options.specified] : SpaceBot;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -98,14 +166,32 @@ class Client {
     }
 
     /**
-     * Fetch a bot using the ID supplied on initialization.
-     * @param {FetchOptions} [options={}] Options.
-     * @returns {Promise<Bot>} Returns the bot contents/specified item.
+     * Fetch an emoji listed on the site.
+     * @param {String} emojiID The emoji ID to fetch.
+     * @param {FetchOptions} options Fetch Options.
+     * @returns {Promise<Emoji>}
      */
-    fetchSelf(options = {}) {
+    fetchEmoji(emojiID, options = {}) {
+        if (!emojiID) throw new ReferenceError('emojiID must be defined.');
+        if (typeof emojiID !== 'string') throw new TypeError('emojiID must be a string.');
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
-            this.fetchBot(this.options.botID, options)
-                .then(resolve)
+            Fetch(`${endpoint}/emojis/${emojiID}`)
+                .then(async body => {
+                    const emoji = await body.json();
+                    if (emoji.code) throw new FetchError(emoji, 'Emoji');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? emoji[Options.specified] : emoji;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceEmoji = Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji);
+                        const resolved = Options.specified ? SpaceEmoji[Options.specified] : SpaceEmoji;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
                 .catch(reject);
         });
     }
@@ -121,18 +207,64 @@ class Client {
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
-            snekfetch.get(`${apiLink}/servers/${guildID}`)
-                .then(guild => {
+            Fetch(`${endpoint}/servers/${guildID}`)
+                .then(async guild => {
+                    const body = await guild.json();
+                    if (body.code) throw new FetchError(body, 'Guild');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        resolve(Options.specified ? guild.body[Options.specified] : guild.body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
-                        const SpaceGuild = new Guild(guild.body);
-                        resolve(Options.specified ? SpaceGuild[Options.specified] : SpaceGuild);
+                        const SpaceGuild = Options.stringify ? new Guild(body).toString() : new Guild(body);
+                        const resolved = Options.specified ? SpaceGuild[Options.specified] : SpaceGuild;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
         });
+    }
+
+    /**
+     * Fetches a guild's emojis.
+     * @param {String} guildID The guild ID to fetch its emojis from.
+     * @param {FetchOptions} options Fetch Options.
+     * @returns {Array<Emoji>}
+     */
+    fetchGuildEmojis(guildID, options = {}) {
+        if (!guildID) throw new ReferenceError('guildID must be supplied.');
+        if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
+        return new Promise((resolve, reject) => {
+            Fetch(`${endpoint}/servers/${guildID}/emojis`)
+                .then(async body => {
+                    const emojis = await body.json();
+                    if (emojis.code) throw new FetchError(emojis, 'Guild');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? emojis[Options.specified] : emojis;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
+                        const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
+                .catch(reject);
+        });
+    }
+
+    /**
+     * Fetch a bot using the ID supplied on initialization.
+     * @param {FetchOptions} [options={}] Options.
+     * @returns {Promise<Bot>} Returns the bot contents/specified item.
+     */
+    fetchSelf(options = {}) {
+        return this.fetchBot(this.options.botID, options);
     }
 
     /**
@@ -142,16 +274,56 @@ class Client {
      */
     fetchStats(options = {}) {
         return new Promise((resolve, reject) => {
-            snekfetch.get(`${apiLink}/stats`)
-                .then(stats => {
+            Fetch(`${endpoint}/stats`)
+                .then(async stats => {
+                    const body = await stats.json();
+                    if (body.code) throw new FetchError(body, 'Stats');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? stats.body[Options.specified] : stats.body);
-                        resolve(Options.specified ? stats.body[Options.specified] : stats.body);
+                        const resolved = Options.specified ? body[Options.specified] || body.bots[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
-                        const SpaceStats = new Stats(stats.body);
-                        if (this.options.log) console.log(Options.specified ? SpaceStats[Options.specified] : SpaceStats);
-                        resolve(Options.specified ? SpaceStats[Options.specified] : SpaceStats);
+                        const SpaceStats = new Stats(body);
+                        const resolved = Options.specified ? SpaceStats[Options.specified] || SpaceStats.bots[Options.specified] : SpaceStats;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
+                .catch(reject);
+        });
+    }
+
+    /**
+     * Fetch users in the last 24 hours who have upvoted your bot.
+     * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
+     * @returns {Promise<Array<PartialUser>>} The array of the user objects/user IDs.
+     * @example
+     * Client.fetchUpvotes({ ids: true });
+     */
+    fetchUpvotes(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new UpvoteFetchOptions(options);
+        if (!Options.token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
+        if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { botID: \'BOT_ID\', ... }) ');
+        if (typeof this.options.botID !== 'string') throw new TypeError('options.botID must be a string.');
+        return new Promise((resolve, reject) => {
+            Fetch(`${endpoint}/bots/${this.options.botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
+                .then(async upvotes => {
+                    const body = await upvotes.json();
+                    if (body.code) throw new FetchError(body, 'Bot');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? body.map(user => user[Options.specified]) : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceUpvotes = body.map(info => {
+                            const obj = { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
+                            return obj;
+                        });
+                        const resolved = Options.specified ? SpaceUpvotes.map(v => v[Options.specified] || v.user[Options.specified]) : SpaceUpvotes;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -169,16 +341,20 @@ class Client {
         if (typeof userID !== 'string') throw new TypeError('userID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
-            snekfetch.get(`${apiLink}/users/${userID}`)
-                .then(user => {
+            Fetch(`${endpoint}/users/${userID}`)
+                .then(async user => {
+                    const body = await user.json();
+                    if (body.code) throw new FetchError(body, 'User');
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
-                        if (this.options.log) console.log(Options.specified ? user.body[Options.specified] : user.body);
-                        resolve(Options.specified ? user.body[Options.specified] : user.body);
+                        const resolved = Options.specified ? body[Options.specified] : body;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     } else {
-                        const SpaceUser = new User(user.body);
-                        if (this.options.log) console.log(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
-                        resolve(Options.specified ? SpaceUser[Options.specified] : SpaceUser);
+                        const SpaceUser = Options.stringify ? new User(body).toString() : new User(body);
+                        const resolved = Options.specified ? SpaceUser[Options.specified] : SpaceUser;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
                     }
                 })
                 .catch(reject);
@@ -186,104 +362,52 @@ class Client {
     }
 
     /**
-     * Fetch a bot's upvotes from the past 24 hours.
-     * @param {String} botID The bot ID to fetch upvotes from.
-     * @param {Boolean} [ids=false] Whether or not to output an array of user IDs instead of user objects.
-     * @returns {Promise<Array<User|String>>} The array of the bot objects.
+     * @param {PostOptions} [options={}] Post Options. Currently supports a number.
+     * @param {String} [options.token=this.options.token] The API token for posting.
+     * @param {String} [options.botID=this.options.botID] The bot ID for posting.
+     * @param {String} [options.guildSize] The guild count to push.
+     * @returns {Promise<Object>} Returns the code, and a message.
      */
-    fetchUpvotes(botID, ids = false) {
-        if (!this.options.token || this.options.token === 'none') throw new ReferenceError('A token must have been supplied during initialization.');
-        if (!botID) throw new ReferenceError('botID must be supplied.');
-        if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
-        if (typeof ids !== 'boolean') throw new TypeError('ids must be a boolean value. (true or false)');
+    setGuilds(options = {}) {
+        if (typeof options !== 'number' && (options !== Object(options) || options instanceof Array)) throw new TypeError('options must be an object.');
+        const Options = new PostOptions(typeof options === 'number' ? { guildSize: options } : options, this.options);
+        if (typeof options === 'number') process.emitWarning(`Client#setGuilds() => Pass { guildSize: ${options} }`);
+        if (!Options.token) throw new ReferenceError('options.token must be defined.');
+        if (!Options.botID) throw new ReferenceError('options.botID must be defined.');
+        if (typeof Options.token !== 'string') throw new TypeError('options.token must be a string.');
+        if (typeof Options.botID !== 'string') throw new TypeError('options.botID must be a string.');
         return new Promise((resolve, reject) => {
-            snekfetch.get(`${apiLink}/bots/${botID}/upvotes?ids=${ids}`)
-                .set({ Authorization: this.options.token })
-                .then(upvotes => {
-                    if (this.options.log) console.log(upvotes.body);
-                    resolve(upvotes.body);
+            const size = options.guildSize instanceof Array ? { shards: options.guildSize } : { server_count: options.guildSize };
+            Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json' }, body: JSON.stringify(size) })
+                .then(async resolved => {
+                    const body = await resolved.json();
+                    if (body.code) throw new FetchError(body, 'Guild');
+                    resolve(body);
                 })
                 .catch(reject);
         });
     }
 
     /**
-     * Fetch your bot's upvotes from the past 24 hours.
-     * @param {Boolean} [ids=false] Whether or not to output an array of user IDs instead of user objects.
-     * @returns {Promise<Array<User|String>>} The array of the users who had upvoted within the past 24 hours.
+     * All of the classes used.
+     * @type {Classes}
+     * @static
+     * @private
      */
-    fetchUpvotesSelf(ids = false) {
-        if (typeof ids !== 'boolean') throw new TypeError('ids must be a boolean value. (true or false)');
-        return new Promise((resolve, reject) => {
-            this.fetchUpvotes(this.options.botID, ids)
-                .then(resolve)
-                .catch(reject);
-        });
+    static get Classes() {
+        return Classes;
     }
 
     /**
-     * Fetches all bots that had been logged on to the site.
-     * @param {String} kind Whether or not to get bots or guilds.
-     * @param {FetchOptions} [options={}] What you want specifically from the array of the kind.
-     * @returns {Promise<Array<Bot|Guild>>} The array of the bot objects.
+     * The endpoint URL, used to interact with the site.
+     * @type {String}
      */
-    fetchAll(kind, options = {}) {
-        if (!kind) throw new ReferenceError('kind must be defined.');
-        if (typeof kind !== 'string') throw new TypeError('kind must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        if (!['bots', 'guilds', 'servers'].some(type => kind.toLowerCase() === type)) throw new SyntaxError('kind must be either bots or guilds.');
-        if (kind === 'servers') {
-            process.emitWarning('Client#fetchAll() => Pass "guilds" instead of "servers"', 'DeprecationWarning');
-            kind = 'guilds';
-        }
-        return new Promise((resolve, reject) => {
-            if (kind === 'bots') {
-                const Options = new FetchOptions(options);
-                snekfetch.get(`${apiLink}/bots`)
-                    .then(bots => {
-                        if (Options.normal) {
-                            if (this.options.log) console.log(Options.specified ? bots.body.map(bot => bot[Options.specified]) : bots.body);
-                            resolve(Options.specified ? bots.body.map(bot => bot[Options.specified]) : bots.body);
-                        } else {
-                            const Bots = bots.body.map(bot => new Bot(bot));
-                            if (this.options.log) console.log(Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots);
-                            resolve(Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots);
-                        }
-                    })
-                    .catch(reject);
-            } else {
-                const Options = new FetchOptions(options);
-                snekfetch.get(`${apiLink}/servers`)
-                    .then(guilds => {
-                        if (Options.normal) {
-                            if (this.options.log) console.log(Options.specified ? guilds.body.map(guild => guild[Options.specified]) : guilds.body);
-                            resolve(Options.specified ? guilds.body.map(guild => guild[Options.specified]) : guilds.body);
-                        } else {
-                            const Guilds = guilds.body.map(bot => new Guild(bot));
-                            if (this.options.log) console.log(Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds);
-                            resolve(Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds);
-                        }
-                    })
-                    .catch(reject);
-            }
-        });
-
+    static get endpoint() {
+        return endpoint;
     }
 }
 
-/**
- * The API link for interacting to botlist.space
- * @type {String}
- * @static
- */
-Client.link = apiLink;
-
-/**
- * The Classes object for creating things.
- * @type {Object}
- * @static
- * @private
- */
-Client.Classes = { Bot: Bot, User: User, Guild: Guild, FetchOptions: FetchOptions, ClientOptions: ClientOptions };
+Client.prototype.fetchAll = util.deprecate(Client.prototype.fetchAll, 'Client#fetchAll() => Use fetchAllBots() or fetchAllGuilds()');
 
 module.exports = Client;
+module.exports.version = 'v2.2.3';

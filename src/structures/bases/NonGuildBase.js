@@ -1,38 +1,45 @@
-const Base = require('./Base').Base;
+const Base = require('../Base').Base;
+const util = require('util');
 
 /**
  * Represents any Non-Guild object.
  * @class
+ * @deprecated Now Deprecated; Not In Use
  * @extends {Base}
  */
 class NonGuildBase extends Base {
     /**
-     * @param {Object} base Any Non-Guild object fetched from the API.
+     * @deprecated
      */
     constructor(base) {
         super(base);
+
         /**
-         * The Non-Guild's avatar URL.
+         * The avatar of the non-guild.
          * @type {String}
          */
         this.avatar = base.avatar;
+
         /**
-         * The Non-Guild's discriminator.
+         * The discriminator of the non-guild.
          * @type {String}
          */
         this.discriminator = base.discriminator;
+
         /**
-         * The Non-Guild's username.
-         * @type {String}
-         */
-        this.username = base.username;
-        /**
-         * The Non-Guild's tag.
+         * The tag of the non-guild.
          * @type {String}
          */
         this.tag = `${this.username}#${this.discriminator}`;
+
         /**
-         * The Non-Guild's short description.
+         * The username of the non-guild.
+         * @type {String}
+         */
+        this.username = base.username;
+
+        /**
+         * The short description of the non-guild.
          * @type {String}
          */
         this.shortDescription = base.short_description;
@@ -45,5 +52,7 @@ class NonGuildBase extends Base {
         return `<@${this.id}>`;
     }
 }
+
+NonGuildBase.prototype = util.deprecate(NonGuildBase, 'NonGuildBase is now deprecated. All Bot/Emoji/Guild/User objects will now be using BASE.');
 
 exports.NonGuildBase = NonGuildBase;

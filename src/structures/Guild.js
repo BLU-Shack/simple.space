@@ -1,6 +1,6 @@
-const Base = require('./bases/Base').Base;
-const FetchOptions = require('./FetchOptions');
-const User = require('./User');
+const Base = require('./Base.js').Base;
+const FetchOptions = require('./FetchOptions.js').FetchOptions;
+const PartialUser = require('./PartialUser.js').PartialUser;
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
@@ -14,16 +14,24 @@ class Guild extends Base {
      */
     constructor(guild) {
         super(guild);
+
+        /**
+         * Whether or not the guild is in compliance with listing its emojis.
+         * @type {Boolean}
+         */
+        this.compliance = guild.compliance;
+
         /**
          * The plain guild object itself.
          * @type {Object}
          */
         this.guild = guild;
+
         /**
          * Whether or not the guild is featured on the front page.
          * @type {Boolean}
          */
-        this.featured = guild.featured;
+        this.isFeatured = guild.featured;
 
         /**
          * The guild's icon URL.
@@ -32,13 +40,13 @@ class Guild extends Base {
         this.icon = guild.icon;
 
         /**
-         * Whether or not the guild's icon is child friendly.
+         * Whether or not the guild's icon is marked as child friendly.
          * @type {Boolean}
          */
-        this.childFriendly = guild.iconChildFriendly;
+        this.isChildFriendly = guild.iconChildFriendly;
 
         /**
-         * How many members are in the Guild (estimate.)
+         * The number of members there currently are in the Guild
          * @type {Number}
          */
         this.memberCount = guild.member_count;
@@ -50,16 +58,16 @@ class Guild extends Base {
         this.name = guild.name;
 
         /**
-         * Whether or not the guild is public to everyone.
+         * Whether or not the guild's not listed publicly (due to inactive invite)
          * @type {Boolean}
          */
-        this.public = guild.public;
+        this.isPublic = guild.public;
 
         /**
          * Whether or not the guild is Premium.
          * @type {Boolean}
          */
-        this.premium = guild.premium;
+        this.isPremium = guild.premium;
 
         /**
          * The guild's short description.
@@ -87,17 +95,26 @@ class Guild extends Base {
     }
 
     /**
-     * Returns a string containing the guild name.
-     * @returns {String} The guild name.
+     * Returns the guild's page URL.
+     * @type {String}
      */
-    toString() {
-        return this.name;
+    get url() {
+        return `https://botlist.space/server/${this.id}`;
+    }
+
+    /**
+     * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
+     * @type {String|null}
+     */
+    get vanityURL() {
+        if (!this.vanity) return null;
+        return `https://botlist.space/server/${this.vanity}`;
     }
 
     /**
      * Get the guild's owners.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<User>} An array of the guild's owners.
+     * @returns {Array<PartialUser>} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
      *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
@@ -105,14 +122,22 @@ class Guild extends Base {
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions.FetchOptions(options);
+        const Options = new FetchOptions(options);
 
         if (Options.normal) {
             return Options.specified ? this.guild.owners.map(owner => owner[Options.specified]) : this.guild.owners;
         } else {
-            const Owners = this.guild.owners.map(owner => new User.User(owner));
+            const Owners = this.guild.owners.map(owner => new PartialUser(owner));
             return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
         }
+    }
+
+    /**
+     * Returns a string containing the guild name.
+     * @returns {String} The guild name.
+     */
+    toString() {
+        return this.name;
     }
 }
 

@@ -1,5 +1,14 @@
 {
     "opts": {
-        "template": "node_modules/toast-jsdoc"
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "source": {
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": false
     }
 }

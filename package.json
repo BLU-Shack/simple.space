@@ -1,17 +1,16 @@
 {
   "name": "simple.space",
-  "version": "2.2.2",
-  "description": "Simplified alternative for botlist.space API",
+  "version": "2.2.3",
+  "description": "A simplified alternative for botlist.space",
   "main": "src/index.js",
   "dependencies": {
-    "snekfetch": "^4.0.4",
-    "toast-jsdoc": "^1.0.2"
+    "node-fetch": "^2.2.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "node examples/test.js",
     "dev": "node examples-private/test.js",
-    "docs": "jsdoc src/ -r README.md -c .jsdoc.json -d docs/"
+    "docs": "jsdoc src/ README.md -c ./.jsdoc.json"
   },
   "keywords": [
     "botlist.space",
@@ -23,8 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/test-resp/simple.space.git",
-    "homepage": "https://github.com/test-resp/simple.space"
+    "url": "https://github.com/test-resp/simple.space"
   },
   "author": "iRED",
   "license": "MIT"

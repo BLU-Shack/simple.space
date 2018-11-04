@@ -47,6 +47,12 @@ const SimpleSpace = require('simple.space');
 const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
 ```
 
+For future assumptions, let's say:
+1. ``options.token`` is invalid.
+2. ``options.botID`` is ``'228537642583588864'`` (id goes to the [Vexera Bot](https://vexera.io) )
+3. ``options.client`` is invalid.
+4. ``options.log`` is ``true``.
+
 </details>
 <br>
 <details>
@@ -89,8 +95,8 @@ Example.setGuilds({ guildSize: 1337, token: 'OOF' }); // You failed.
 // botID (String) => The bot ID to fetch from the site.
 // options (?FetchOptions) => Fetch Options.
 Example.fetchBot(botID, ?options);
-Example.fetchBot('463803888072523797'); // Example too large to show.
-Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
+Example.fetchBot('228537642583588864'); // Example too large
+Example.fetchBot('228537642583588864', { specified: 'username' }); // Vexera
 ```
 
 </details>
@@ -103,8 +109,8 @@ Example.fetchBot('463803888072523797', { specified: 'username' }); // Moddy ©
 // Fetches the bot by using the ID supplied during initialization.
 // options (?FetchOptions) => Fetch Options.
 Example.fetchSelf(?options);
-Example.fetchSelf(); // Example varies
-Example.fetchSelf({ specified: 'username' }); // Example varies
+Example.fetchSelf(); // Example too large
+Example.fetchSelf({ specified: 'username' }); // Vexera
 ```
 
 </details>
@@ -119,7 +125,7 @@ Example.fetchSelf({ specified: 'username' }); // Example varies
 // options (?FetchOptions) => Fetch Options.
 Example.fetchGuild(guildID, ?options);
 Example.fetchGuild('467868565073035284');
-Example.fetchGuild('467868565073035284', { specified: 'username' });
+Example.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU Shack
 ```
 
 </details>
@@ -204,7 +210,7 @@ Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 
 https://iredme.github.io/simple.space/
 
-## Want to contribute?
+## Contributing?
 
 ### Found an Issue?
 
@@ -213,11 +219,3 @@ Go [here](https://github.com/iREDMe/simple.space/issues/new?template=ISSUE_TEMPL
 ### Want to Pull Request?
 
 Well, go ahead and make one already.
-
-## Update Notes
-
-### UPDATE!
-
-Check [here](https://github.com/iREDMe/simple.space/releases) for releases; Check [here](https://github.com/iREDMe/simple.space/projects) for Projects and to know what's coming next.
-
-If you want to get notified for whenever a release is up, join my [main server](https://discord.gg/eB3gK72)!

@@ -1,7 +1,8 @@
 {
     "opts": {
         "destination": "./docs/",
-        "recurse": true
+        "recurse": true,
+        "template": "node_modules/tui-jsdoc-template"
     },
     "source": {
         "includePattern": ".+\\.js(doc|x)?$",
@@ -10,5 +11,15 @@
     "sourceType": "module",
     "tags": {
         "allowUnknownTags": false
+    },
+    "templates": {
+        "logo": {
+            "name": "simple.space",
+            "footerText": "A Botlist.Space Alternate Package",
+            "url": "https://i.imgur.com/j5gEcTf.png",
+            "width": "150px",
+            "height": "13px",
+            "link": ""
+        }
     }
 }

@@ -6,7 +6,9 @@
   "dependencies": {
     "node-fetch": "^2.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tui-jsdoc-template": "^1.2.2"
+  },
   "scripts": {
     "test": "node examples/test.js",
     "dev": "node examples-private/test.js",

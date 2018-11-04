@@ -12,4 +12,4 @@ about: Simple(tm)
 
 **Please Check the Below**
 
-- [ ] I use this package (and/or the Main Package) and understand its functionality, and all of the available endpoints on botlist.space (if you don't,)
+- [ ] I use this package (and/or the Main Package) and understand its functionality, and all of the available endpoints on botlist.space (if you don't, either use this or the official package, and also check up on the endpoints available.)

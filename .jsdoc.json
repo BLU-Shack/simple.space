@@ -15,11 +15,7 @@
     "templates": {
         "logo": {
             "name": "simple.space",
-            "footerText": "A Botlist.Space Alternate Package",
-            "url": "https://i.imgur.com/j5gEcTf.png",
-            "width": "150px",
-            "height": "60px",
-            "link": ""
+            "footerText": "A Botlist.Space Alternate Package"
         }
     }
 }

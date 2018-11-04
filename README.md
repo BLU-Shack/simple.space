@@ -210,11 +210,10 @@ Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 
 https://iredme.github.io/simple.space/
 
-## Contributing?
+## Contributing
 
-### Found an Issue?
-
-Go [here](https://github.com/iREDMe/simple.space/issues/new?template=ISSUE_TEMPLATE.md) to submit an issue.
+- Go [here](https://github.com/iREDMe/simple.space/issues/new?template=ISSUE_TEMPLATE.md) to submit a bug.
+- Go [here](https://github.com/iREDMe/simple.space/issues/new?template=feature_request.md) to submit a feature request.
 
 ### Want to Pull Request?
 

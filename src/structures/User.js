@@ -1,5 +1,5 @@
 const FetchOptions = require('./FetchOptions').FetchOptions;
-const Guild = require('./Guild.js');
+const Guild = require('./Guild.js').Guild;
 const Bot = require('./Bot.js').Bot;
 const PartialUser = require('./PartialUser.js').PartialUser;
 
@@ -41,7 +41,7 @@ class User extends PartialUser {
     /**
      * Fetches all guilds that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Guild.Guild>} An array of guilds.
+     * @returns {Array<Guild>} An array of guilds.
      * @example
      * User.guilds({ specified: 'name' })
      *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
@@ -54,7 +54,7 @@ class User extends PartialUser {
         if (Options.normal) {
             return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;
         } else {
-            const Guilds = this.user.servers.map(guild => new Guild.Guild(guild));
+            const Guilds = this.user.servers.map(guild => new Guild(guild));
             return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
         }
     }

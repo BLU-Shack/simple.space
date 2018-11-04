@@ -57,6 +57,7 @@ class Client {
 
     /**
      * Fetches all bots that had been logged on to the site.
+     * @deprecated Use {@link Bot#fetchAllBots} or {@link Bot#fetchAllGuilds}
      * @param {String} kind Whether or not to get bots or
      * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Array<Bot|Guild>>} The array of the bot objects.
@@ -64,48 +65,20 @@ class Client {
     fetchAll(kind, options = {}) {
         if (!kind) throw new ReferenceError('kind must be defined.');
         if (typeof kind !== 'string') throw new TypeError('kind must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        if (!['bots', 'guilds'].some(type => kind.toLowerCase() === type)) throw new SyntaxError('kind must be either bots or ');
-        return new Promise((resolve, reject) => {
-            const Options = new FetchOptions(options);
-            if (kind.toLowerCase() === 'bots') {
-                Fetch(`${endpoint}/bots`)
-                    .then(async bots => {
-                        const body = await bots.json();
-                        if (body.code) throw new FetchError(body, 'Bots');
-                        if (Options.normal) {
-                            const resolved = Options.specified ? body.map(bot => bot[Options.specified]) : body;
-                            if (this.options.log) console.log(resolved);
-                            resolve(resolved);
-                        } else {
-                            const Bots = body.map(bot => new Bot(bot));
-                            const resolved = Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
-                            if (this.options.log) console.log(resolved);
-                            resolve(resolved);
-                        }
-                    })
-                    .catch(reject);
-            } else if (kind.toLowerCase() === 'guilds') {
-                Fetch(`${endpoint}/servers`)
-                    .then(async guilds => {
-                        const body = await guilds.json();
-                        if (body.code) throw new FetchError(body, 'Guilds');
-                        if (Options.normal) {
-                            const resolved = Options.specified ? body.map(guild => guild[Options.specified]) : body;
-                            if (this.options.log) console.log(resolved);
-                            resolve(resolved);
-                        } else {
-                            const Guilds = body.map(bot => new Guild(bot));
-                            const resolved = Options.specified ? Guilds.map(bot => bot[Options.specified]) : Guilds;
-                            if (this.options.log) console.log(resolved);
-                            resolve(resolved);
-                        }
-                    })
-                    .catch(reject);
-            }
-        });
+        if (kind === 'bots') {
+            return this.fetchAllBots(options);
+        } else if (kind === 'guilds') {
+            return this.fetchAllGuilds(options);
+        } else {
+            throw new SyntaxError('kind must be either guilds or bots');
+        }
     }
 
+    /**
+     * Returns all bots on the site.
+     * @param {FetchOptios} options Fetch Options.
+     * @returns {Array<Bot>}
+     */
     fetchAllBots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
@@ -129,6 +102,11 @@ class Client {
         });
     }
 
+    /**
+     * Fetches all guilds on the site.
+     * @param {FetchOptions} options Fetch Options
+     * @returns {Array<Guild>}
+     */
     fetchAllGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
@@ -428,5 +406,8 @@ class Client {
         return endpoint;
     }
 }
+
+Client.prototype.fetchAll = util.deprecate(Client.prototype.fetchAll, 'Client#fetchAll() => Use fetchAllBots() or fetchAllGuilds()');
+
 module.exports = Client;
 module.exports.version = 'v2.2.3';

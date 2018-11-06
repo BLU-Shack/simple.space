@@ -16,17 +16,19 @@ class Bot extends Base {
     constructor(bot) {
         super(bot);
 
-        /**
-         * The avatar URL of the bot.
-         * @type {String}
-         */
-        this.avatar = bot.avatar;
+        Object.defineProperty(this, 'bot', { writable: true, enumerable: false });
 
         /**
          * The plain bot object itself.
          * @type {Object}
          */
         this.bot = bot;
+
+        /**
+         * The avatar URL of the bot.
+         * @type {String}
+         */
+        this.avatar = bot.avatar;
 
         /**
          * The discriminator of the bot.
@@ -184,7 +186,8 @@ class Bot extends Base {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
             const Owners = this.bot.owners.map(owner => new PartialUser(owner));
-            return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            const resolved = Options.stringify ? Owners.map(owner => owner.toString()) : Owners;
+            return resolved;
         }
     }
 

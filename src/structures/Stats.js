@@ -8,6 +8,8 @@ class Stats {
      * @param {Object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {
+        Object.defineProperty(this, 'stats', { writable: true, enumerable: false });
+
         /**
          * The plain stats object itself.
          * @type {Object}
@@ -26,11 +28,13 @@ class Stats {
             unapproved: stats.bots.unapproved
         };
 
+        this.emojis = stats.emojis;
+
         /**
-         * The total number of servers that had been submitted.
+         * The total number of guilds that had been submitted.
          * @type {Number}
          */
-        this.servers = stats.servers;
+        this.guilds = stats.servers;
 
         /**
          * Whether or not it was successful at fetching statistics.

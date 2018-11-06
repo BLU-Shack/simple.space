@@ -1,7 +1,7 @@
 const Base = require('./Base.js').Base;
 
 /**
- * The user that is fetched when looking for a bot's owners/upvotes.
+ * A user with limited information.
  * @class
  * @constructor
  */
@@ -11,6 +11,14 @@ class PartialUser extends Base {
      */
     constructor(base) {
         super(base);
+
+        Object.defineProperty(this, 'user', { writable: true, enumerable: false });
+
+        /**
+         * The plain user object itself.
+         * @type {Object}
+         */
+        this.user = base;
 
         /**
          * The avatar of the user.
@@ -37,12 +45,6 @@ class PartialUser extends Base {
         this.gitlabUsername = base.links.gitlab;
 
         /**
-         * The plain user object itself.
-         * @type {Object}
-         */
-        this.user = base;
-
-        /**
          * The short description of the user.
          * @type {String}
          */
@@ -50,6 +52,7 @@ class PartialUser extends Base {
 
         /**
          * The user's username.
+         * @type {String}
          */
         this.username = base.username;
     }

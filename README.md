@@ -13,7 +13,7 @@ To install, use ``npm i simple.space``; But you already know that, right?
 
 ## What sets the difference than the original?
 
-|Key Differences from [Main Package](https://www.npmjs.com/package/botlist.space)|Examples|
+|Differences from [Main Package](https://www.npmjs.com/package/botlist.space)|Examples|
 |-|-|
 |Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
 |Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|

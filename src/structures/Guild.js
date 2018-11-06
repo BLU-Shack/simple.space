@@ -14,6 +14,13 @@ class Guild extends Base {
      */
     constructor(guild) {
         super(guild);
+        Object.defineProperty(this, 'guild', { writable: true, enumerable: false });
+
+        /**
+         * The plain guild object.
+         * @type {Object}
+         */
+        this.guild = guild;
 
         /**
          * Whether or not the guild is in compliance with listing its emojis.
@@ -22,16 +29,10 @@ class Guild extends Base {
         this.compliance = guild.compliance;
 
         /**
-         * The plain guild object itself.
-         * @type {Object}
+         * The guild's full description, if any.
+         * @type {String|null}
          */
-        this.guild = guild;
-
-        /**
-         * Whether or not the guild is featured on the front page.
-         * @type {Boolean}
-         */
-        this.isFeatured = guild.featured;
+        this.fullDescription = guild.full_description;
 
         /**
          * The guild's icon URL.
@@ -46,6 +47,24 @@ class Guild extends Base {
         this.isChildFriendly = guild.iconChildFriendly;
 
         /**
+         * Whether or not the guild is featured on the front page.
+         * @type {Boolean}
+         */
+        this.isFeatured = guild.featured;
+
+        /**
+         * Whether or not the guild is Premium.
+         * @type {Boolean}
+         */
+        this.isPremium = guild.premium;
+
+        /**
+         * Whether or not the guild's not listed publicly (due to inactive invite)
+         * @type {Boolean}
+         */
+        this.isPublic = guild.public;
+
+        /**
          * The number of members there currently are in the Guild
          * @type {Number}
          */
@@ -58,28 +77,10 @@ class Guild extends Base {
         this.name = guild.name;
 
         /**
-         * Whether or not the guild's not listed publicly (due to inactive invite)
-         * @type {Boolean}
-         */
-        this.isPublic = guild.public;
-
-        /**
-         * Whether or not the guild is Premium.
-         * @type {Boolean}
-         */
-        this.isPremium = guild.premium;
-
-        /**
          * The guild's short description.
          * @type {String}
          */
         this.shortDescription = guild.short_description;
-
-        /**
-         * The guild's full description, if any.
-         * @type {String|null}
-         */
-        this.fullDescription = guild.full_description;
 
         /**
          * The guild's timestamp, in which the guild had been submitted.

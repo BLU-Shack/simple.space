@@ -34,7 +34,8 @@ class User extends PartialUser {
             return Options.specified ? this.user.bots.map(bot => bot[Options.specified]) : this.user.bots;
         } else {
             const Bots = this.user.bots.map(bot => new Bot(bot));
-            return Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
+            const resolved = Options.stringify ? Bots.map(bot => bot.toString()) : Bots;
+            return resolved;
         }
     }
 
@@ -55,7 +56,8 @@ class User extends PartialUser {
             return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;
         } else {
             const Guilds = this.user.servers.map(guild => new Guild(guild));
-            return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
+            const resolved = Options.stringify ? Guilds.map(guild => guild.toString()) : Guilds;
+            return resolved;
         }
     }
 }

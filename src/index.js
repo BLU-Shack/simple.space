@@ -76,8 +76,8 @@ class Client {
 
     /**
      * Returns all bots on the site.
-     * @param {FetchOptios} options Fetch Options.
-     * @returns {Array<Bot>}
+     * @param {FetchOptions} options Fetch Options.
+     * @returns {Array<Bot>} All bots on the site.
      */
     fetchAllBots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -105,7 +105,7 @@ class Client {
     /**
      * Fetches all guilds on the site.
      * @param {FetchOptions} options Fetch Options
-     * @returns {Array<Guild>}
+     * @returns {Array<Guild>} All guilds on the site.
      */
     fetchAllGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -122,6 +122,34 @@ class Client {
                     } else {
                         const SpaceGuilds = guilds.map(guild => new Guild(guild));
                         const resolved = Options.specified ? SpaceGuilds.map(guild => guild[Options.specified]) : SpaceGuilds;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    }
+                })
+                .catch(reject);
+        });
+    }
+
+    /**
+     * Fetch all emojis listed on the site.
+     * @param {FetchOptions} options Fetch Options.
+     * @returns {Array<Emoji>} All emojis on the site.
+     */
+    fetchAllEmojis(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options);
+        return new Promise((resolve, reject) => {
+            Fetch(`${endpoint}/emojis`)
+                .then(async body => {
+                    const emojis = await body.json();
+                    if (emojis.code) throw new FetchError(emojis, 'Emojis');
+                    if (Options.normal) {
+                        const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
+                        if (this.options.log) console.log(resolved);
+                        resolve(resolved);
+                    } else {
+                        const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
+                        const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
                         if (this.options.log) console.log(resolved);
                         resolve(resolved);
                     }
@@ -356,6 +384,21 @@ class Client {
                         if (this.options.log) console.log(resolved);
                         resolve(resolved);
                     }
+                })
+                .catch(reject);
+        });
+    }
+
+    /**
+     * Checks if a user has upvoted your bot.
+     * @param {String} userID The user ID to check if they have upvoted your bot.
+     * @returns {Boolean} Whether or not the user has upvoted your bot.
+     */
+    hasUpvoted(userID) {
+        return new Promise((resolve, reject) => {
+            this.fetchUpvotes({ ids: true })
+                .then(users => {
+                    resolve(users.includes(userID));
                 })
                 .catch(reject);
         });

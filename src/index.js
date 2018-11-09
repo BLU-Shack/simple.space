@@ -113,7 +113,7 @@ class Client {
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers`)
                 .then(async body => {
-                    const guilds = await body.text();
+                    const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
                     if (Options.normal) {
                         const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;

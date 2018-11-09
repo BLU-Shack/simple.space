@@ -20,7 +20,7 @@ class PostOptions {
          * The size number/array for posting.
          * @type {Number|Array<Number>}
          */
-        this.guildSize = options.guildSize || (preset.client ? preset.client.guilds.size : 'Nothing');
+        this.guildSize = options.guildSize || (preset.client ? preset.client.guilds.size : false);
     }
 }
 

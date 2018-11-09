@@ -412,19 +412,20 @@ class Client {
      * @returns {Promise<Object>} Returns the code, and a message.
      */
     setGuilds(options = {}) {
-        if (typeof options !== 'number' && (options !== Object(options) || options instanceof Array)) throw new TypeError('options must be an object.');
-        const Options = new PostOptions(typeof options === 'number' ? { guildSize: options } : options, this.options);
-        if (typeof options === 'number') process.emitWarning(`Client#setGuilds() => Pass { guildSize: ${options} }`);
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new PostOptions(options, this.options);
         if (!Options.token) throw new ReferenceError('options.token must be defined.');
         if (!Options.botID) throw new ReferenceError('options.botID must be defined.');
+        if (!Options.guildSize) throw new ReferenceError('options.guildSize must be defined.');
         if (typeof Options.token !== 'string') throw new TypeError('options.token must be a string.');
         if (typeof Options.botID !== 'string') throw new TypeError('options.botID must be a string.');
+        if (typeof Options.guildSize !== 'number' && !(Options.guildSize instanceof Array)) throw new TypeError('options.guildSize must be either a number or an array of numbers.');
         return new Promise((resolve, reject) => {
-            const size = options.guildSize instanceof Array ? { shards: options.guildSize } : { server_count: options.guildSize };
+            const size = Options.guildSize instanceof Array ? { shards: Options.guildSize } : { server_count: Options.guildSize };
             Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json' }, body: JSON.stringify(size) })
                 .then(async resolved => {
                     const body = await resolved.json();
-                    if (body.code) throw new FetchError(body, 'Guild');
+                    if (body.code) throw new FetchError(body, 'Bot');
                     resolve(body);
                 })
                 .catch(reject);
@@ -449,8 +450,6 @@ class Client {
         return endpoint;
     }
 }
-
-Client.prototype.fetchAll = util.deprecate(Client.prototype.fetchAll, 'Client#fetchAll() => Use fetchAllBots() or fetchAllGuilds()');
 
 module.exports = Client;
 module.exports.version = 'v2.2.3';

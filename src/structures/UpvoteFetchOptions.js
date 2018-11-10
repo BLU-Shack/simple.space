@@ -4,6 +4,7 @@ const ClientOptions = require('./ClientOptions.js').ClientOptions;
 /**
  * Fetch Options when fetching a bot's upvotes.
  * @class
+ * @constructor
  */
 class UpvoteFetchOptions extends FetchOptions {
     /**

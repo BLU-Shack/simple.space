@@ -1,10 +1,10 @@
 /**
  * Represents the statistics that have been fetched from the API.
  * @class
+ * @constructor
  */
 class Stats {
     /**
-     * @constructor
      * @param {Object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {

@@ -6,11 +6,11 @@ const PartialUser = require('./PartialUser.js').PartialUser;
 /**
  * Represents any user logged onto botlist.space.
  * @class
+ * @constructor
  * @extends {PartialUser}
  */
 class User extends PartialUser {
     /**
-     * @constructor
      * @param {Object} user The plain user object from the API.
      */
     constructor(user) {

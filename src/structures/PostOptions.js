@@ -1,3 +1,8 @@
+/**
+ * Options when Posting.
+ * @class
+ * @constructor
+ */
 class PostOptions {
     /**
      * @param {Object} options Options to override the preconfigured options.

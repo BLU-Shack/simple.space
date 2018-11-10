@@ -1,7 +1,7 @@
 const FetchOptions = require('./FetchOptions').FetchOptions;
 const Base = require('./Base').Base;
 const PartialUser = require('./PartialUser.js').PartialUser;
-const util = require('util');
+const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**
  * Represents any bot that has been submitted onto botlist.space.
@@ -200,23 +200,6 @@ class Bot extends Base {
     toString() {
         return `<@${this.id}>`;
     }
-
-    /**
-     * @deprecated Use {@link Bot#inviteURL} or {@link Bot#inviteNoPerms}
-     */
-    invite() {
-        return this.inviteURL;
-    }
-
-    /**
-     * @deprecated Use {@link Bot#supportCode} or {@link Bot#supportURL}
-     */
-    support() {
-        return this.supportURL;
-    }
 }
-
-Bot.prototype.invite = util.deprecate(Bot.prototype.invite, 'Bot#invite() => Use Bot#inviteURL or Bot#inviteNoPerms');
-Bot.prototype.support = util.deprecate(Bot.prototype.support, 'Bot#support() => Use Bot#supportCode or Bot#supportURL');
 
 exports.Bot = Bot;

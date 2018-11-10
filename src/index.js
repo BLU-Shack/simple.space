@@ -77,7 +77,7 @@ class Client {
     /**
      * Returns all bots on the site.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Array<Bot>} All bots on the site.
+     * @returns {Promise<Array<Bot>>} All bots on the site.
      */
     fetchAllBots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -105,7 +105,7 @@ class Client {
     /**
      * Fetches all guilds on the site.
      * @param {FetchOptions} options Fetch Options
-     * @returns {Array<Guild>} All guilds on the site.
+     * @returns {Promise<Array<Guild>>} All guilds on the site.
      */
     fetchAllGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -133,7 +133,7 @@ class Client {
     /**
      * Fetch all emojis listed on the site.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Array<Emoji>} All emojis on the site.
+     * @returns {Promise<Array<Emoji>>} All emojis on the site.
      */
     fetchAllEmojis(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

@@ -20,17 +20,18 @@ To install, use ``npm i simple.space``; But you already know that, right?
 
 ## Examples
 
-Wait, before we get in, let me explain things.
+<details>
+<summary>Each Chapter Format</summary>
+<br>
 
-* The ``value = example`` part is the default value if not supplied. If there is none, either it's required, or it doesn't supply a default value since it's not needed.
-* The function formats are as follows:
 ```js
-// Small description of what thing does
-// For each value: valueExample (TypeOfValue) => Description of how value affects function.
-// EXAMPLE: token (String) => This value requires a String-type value to be passed in.
-// Sometimes, there is a ? before the Type, which means Optional.
+// something (Type) => A random definition.
+// notNeeded (?Type) => An optional definition.
+Options.example(something, ?notNeeded);
 ```
 
+</details>
+<br>
 <details>
 <summary>Initialize The Package</summary>
 <br>
@@ -49,7 +50,7 @@ const Example = new SimpleSpace(?options = { token: false, botID: false, client:
 
 For future assumptions, let's say:
 1. ``options.token`` is invalid.
-2. ``options.botID`` is ``'228537642583588864'`` (id goes to the [Vexera Bot](https://vexera.io) )
+2. ``options.botID`` is ``'228537642583588864'`` (id goes to the [Vexera Bot](https://vexera.io))
 3. ``options.client`` is invalid.
 4. ``options.log`` is ``true``.
 

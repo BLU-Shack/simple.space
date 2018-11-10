@@ -54,7 +54,7 @@ class Emoji extends Base {
      * @type {Guild}
      */
     get guild() {
-        return new Guild(this.emoji.server);
+        return new Guild(this.normalGuild);
     }
 
     /**

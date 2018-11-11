@@ -259,7 +259,7 @@ class Client {
      * Fetches a guild's emojis.
      * @param {String} guildID The guild ID to fetch its emojis from.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Array<Emoji>}
+     * @returns {Promise<Array<Emoji>>} The array of the guild's emojis.
      */
     fetchGuildEmojis(guildID, options = {}) {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');

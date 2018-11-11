@@ -10,12 +10,10 @@ class PostOptions {
      */
     constructor(options, preset) {
         /**
-         * The API token for posting.
-         * @type {String}
+         * The discord.js#Client object. Usable to not require the guildSize parameter.
+         * @type {Client}
          */
-        this.token = options.token || preset.token;
-        if (!options.token) throw new ReferenceError('options.token must be defined.');
-        if (typeof options.token !== 'string') throw new TypeError('options.token must be a string.');
+        this.client = options.client || preset.client;
 
         /**
          * The bot ID for posting.
@@ -29,9 +27,17 @@ class PostOptions {
          * The size number/array for posting.
          * @type {Number|Array<Number>}
          */
-        this.guildSize = options.guildSize || (preset.client ? preset.client.guilds.size : false);
+        this.guildSize = options.guildSize || (this.client ? this.client.guilds.size : false);
         if (!this.guildSize) throw new ReferenceError('guildSize must be defined.');
         if (typeof this.guildSize !== 'number' && !(this.guildSize instanceof Array)) throw new TypeError('options.guildSize must be either a number or an array of numbers.');
+
+        /**
+         * The API token for posting.
+         * @type {String}
+         */
+        this.token = options.token || preset.token;
+        if (!options.token) throw new ReferenceError('options.token must be defined.');
+        if (typeof options.token !== 'string') throw new TypeError('options.token must be a string.');
     }
 
     /**

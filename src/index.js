@@ -405,10 +405,10 @@ class Client {
     }
 
     /**
-     * @param {PostOptions} options Post Options.
+     * @param {PostOptions} [options] Post Options.
      * @param {String} [options.token=this.options.token] The API token for posting.
      * @param {String} [options.botID=this.options.botID] The bot ID for posting.
-     * @param {String} options.guildSize The number (if no shards)/an array of numbers (if shards) to push to the API.
+     * @param {String} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
      * @returns {Promise<Object>} Returns the code, and a message.
      */
     setGuilds(options = {}) {

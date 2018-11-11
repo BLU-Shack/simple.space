@@ -21,7 +21,7 @@ class PostOptions {
          */
         this.botID = options.botID || preset.botID;
         if (!this.botID) throw new ReferenceError('options.botID must be defined.');
-        if (typeof options.botID !== 'string') throw new TypeError('options.botID must be a string.');
+        if (typeof this.botID !== 'string') throw new TypeError('options.botID must be a string.');
 
         /**
          * The size number/array for posting.

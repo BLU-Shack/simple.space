@@ -208,7 +208,7 @@ Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 
 ## Documentation
 
-https://iredme.github.io/simple.space/
+https://blu-shack.github.io/simple.space/
 
 ## Contributing
 

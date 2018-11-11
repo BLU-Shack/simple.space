@@ -56,25 +56,6 @@ class Client {
     }
 
     /**
-     * Fetches all bots that had been logged on to the site.
-     * @deprecated Use {@link Bot#fetchAllBots} or {@link Bot#fetchAllGuilds}
-     * @param {String} kind Whether or not to get bots or
-     * @param {FetchOptions} [options={}] Fetch Options.
-     * @returns {Promise<Array<Bot|Guild>>} The array of the bot objects.
-     */
-    fetchAll(kind, options = {}) {
-        if (!kind) throw new ReferenceError('kind must be defined.');
-        if (typeof kind !== 'string') throw new TypeError('kind must be a string.');
-        if (kind === 'bots') {
-            return this.fetchAllBots(options);
-        } else if (kind === 'guilds') {
-            return this.fetchAllGuilds(options);
-        } else {
-            throw new SyntaxError('kind must be either guilds or bots');
-        }
-    }
-
-    /**
      * Returns all bots on the site.
      * @param {FetchOptions} options Fetch Options.
      * @returns {Promise<Array<Bot>>} All bots on the site.

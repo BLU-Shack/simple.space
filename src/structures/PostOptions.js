@@ -20,7 +20,7 @@ class PostOptions {
          * @type {String}
          */
         this.botID = options.botID || preset.botID;
-        if (!options.botID) throw new ReferenceError('options.botID must be defined.');
+        if (!this.botID) throw new ReferenceError('options.botID must be defined.');
         if (typeof options.botID !== 'string') throw new TypeError('options.botID must be a string.');
 
         /**
@@ -36,8 +36,8 @@ class PostOptions {
          * @type {String}
          */
         this.token = options.token || preset.token;
-        if (!options.token) throw new ReferenceError('options.token must be defined.');
-        if (typeof options.token !== 'string') throw new TypeError('options.token must be a string.');
+        if (!this.token) throw new ReferenceError('options.token must be defined.');
+        if (typeof this.token !== 'string') throw new TypeError('options.token must be a string.');
     }
 
     /**

@@ -128,8 +128,9 @@ class Guild extends Base {
         if (Options.normal) {
             return Options.specified ? this.guild.owners.map(owner => owner[Options.specified]) : this.guild.owners;
         } else {
-            const Owners = this.guild.owners.map(owner => new PartialUser(owner));
-            return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            const Owners = Options.stringify ? this.guild.owners.map(owner => new PartialUser(owner).toString()) : this.guild.owners.map(owner => new PartialUser(owner));
+            const resolved = Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            return resolved;
         }
     }
 

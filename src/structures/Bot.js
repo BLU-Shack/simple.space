@@ -185,8 +185,8 @@ class Bot extends Base {
         if (Options.normal) {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
-            const Owners = this.bot.owners.map(owner => new PartialUser(owner));
-            const resolved = Options.stringify ? Owners.map(owner => owner.toString()) : Owners;
+            const Owners = Options.stringify ? this.bot.owners.map(owner => new PartialUser(owner).toString()) : this.bot.owners.map(owner => new PartialUser(owner));
+            const resolved = Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
             return resolved;
         }
     }

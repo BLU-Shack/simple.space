@@ -4,7 +4,6 @@ const Guild = require('./Guild.js').Guild;
 /**
  * Represents any emoji on botlist.space.
  * @class
- * @constructor
  * @extends {Base}
  */
 class Emoji extends Base {

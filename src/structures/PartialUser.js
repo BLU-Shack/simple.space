@@ -3,7 +3,6 @@ const Base = require('./Base.js').Base;
 /**
  * A user with limited information.
  * @class
- * @constructor
  */
 class PartialUser extends Base {
     /**

@@ -1,7 +1,6 @@
 /**
  * The universal base for Bot/Emoji/Guild/User classes.
  * @class
- * @constructor
  */
 class Base {
     /**

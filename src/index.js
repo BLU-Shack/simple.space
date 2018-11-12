@@ -15,6 +15,7 @@ const User = require('./structures/User.js').User;
 
 const FetchError = require('./structures/FetchError.js').FetchError;
 const Stats = require('./structures/Stats.js').Stats;
+const Store = require('./structures/Store.js').Store;
 const endpoint = 'https://botlist.space/api';
 
 const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats };
@@ -23,6 +24,7 @@ const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, 
  * Main client class for interacting to botlist.space
  * @class
  * @constructor
+ * @extends {EventEmitter}
  */
 class Client extends EventEmitter {
     /**
@@ -36,21 +38,21 @@ class Client extends EventEmitter {
 
         /**
          * If cached, all the bots that are listed on the site.
-         * @type {Map<String, Bot>}
+         * @type {Store}
          */
-        this.bots = new Map();
-
-        /**
-         * If cached, all the guilds that are listed on the site.
-         * @type {Map<String, Guild>}
-         */
-        this.guilds = new Map();
+        this.bots = new Store();
 
         /**
          * If cached, all the emojis that are listed on the site.
-         * @type {Map<String, Emoji>}
+         * @type {Store}
          */
-        this.emojis = new Map();
+        this.emojis = new Store();
+
+        /**
+         * If cached, all the guilds that are listed on the site.
+         * @type {Store}
+         */
+        this.guilds = new Store();
 
         this.edit(options, true); // Note from the Developer: Do Not Touch.
         this._runCache(this.options.cache)
@@ -71,6 +73,7 @@ class Client extends EventEmitter {
             await this.fetchAllGuilds({ log: false });
 
             setTimeout(this._runCache, 180e3);
+            this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
             return {};
@@ -109,7 +112,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const bots = await body.json();
                     if (bots.code) throw new FetchError(bots, 'Bots');
-                    this.bots = new Map([...bots.map(bot => [bot.id, new Bot(bot)])]);
+                    this.bots = new Store([...bots.map(bot => [bot.id, new Bot(bot)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
                         if (Options.log) console.log(resolved);
@@ -138,7 +141,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
-                    this.guilds = new Map([...guilds.map(guild => [guild.id, new Guild(guild)])]);
+                    this.guilds = new Store([...guilds.map(guild => [guild.id, new Guild(guild)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
                         if (Options.log) console.log(resolved);
@@ -167,7 +170,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
-                    this.emojis = new Map([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
+                    this.emojis = new Store([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
                         if (Options.log) console.log(resolved);

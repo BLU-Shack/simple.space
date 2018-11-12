@@ -28,8 +28,6 @@ class Stats {
             unapproved: stats.bots.unapproved
         };
 
-        this.emojis = stats.emojis;
-
         /**
          * The total number of guilds that had been submitted.
          * @type {Number}

@@ -38,13 +38,13 @@ class Bot extends Base {
 
         /**
          * The bot's full description, if any.
-         * @type {String|null}
+         * @type {?String}
          */
         this.fullDescription = bot.full_description;
 
         /**
          * The amount of guilds the bot is currently in, if the owner posted anything.
-         * @type {Number|null}
+         * @type {?Number}
          */
         this.guildSize = bot.server_count;
 
@@ -86,13 +86,13 @@ class Bot extends Base {
 
         /**
          * Identical to {@link Bot#guildSize}
-         * @type {Number|null}
+         * @type {?Number}
          */
         this.serverCount = this.guildSize || null;
 
         /**
          * Returns, if any, an array of the bot's guild count for each of its shard.
-         * @type {Array<Number>|null}
+         * @type {?Array<Number>}
          */
         this.shards = bot.shards || null;
 
@@ -104,7 +104,7 @@ class Bot extends Base {
 
         /**
          * The bot's support code, if any.
-         * @type {String|null}
+         * @type {?String}
          */
         this.supportCode = bot.links.support;
 
@@ -137,7 +137,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's support URL, if the support code exists.
-     * @type {String|null}
+     * @type {?String}
      */
     get supportURL() {
         if (!this.supportCode) return null;
@@ -162,7 +162,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's vanity in the form of a URL, if the bot has a vanity.
-     * @type {String|null}
+     * @type {?String}
      */
     get vanityURL() {
         if (!this.vanity) return null;

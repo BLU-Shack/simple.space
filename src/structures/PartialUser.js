@@ -34,13 +34,13 @@ class PartialUser extends Base {
 
         /**
          * If any, the user's github username.
-         * @type {String}
+         * @type {?String}
          */
         this.githubUsername = base.links.github;
 
         /**
          * If any, the user's gitlab username.
-         * @type {String}
+         * @type {?String}
          */
         this.gitlabUsername = base.links.gitlab;
 

@@ -396,7 +396,7 @@ class Client {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
         const Options = new PostOptions(options, this.options);
         return new Promise((resolve, reject) => {
-            Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json' }, body: Options.data })
+            Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json; charset=UTF-8' }, body: Options.data })
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code) throw new FetchError(body, 'Bot');

@@ -30,7 +30,7 @@ class Guild extends Base {
 
         /**
          * The guild's full description, if any.
-         * @type {String|null}
+         * @type {?String}
          */
         this.fullDescription = guild.full_description;
 
@@ -90,7 +90,7 @@ class Guild extends Base {
 
         /**
          * The guild's vanity, if any.
-         * @type {String|null}
+         * @type {?String}
          */
         this.vanity = guild.vanity;
     }

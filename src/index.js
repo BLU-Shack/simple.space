@@ -81,7 +81,7 @@ class Client extends EventEmitter {
             this.emojis = new Map([...allEmojis.map(emoji => [emoji.id, emoji])]);
             this.guilds = new Map([...allGuilds.map(guild => [guild.id, guild])]);
 
-            setInterval(this._runCache, 180e3);
+            setTimeout(this._runCache, 180e3);
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
             await this._ready();

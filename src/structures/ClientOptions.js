@@ -10,14 +10,19 @@ class ClientOptions {
      */
     constructor(newObj, oldObj = ClientOptions.default) {
         /**
+         * Whether or not to save all bots and guilds into an array.
+         * @type {Boolean}
+         */
+        this.cache = newObj.hasOwnProperty('cache') ? newObj.cache !== 'none' ? newObj.cache : false : oldObj.cache;
+        /**
          * The API token, required for some functions to work properly.
-         * @type {String|false}
+         * @type {String|Boolean}
          */
         this.token = newObj.hasOwnProperty('token') ? newObj.token !== 'none' ? newObj.token : false : oldObj.token;
 
         /**
          * The Bot ID, used for self actions and posting guild count.
-         * @type {String|false}
+         * @type {String|Boolean}
          */
         this.botID = newObj.hasOwnProperty('botID') ? newObj.botID !== 'none' ? newObj.botID : false : oldObj.botID;
 
@@ -40,9 +45,10 @@ class ClientOptions {
      */
     static get default() {
         return {
-            token: 'none',
-            botID: 'none',
+            cache: false,
             client: 'none',
+            botID: 'none',
+            token: 'none',
             log: false
         };
     }

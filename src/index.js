@@ -1,3 +1,4 @@
+const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
@@ -23,17 +24,38 @@ const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, 
  * @class
  * @constructor
  */
-class Client {
+class Client extends EventEmitter {
     /**
      * @param {ClientOptions} [options=ClientOptions.default] The configuration options.
      */
     constructor(options = ClientOptions.default) {
-        /**
-         * @ignore
-         * @type {ClientOptions}
-         */
+        super();
+
+        /** @ignore @type {ClientOptions} */
         this.options;
+
+        /** @ignore @type {Array<Bot>} */
+        this.bots;
+
+        /** @ignore @type {Array<Guild>} */
+        this.guilds;
+
+        /** @ignore @type {Array<Emoji>} */
+        this.emojis;
         this.edit(options, true); // Note from the Developer: Do Not Touch.
+
+        this._runCache(this.options.cache);
+    }
+
+    async _runCache(cache) {
+        if (cache) {
+            this.bots = await this.fetchAllBots();
+            this.emojis = await this.fetchAllEmojis();
+            this.guilds = await this.fetchAllGuilds();
+            this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+        } else {
+            this.emit('ready', {});
+        }
     }
 
     /**

@@ -60,6 +60,7 @@ class Client extends EventEmitter {
 
     /**
      * Returns a promise. Used to emit the ready event if cache is disabled.
+     * @private
      * @returns {Promise<0>}
      */
     async _ready() {
@@ -68,6 +69,7 @@ class Client extends EventEmitter {
 
     /**
      * Runs the cache if this.options.cache is set to true.
+     * @private
      * @param {Boolean} cache Whether or not to cache all bots, guilds, and emojis.
      * @returns {Object}
      */

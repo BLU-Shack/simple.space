@@ -34,26 +34,43 @@ class Client extends EventEmitter {
         /** @ignore @type {ClientOptions} */
         this.options;
 
-        /** @ignore @type {Array<Bot>} */
+        /**
+         * If cached, all the bots that are listed on the site.
+         * @type {Array<Bot>}
+         */
         this.bots;
 
-        /** @ignore @type {Array<Guild>} */
+        /**
+         * If cached, all the guilds that are listed on the site.
+         * @type {Array<Guild>}
+         */
         this.guilds;
 
-        /** @ignore @type {Array<Emoji>} */
+        /**
+         * If cached, all the emojis that are listed on the site.
+         * @type {Array<Emoji>}
+         */
         this.emojis;
         this.edit(options, true); // Note from the Developer: Do Not Touch.
 
+        this.removeAllListeners('ready');
         this._runCache(this.options.cache);
+    }
+
+    async _ready() {
+        return Promise.resolve(0);
     }
 
     async _runCache(cache) {
         if (cache) {
-            this.bots = await this.fetchAllBots();
-            this.emojis = await this.fetchAllEmojis();
-            this.guilds = await this.fetchAllGuilds();
+            this.bots = this.fetchAllBots({ log: false });
+            this.emojis = this.fetchAllEmojis({ log: false });
+            this.guilds = this.fetchAllGuilds({ log: false });
+
+            await Promise.all([this.bots, this.emojis, this.guilds]);
             this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
         } else {
+            await this._ready();
             this.emit('ready', {});
         }
     }
@@ -92,12 +109,12 @@ class Client extends EventEmitter {
                     if (bots.code) throw new FetchError(bots, 'Bots');
                     if (Options.normal) {
                         const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceBots = bots.map(bot => new Bot(bot));
                         const resolved = Options.specified ? SpaceBots.map(bot => bot[Options.specified]) : SpaceBots;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -120,12 +137,12 @@ class Client extends EventEmitter {
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
                     if (Options.normal) {
                         const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceGuilds = guilds.map(guild => new Guild(guild));
                         const resolved = Options.specified ? SpaceGuilds.map(guild => guild[Options.specified]) : SpaceGuilds;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -148,12 +165,12 @@ class Client extends EventEmitter {
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
                         const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -183,12 +200,12 @@ class Client extends EventEmitter {
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceBot = Options.stringify ? new Bot(body).toString() : new Bot(body);
                         const resolved = Options.specified ? SpaceBot[options.specified] : SpaceBot;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -214,12 +231,12 @@ class Client extends EventEmitter {
                     if (emoji.code) throw new FetchError(emoji, 'Emoji');
                     if (Options.normal) {
                         const resolved = Options.specified ? emoji[Options.specified] : emoji;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceEmoji = Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji);
                         const resolved = Options.specified ? SpaceEmoji[Options.specified] : SpaceEmoji;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -245,12 +262,12 @@ class Client extends EventEmitter {
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceGuild = Options.stringify ? new Guild(body).toString() : new Guild(body);
                         const resolved = Options.specified ? SpaceGuild[Options.specified] : SpaceGuild;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -276,12 +293,12 @@ class Client extends EventEmitter {
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis[Options.specified] : emojis;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
                         const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -312,12 +329,12 @@ class Client extends EventEmitter {
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] || body.bots[Options.specified] : body;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceStats = new Stats(body);
                         const resolved = Options.specified ? SpaceStats[Options.specified] || SpaceStats.bots[Options.specified] : SpaceStats;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -345,7 +362,7 @@ class Client extends EventEmitter {
                     if (body.code) throw new FetchError(body, 'Bot');
                     if (Options.normal) {
                         const resolved = Options.specified ? body.map(user => user[Options.specified]) : body;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceUpvotes = body.map(info => {
@@ -353,7 +370,7 @@ class Client extends EventEmitter {
                             return obj;
                         });
                         const resolved = Options.specified ? SpaceUpvotes.map(v => v[Options.specified] || v.user[Options.specified]) : SpaceUpvotes;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })
@@ -379,12 +396,12 @@ class Client extends EventEmitter {
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     } else {
                         const SpaceUser = Options.stringify ? new User(body).toString() : new User(body);
                         const resolved = Options.specified ? SpaceUser[Options.specified] : SpaceUser;
-                        if (this.options.log) console.log(resolved);
+                        if (Options.log) console.log(resolved);
                         resolve(resolved);
                     }
                 })

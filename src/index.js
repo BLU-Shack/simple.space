@@ -42,13 +42,13 @@ class Client extends EventEmitter {
 
         /**
          * If cached, all the guilds that are listed on the site.
-         * @type {Map<String, Bot>}
+         * @type {Map<String, Guild>}
          */
         this.guilds;
 
         /**
          * If cached, all the emojis that are listed on the site.
-         * @type {Map<String, Bot>}
+         * @type {Map<String, Emoji>}
          */
         this.emojis;
 
@@ -73,13 +73,9 @@ class Client extends EventEmitter {
      */
     async _runCache(cache) {
         if (cache) {
-            const allBots = await this.fetchAllBots({ log: false });
-            const allEmojis = await this.fetchAllEmojis({ log: false });
-            const allGuilds = await this.fetchAllGuilds({ log: false });
-
-            this.bots = new Map([...allBots.map(bot => [bot.id, bot])]);
-            this.emojis = new Map([...allEmojis.map(emoji => [emoji.id, emoji])]);
-            this.guilds = new Map([...allGuilds.map(guild => [guild.id, guild])]);
+            await this.fetchAllBots({ log: false });
+            await this.fetchAllEmojis({ log: false });
+            await this.fetchAllGuilds({ log: false });
 
             setTimeout(this._runCache, 180e3);
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
@@ -121,6 +117,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const bots = await body.json();
                     if (bots.code) throw new FetchError(bots, 'Bots');
+                    this.bots = new Map([...bots.map(bot => [bot.id, new Bot(bot)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
                         if (Options.log) console.log(resolved);
@@ -149,6 +146,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
+                    this.guilds = new Map([...guilds.map(guild => [guild.id, new Guild(guild)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
                         if (Options.log) console.log(resolved);
@@ -177,6 +175,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
+                    this.emojis = new Map([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
                         if (Options.log) console.log(resolved);
@@ -211,6 +210,7 @@ class Client extends EventEmitter {
                 .then(async bot => {
                     const body = await bot.json();
                     if (body.code) throw new FetchError(body, 'Bot');
+                    this.bots.set(body.id, new Bot(body));
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
@@ -243,6 +243,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emoji = await body.json();
                     if (emoji.code) throw new FetchError(emoji, 'Emoji');
+                    this.emojis.set(emoji.id, new Emoji(emoji));
                     if (Options.normal) {
                         const resolved = Options.specified ? emoji[Options.specified] : emoji;
                         if (Options.log) console.log(resolved);
@@ -273,6 +274,7 @@ class Client extends EventEmitter {
                 .then(async guild => {
                     const body = await guild.json();
                     if (body.code) throw new FetchError(body, 'Guild');
+                    this.guilds.set(guild.id, new Guild(guild));
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
@@ -305,6 +307,9 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
+                    for (const emoji of emojis) {
+                        this.emojis.set(emoji.id, new Emoji(emoji));
+                    }
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis[Options.specified] : emojis;
                         if (Options.log) console.log(resolved);

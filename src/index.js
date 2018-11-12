@@ -36,19 +36,19 @@ class Client extends EventEmitter {
 
         /**
          * If cached, all the bots that are listed on the site.
-         * @type {Array<Bot>}
+         * @type {Map<String, Bot>}
          */
         this.bots;
 
         /**
          * If cached, all the guilds that are listed on the site.
-         * @type {Array<Guild>}
+         * @type {Map<String, Bot>}
          */
         this.guilds;
 
         /**
          * If cached, all the emojis that are listed on the site.
-         * @type {Array<Emoji>}
+         * @type {Map<String, Bot>}
          */
         this.emojis;
         this.edit(options, true); // Note from the Developer: Do Not Touch.
@@ -63,11 +63,13 @@ class Client extends EventEmitter {
 
     async _runCache(cache) {
         if (cache) {
-            this.bots = this.fetchAllBots({ log: false });
-            this.emojis = this.fetchAllEmojis({ log: false });
-            this.guilds = this.fetchAllGuilds({ log: false });
+            const allBots = await this.fetchAllBots({ log: false });
+            const allEmojis = await this.fetchAllEmojis({ log: false });
+            const allGuilds = await this.fetchAllGuilds({ log: false });
+            this.bots = new Map([...allBots.map(bot => [bot.id, bot])]);
+            this.emojis = new Map([...allEmojis.map(emoji => [emoji.id, emoji])]);
+            this.guilds = new Map([...allGuilds.map(guild => [guild.id, guild])]);
 
-            await Promise.all([this.bots, this.emojis, this.guilds]);
             this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
         } else {
             await this._ready();

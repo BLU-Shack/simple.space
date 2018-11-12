@@ -53,14 +53,22 @@ class Client extends EventEmitter {
         this.emojis;
         this.edit(options, true); // Note from the Developer: Do Not Touch.
 
-        this.removeAllListeners('ready');
         this._runCache(this.options.cache);
     }
 
+    /**
+     * Returns a promise. Used to emit the ready event if cache is disabled.
+     * @returns {Promise<0>}
+     */
     async _ready() {
         return Promise.resolve(0);
     }
 
+    /**
+     * Runs the cache if this.options.cache is set to true.
+     * @param {Boolean} cache Whether or not to cache all bots, guilds, and emojis.
+     * @returns {Boolean}
+     */
     async _runCache(cache) {
         if (cache) {
             const allBots = await this.fetchAllBots({ log: false });
@@ -70,10 +78,10 @@ class Client extends EventEmitter {
             this.emojis = new Map([...allEmojis.map(emoji => [emoji.id, emoji])]);
             this.guilds = new Map([...allGuilds.map(guild => [guild.id, guild])]);
 
-            this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+            return this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
         } else {
             await this._ready();
-            this.emit('ready', {});
+            return this.emit('ready', {});
         }
     }
 

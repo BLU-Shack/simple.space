@@ -14,6 +14,7 @@ class ClientOptions {
          * @type {Boolean}
          */
         this.cache = newObj.hasOwnProperty('cache') ? newObj.cache !== 'none' ? newObj.cache : false : oldObj.cache;
+
         /**
          * The API token, required for some functions to work properly.
          * @type {String|Boolean}

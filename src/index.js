@@ -51,9 +51,11 @@ class Client extends EventEmitter {
          * @type {Map<String, Bot>}
          */
         this.emojis;
-        this.edit(options, true); // Note from the Developer: Do Not Touch.
 
-        this._runCache(this.options.cache);
+        this.edit(options, true); // Note from the Developer: Do Not Touch.
+        this._runCache(this.options.cache)
+            .then(e => this.emit('ready', e))
+            .catch(console.error);
     }
 
     /**
@@ -67,21 +69,23 @@ class Client extends EventEmitter {
     /**
      * Runs the cache if this.options.cache is set to true.
      * @param {Boolean} cache Whether or not to cache all bots, guilds, and emojis.
-     * @returns {Boolean}
+     * @returns {Object}
      */
     async _runCache(cache) {
         if (cache) {
             const allBots = await this.fetchAllBots({ log: false });
             const allEmojis = await this.fetchAllEmojis({ log: false });
             const allGuilds = await this.fetchAllGuilds({ log: false });
+
             this.bots = new Map([...allBots.map(bot => [bot.id, bot])]);
             this.emojis = new Map([...allEmojis.map(emoji => [emoji.id, emoji])]);
             this.guilds = new Map([...allGuilds.map(guild => [guild.id, guild])]);
 
-            return this.emit('ready', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+            setInterval(this._runCache, 180e3);
+            return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
             await this._ready();
-            return this.emit('ready', {});
+            return {};
         }
     }
 
@@ -476,3 +480,9 @@ class Client extends EventEmitter {
 
 module.exports = Client;
 module.exports.version = 'v2.2.3';
+
+/**
+ * Emitted when cache is ready/cache was never run but it still returned something.
+ * @event Client#ready
+ * @param {Object}
+ */

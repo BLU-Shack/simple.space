@@ -373,7 +373,7 @@ class Client {
     /**
      * Checks if a user has upvoted your bot.
      * @param {String} userID The user ID to check if they have upvoted your bot.
-     * @returns {Boolean} Whether or not the user has upvoted your bot.
+     * @returns {Promise<Boolean>} Whether or not the user has upvoted your bot.
      */
     hasUpvoted(userID) {
         return new Promise((resolve, reject) => {

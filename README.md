@@ -17,11 +17,12 @@ To install, use ``npm i simple.space``; But you already know that, right?
 |-|-|
 |Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
 |Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|
+|Uses ``node-fetch`` instead of ``snekfetch``|No Code Example Here, Mate|
 
 ## Examples
 
 <details>
-<summary>Each Chapter Format</summary>
+<summary>An Example Format</summary>
 <br>
 
 ```js

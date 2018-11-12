@@ -59,7 +59,7 @@ class PartialUser extends Base {
 
     /**
      * The user's github URL.
-     * @type {String}
+     * @type {?String}
      */
     get githubURL() {
         if (!this.githubUsername) return null;
@@ -68,7 +68,7 @@ class PartialUser extends Base {
 
     /**
      * The user's gitlab URL.
-     * @type {String}
+     * @type {?String}
      */
     get gitlabURL() {
         if (!this.gitlabUsername) return null;

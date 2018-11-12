@@ -274,7 +274,7 @@ class Client extends EventEmitter {
                 .then(async guild => {
                     const body = await guild.json();
                     if (body.code) throw new FetchError(body, 'Guild');
-                    this.guilds.set(guild.id, new Guild(guild));
+                    this.guilds.set(body.id, new Guild(body));
                     const Options = new FetchOptions(options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;

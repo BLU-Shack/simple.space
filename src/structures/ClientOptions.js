@@ -1,7 +1,6 @@
 /**
  * Options that are supplied on initialization.
  * @class
- * @constructor
  */
 class ClientOptions {
     /**

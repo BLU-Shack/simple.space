@@ -1,7 +1,6 @@
 /**
  * Options when Posting.
  * @class
- * @constructor
  */
 class PostOptions {
     /**

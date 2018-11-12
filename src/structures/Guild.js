@@ -9,7 +9,6 @@ const PartialUser = require('./PartialUser.js').PartialUser;
  */
 class Guild extends Base {
     /**
-     * @constructor
      * @param {Object} guild The plain guild object, fetched from the API.
      */
     constructor(guild) {

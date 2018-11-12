@@ -23,8 +23,6 @@ const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, 
 /**
  * Main client class for interacting to botlist.space
  * @class
- * @constructor
- * @extends {EventEmitter}
  */
 class Client extends EventEmitter {
     /**

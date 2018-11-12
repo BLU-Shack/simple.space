@@ -6,7 +6,6 @@ const util = require('util'); // eslint-disable-line no-unused-vars
 /**
  * Represents any bot that has been submitted onto botlist.space.
  * @class
- * @constructor
  * @extends {Base}
  */
 class Bot extends Base {

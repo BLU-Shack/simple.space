@@ -1,7 +1,6 @@
 /**
  * Represents the statistics that have been fetched from the API.
  * @class
- * @constructor
  */
 class Stats {
     /**

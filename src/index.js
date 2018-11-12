@@ -38,19 +38,19 @@ class Client extends EventEmitter {
          * If cached, all the bots that are listed on the site.
          * @type {Map<String, Bot>}
          */
-        this.bots;
+        this.bots = new Map();
 
         /**
          * If cached, all the guilds that are listed on the site.
          * @type {Map<String, Guild>}
          */
-        this.guilds;
+        this.guilds = new Map();
 
         /**
          * If cached, all the emojis that are listed on the site.
          * @type {Map<String, Emoji>}
          */
-        this.emojis;
+        this.emojis = new Map();
 
         this.edit(options, true); // Note from the Developer: Do Not Touch.
         this._runCache(this.options.cache)

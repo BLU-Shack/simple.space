@@ -2,17 +2,19 @@
  * A storage class that includes additional methods.
  * @class
  * @extends {Map}
+ * @template K
+ * @template V
  */
 class Store extends Map {
     /**
-     * @param {Iterable<any, any>} [iterable]
+     * @param {Iterable<[any, any]>} [iterable]
      */
     constructor(iterable) {
         super(iterable);
     }
 
     /**
-     * Returns all the values of an array.
+     * Returns all the values of the Store in an array.
      * @returns {Array<*>}
      */
     array() {
@@ -38,11 +40,41 @@ class Store extends Map {
     }
 
     /**
-     * Returns all the keys in an array.
+     * Returns all the keys of the Store in an array.
      * @returns {Array<*>}
      */
     keyArray() {
         return [...this.keys()];
+    }
+
+    /**
+     * Retrives a random value of the Store.
+     * @returns {*}
+     */
+    random() {
+        const values = this.array();
+        return values[Math.floor(Math.random() * values.length)];
+    }
+
+    /**
+     * Retrieves a random key of the Store.
+     * @returns {*}
+     */
+    randomKey() {
+        const keys = this.keyArray();
+        return keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    /**
+     * Retrieves a random key-value pair of the Store and returns a new Store.
+     * @returns {Store<*, *>}
+     */
+    randomPair() {
+        const random = this.randomKey();
+        const pair = new this.constructor[Symbol.species]();
+
+        pair.set(random, this.get(random));
+        return pair;
     }
 }
 

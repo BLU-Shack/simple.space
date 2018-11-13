@@ -18,7 +18,7 @@ const Stats = require('./structures/Stats.js').Stats;
 const Store = require('./structures/Store.js').Store;
 const endpoint = 'https://botlist.space/api';
 
-const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats };
+const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats, Store };
 
 /**
  * Main client class for interacting to botlist.space
@@ -36,19 +36,19 @@ class Client extends EventEmitter {
 
         /**
          * If cached, all the bots that are listed on the site.
-         * @type {Store}
+         * @type {Store<String, Bot>}
          */
         this.bots = new Store();
 
         /**
          * If cached, all the emojis that are listed on the site.
-         * @type {Store}
+         * @type {Store<String, Emoji>}
          */
         this.emojis = new Store();
 
         /**
          * If cached, all the guilds that are listed on the site.
-         * @type {Store}
+         * @type {Store<String, Guild>}
          */
         this.guilds = new Store();
 

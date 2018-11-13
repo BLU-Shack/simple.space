@@ -8,10 +8,10 @@ const Guild = require('./Guild.js').Guild;
  */
 class Emoji extends Base {
     /**
-     * @param {Object} base The emoji object fetched from the API.
+     * @param {Object} emoji The emoji object fetched from the API.
      */
-    constructor(base) {
-        super(base);
+    constructor(emoji) {
+        super(emoji);
 
         Object.defineProperty(this, 'emoji', { writable: true, enumerable: false });
 
@@ -19,25 +19,25 @@ class Emoji extends Base {
          * The plain emoji object itself.
          * @type {Object}
          */
-        this.emoji = base;
+        this.emoji = emoji;
 
         /**
          * Whether or not the emoji is animated.
          * @type {Boolean}
          */
-        this.animated = base.animated;
+        this.animated = emoji.animated;
 
         /**
          * The emoji's name.
          * @type {String}
          */
-        this.name = base.name;
+        this.name = emoji.name;
 
         /**
          * The emoji's image URL.
          * @type {String}
          */
-        this.imageURL = base.url;
+        this.imageURL = emoji.url;
     }
 
     /**

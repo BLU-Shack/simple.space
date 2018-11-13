@@ -121,7 +121,7 @@ class Bot extends Base {
 
         /**
          * Returns, if any, the bot's vanity.
-         * @type {String}
+         * @type {?String}
          */
         this.vanity = bot.vanity;
     }

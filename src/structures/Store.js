@@ -25,7 +25,7 @@ class Store extends Map {
      * Filters the store using a passed function, and returns a new Store including the filtered values.
      * @param {Function} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to "this" value.
-     * @returns {Store} The new Store containing the filtered contents.
+     * @returns {Store<*, *>} The new Store containing the filtered contents.
      */
     filter(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');
@@ -67,13 +67,13 @@ class Store extends Map {
 
     /**
      * Retrieves a random key-value pair of the Store and returns a new Store.
-     * @returns {Store<*, *>}
+     * @returns {Array<*>}
      */
     randomPair() {
         const random = this.randomKey();
-        const pair = new this.constructor[Symbol.species]();
+        const pair = [];
 
-        pair.set(random, this.get(random));
+        pair.push(random, this.get(random));
         return pair;
     }
 }

@@ -18,7 +18,7 @@ const Stats = require('./structures/Stats.js').Stats;
 const Store = require('./structures/Store.js').Store;
 const endpoint = 'https://botlist.space/api';
 
-const Classes = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats, Store };
+const AllClasses = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats, Store };
 
 /**
  * Main client class for interacting to botlist.space
@@ -458,13 +458,29 @@ class Client extends EventEmitter {
     }
 
     /**
+     * @typedef {Object} Classes
+     * @property {typeof ClientOptions} ClientOptions
+     * @property {typeof FetchOptions} FetchOptions
+     * @property {typeof PostOptions} PostOptions
+     * @property {typeof UpvoteFetchOptions} UpvoteFetchOptions
+     * @property {typeof Bot} Bot
+     * @property {typeof Emoji} Emoji
+     * @property {typeof Guild} Guild
+     * @property {typeof PartialUser} PartialUser
+     * @property {typeof User} User
+     * @property {typeof FetchError} FetchError
+     * @property {typeof Stats} Stats
+     * @property {typeof Store} Store
+     */
+
+    /**
      * All of the classes used.
      * @type {Classes}
      * @static
      * @private
      */
     static get Classes() {
-        return Classes;
+        return AllClasses;
     }
 
     /**
@@ -482,5 +498,11 @@ module.exports.version = 'v2.2.3';
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.
  * @event Client#ready
+ * @param {Object}
+ */
+
+/**
+ * Emitted when cache is updated.
+ * @event Client#cacheUpdate
  * @param {Object}
  */

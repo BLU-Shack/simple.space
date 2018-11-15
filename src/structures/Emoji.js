@@ -66,7 +66,7 @@ class Emoji extends Base {
 
     /**
      * Returns the text that forms a readable Discord emoji in discord messages.
-     * @returns {String}
+     * @returns {String} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
      */
     toString() {
         return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;

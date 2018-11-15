@@ -92,7 +92,7 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's mention, rather than the user object.
-     * @type {String}
+     * @returns {String} The user mention.
      * @example
      * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
      */

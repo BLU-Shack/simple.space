@@ -15,6 +15,12 @@ class ClientOptions {
         this.cache = newObj.hasOwnProperty('cache') ? newObj.cache !== 'none' ? newObj.cache : false : oldObj.cache;
 
         /**
+         * The number of milliseconds to wait until the cache is automatically updated. Set to ``0`` to disable automatic cache updating. Note that updating may not be consistent, and may be later than intended.
+         * @type {Number}
+         */
+        this.cacheUpdateTimer = newObj.hasOwnProperty('cacheUpdateTimer') ? newObj.cacheUpdateTimer !== 'none' ? newObj.cacheUpdateTimer : oldObj.cacheUpdateTimer : oldObj.cacheUpdateTimer;
+
+        /**
          * The API token, required for some functions to work properly.
          * @type {String|Boolean}
          */
@@ -46,6 +52,7 @@ class ClientOptions {
     static get default() {
         return {
             cache: false,
+            cacheUpdateTimer: 180000,
             client: 'none',
             botID: 'none',
             token: 'none',

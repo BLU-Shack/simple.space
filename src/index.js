@@ -71,7 +71,10 @@ class Client extends EventEmitter {
             await this.fetchAllEmojis({ log: false });
             await this.fetchAllGuilds({ log: false });
 
-            setTimeout(this._runCache, 180e3);
+            if (this.options.cacheUpdateTimer > 0) {
+                setTimeout(() => { this._runCache(this.options.cache); }, this.options.cacheUpdateTimer);
+            }
+
             this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
@@ -90,10 +93,13 @@ class Client extends EventEmitter {
     edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-        if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
-        if (options.botID && typeof options.botID !== 'string') throw new TypeError('botID must be a string.');
-        if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
-        this.options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
+        const Options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
+        if (Options.token && typeof Options.token !== 'string') throw new TypeError('options.token must be a string.');
+        if (Options.botID && typeof Options.botID !== 'string') throw new TypeError('options.botID must be a string.');
+        if (typeof Options.log !== 'boolean') throw new TypeError('options.log must be boolean.');
+        if (typeof Options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
+        if (typeof Options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
+        this.options = Options;
 
         return this.options;
     }

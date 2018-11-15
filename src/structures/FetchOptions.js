@@ -6,7 +6,7 @@ const ClientOptions = require('./ClientOptions.js').ClientOptions;
  */
 class FetchOptions {
     /**
-     * @param {FetchOptions} [options={}] The selected object.
+     * @param {Object} [options={}] The selected object.
      * @param {ClientOptions} [preset=ClientOptions.default] Preset Client Options.
      */
     constructor(options = {}, preset = ClientOptions.default) {

@@ -63,6 +63,7 @@ class Client extends EventEmitter {
      * @private
      * @param {Boolean} cache Whether or not to cache all bots, guilds, and emojis.
      * @returns {Object}
+     * @fires Client#cacheUpdate
      */
     async _runCache(cache) {
         if (cache) {
@@ -498,11 +499,17 @@ module.exports.version = 'v2.2.3';
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.
  * @event Client#ready
- * @param {Object}
+ * @type {Object}
+ * @property {Store<String, Bot>} bots
+ * @property {Store<String, Guild>} guilds
+ * @property {Store<String, Emoji>} emojis
  */
 
 /**
  * Emitted when cache is updated.
  * @event Client#cacheUpdate
- * @param {Object}
+ * @type {Object}
+ * @property {Store<String, Bot>} bots
+ * @property {Store<String, Guild>} guilds
+ * @property {Store<String, Emoji>} emojis
  */

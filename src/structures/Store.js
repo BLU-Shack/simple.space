@@ -14,8 +14,17 @@ class Store extends Map {
     }
 
     /**
+     * @ignore
+     * @param {any} key The key to use when fetching for a value.
+     * @returns {V}
+     */
+    get(key) {
+        return super.get(key);
+    }
+
+    /**
      * Returns all the values of the Store in an array.
-     * @returns {Array<*>}
+     * @returns {Array<V>}
      */
     array() {
         return [...this.values()];
@@ -25,7 +34,14 @@ class Store extends Map {
      * Filters the store using a passed function, and returns a new Store including the filtered values.
      * @param {Function} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to "this" value.
-     * @returns {Store<*, *>} The new Store containing the filtered contents.
+     * @returns {Store<K, V>} The new Store containing the filtered contents.
+     * @example
+     * Client.fetchAllBots()
+     *  .then(bots => {
+     *   const onlyApproved = bots.filter(bot => bot.isApproved);
+     *   console.log(`${onlyApproved.size} bots are approved.`);
+     *  })
+     * .catch(console.error);
      */
     filter(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');
@@ -41,7 +57,7 @@ class Store extends Map {
 
     /**
      * Returns all the keys of the Store in an array.
-     * @returns {Array<*>}
+     * @returns {Array<K>}
      */
     keyArray() {
         return [...this.keys()];
@@ -49,7 +65,7 @@ class Store extends Map {
 
     /**
      * Retrives a random value of the Store.
-     * @returns {*}
+     * @returns {V}
      */
     random() {
         const values = this.array();
@@ -58,7 +74,7 @@ class Store extends Map {
 
     /**
      * Retrieves a random key of the Store.
-     * @returns {*}
+     * @returns {K}
      */
     randomKey() {
         const keys = this.keyArray();
@@ -67,7 +83,7 @@ class Store extends Map {
 
     /**
      * Retrieves a random key-value pair of the Store and returns a new Store.
-     * @returns {Array<*>}
+     * @returns {Array<K | V>}
      */
     randomPair() {
         const random = this.randomKey();

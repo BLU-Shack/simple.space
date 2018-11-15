@@ -9,7 +9,7 @@ class ClientOptions {
      */
     constructor(newObj, oldObj = ClientOptions.default) {
         /**
-         * Whether or not to save all bots and guilds into an array.
+         * Whether or not to cache every bot, emoji, and guild existing on the site.
          * @type {Boolean}
          */
         this.cache = newObj.hasOwnProperty('cache') ? newObj.cache !== 'none' ? newObj.cache : false : oldObj.cache;

@@ -35,19 +35,19 @@ class Client extends EventEmitter {
         this.options;
 
         /**
-         * If cached, all the bots that are listed on the site.
+         * Cached bots that are listed on the site.
          * @type {Store<String, Bot>}
          */
         this.bots = new Store();
 
         /**
-         * If cached, all the emojis that are listed on the site.
+         * Cached emojis that are listed on the site.
          * @type {Store<String, Emoji>}
          */
         this.emojis = new Store();
 
         /**
-         * If cached, all the guilds that are listed on the site.
+         * Cached guilds that are listed on the site.
          * @type {Store<String, Guild>}
          */
         this.guilds = new Store();
@@ -61,18 +61,17 @@ class Client extends EventEmitter {
     /**
      * Runs the cache if this.options.cache is set to true.
      * @private
-     * @param {Boolean} cache Whether or not to cache all bots, guilds, and emojis.
-     * @returns {Object}
+     * @returns {Object} Updated data/empty object.
      * @fires Client#cacheUpdate
      */
-    async _runCache(cache) {
-        if (cache) {
+    async _runCache() {
+        if (this.options.cache) {
             await this.fetchAllBots({ log: false });
             await this.fetchAllEmojis({ log: false });
             await this.fetchAllGuilds({ log: false });
 
             if (this.options.cacheUpdateTimer > 0) {
-                setTimeout(() => { this._runCache(this.options.cache); }, this.options.cacheUpdateTimer);
+                setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
             }
 
             this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
@@ -231,7 +230,7 @@ class Client extends EventEmitter {
      * Fetch an emoji listed on the site.
      * @param {String} emojiID The emoji ID to fetch.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Promise<Emoji>}
+     * @returns {Promise<Emoji>} Returns the emoji contents/specified item.
      */
     fetchEmoji(emojiID, options = {}) {
         if (!emojiID) throw new ReferenceError('emojiID must be defined.');
@@ -263,7 +262,7 @@ class Client extends EventEmitter {
      * Fetch a guild on the list.
      * @param {String} guildID The guild ID to fetch from the list.
      * @param {FetchOptions} [options={}] Supply if you want to get a specific value, etc. 'prefix'
-     * @returns {Promise<Guild>} Returns the guild object.
+     * @returns {Promise<Guild>} Returns the guild contents/specified item.
      */
     fetchGuild(guildID, options = {}) {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
@@ -401,7 +400,7 @@ class Client extends EventEmitter {
      * Fetches a user that had logged on to botlist.space
      * @param {String} userID The user ID to fetch.
      * @param {FetchOptions} [options={}] FetchOptions.
-     * @returns {Promise<User>} Returns user object/specified value.
+     * @returns {Promise<User>} Returns the user contents/specified item.
      */
     fetchUser(userID, options = {}) {
         if (!userID) throw new ReferenceError('userID must be supplied.');
@@ -448,7 +447,7 @@ class Client extends EventEmitter {
      * @param {String} [options.token=this.options.token] The API token for posting.
      * @param {String} [options.botID=this.options.botID] The bot ID for posting.
      * @param {String} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
-     * @returns {Promise<Object>} Returns the code, and a message.
+     * @returns {Promise<Object>} The code and a message.
      */
     setGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

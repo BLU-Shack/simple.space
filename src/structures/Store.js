@@ -2,12 +2,11 @@
  * A storage class that includes additional methods.
  * @class
  * @extends {Map}
- * @template K
- * @template V
+ * @template K, V
  */
 class Store extends Map {
     /**
-     * @param {Iterable<[any, any]>} [iterable]
+     * @param {Iterable<[*, *]>} [iterable] An iterable object.
      */
     constructor(iterable) {
         super(iterable);
@@ -16,7 +15,7 @@ class Store extends Map {
     /**
      * @ignore
      * @param {any} key The key to use when fetching for a value.
-     * @returns {V}
+     * @returns {V} The value retrieved.
      */
     get(key) {
         return super.get(key);
@@ -24,7 +23,7 @@ class Store extends Map {
 
     /**
      * Returns all the values of the Store in an array.
-     * @returns {Array<V>}
+     * @returns {Array<V>} The array of the Store's values.
      */
     array() {
         return [...this.values()];
@@ -57,7 +56,7 @@ class Store extends Map {
 
     /**
      * Returns all the keys of the Store in an array.
-     * @returns {Array<K>}
+     * @returns {Array<K>} An array of the Store's keys.
      */
     keyArray() {
         return [...this.keys()];
@@ -65,7 +64,7 @@ class Store extends Map {
 
     /**
      * Retrives a random value of the Store.
-     * @returns {V}
+     * @returns {V} A random value.
      */
     random() {
         const values = this.array();
@@ -74,7 +73,7 @@ class Store extends Map {
 
     /**
      * Retrieves a random key of the Store.
-     * @returns {K}
+     * @returns {K} A random key.
      */
     randomKey() {
         const keys = this.keyArray();
@@ -83,7 +82,7 @@ class Store extends Map {
 
     /**
      * Retrieves a random key-value pair of the Store and returns a new Store.
-     * @returns {Array<K | V>}
+     * @returns {Array<K | V>} A random pair.
      */
     randomPair() {
         const random = this.randomKey();

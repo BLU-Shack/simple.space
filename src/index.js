@@ -28,7 +28,7 @@ class Client {
      */
     constructor(options = ClientOptions.default) {
         /**
-         * @ignore
+         * The Client Options.
          * @type {ClientOptions}
          */
         this.options;

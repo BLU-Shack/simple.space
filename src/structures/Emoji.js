@@ -23,19 +23,19 @@ class Emoji extends Base {
 
         /**
          * Whether or not the emoji is animated.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.animated = emoji.animated;
 
         /**
          * The emoji's name.
-         * @type {String}
+         * @type {string}
          */
         this.name = emoji.name;
 
         /**
          * The emoji's image URL.
-         * @type {String}
+         * @type {string}
          */
         this.imageURL = emoji.url;
     }
@@ -58,7 +58,7 @@ class Emoji extends Base {
 
     /**
      * The emoji's page URL.
-     * @type {String}
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/emoji/${this.id}`;
@@ -66,7 +66,7 @@ class Emoji extends Base {
 
     /**
      * Returns the text that forms a readable Discord emoji in discord messages.
-     * @returns {String} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
+     * @returns {string} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
      */
     toString() {
         return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;

@@ -16,7 +16,7 @@ class PostOptions {
 
         /**
          * The bot ID for posting.
-         * @type {String}
+         * @type {string}
          */
         this.botID = options.botID || preset.botID;
         if (!this.botID) throw new ReferenceError('options.botID must be defined.');
@@ -24,7 +24,7 @@ class PostOptions {
 
         /**
          * The size number/array for posting.
-         * @type {Number|Array<Number>}
+         * @type {number|number[]}
          */
         this.guildSize = options.guildSize || (this.client ? this.client.guilds.size : false);
         if (!this.guildSize) throw new ReferenceError('guildSize must be defined.');
@@ -32,7 +32,7 @@ class PostOptions {
 
         /**
          * The API token for posting.
-         * @type {String}
+         * @type {string}
          */
         this.token = options.token || preset.token;
         if (!this.token) throw new ReferenceError('options.token must be defined.');
@@ -41,7 +41,7 @@ class PostOptions {
 
     /**
      * The returned data.
-     * @type {String}
+     * @type {string}
      */
     get data() {
         return this.guildSize instanceof Array ? JSON.stringify({ shards: this.guildSize }) : JSON.stringify({ server_count: this.guildSize });

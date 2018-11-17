@@ -23,61 +23,61 @@ class Guild extends Base {
 
         /**
          * Whether or not the guild is in compliance with listing its emojis.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.compliance = guild.compliance;
 
         /**
          * The guild's full description, if any.
-         * @type {?String}
+         * @type {?string}
          */
         this.fullDescription = guild.full_description;
 
         /**
          * The guild's icon URL.
-         * @type {String}
+         * @type {string}
          */
         this.icon = guild.icon;
 
         /**
          * Whether or not the guild's icon is marked as child friendly.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isChildFriendly = guild.iconChildFriendly;
 
         /**
          * Whether or not the guild is featured on the front page.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isFeatured = guild.featured;
 
         /**
          * Whether or not the guild is Premium.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isPremium = guild.premium;
 
         /**
          * Whether or not the guild's not listed publicly (due to inactive invite)
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isPublic = guild.public;
 
         /**
          * The number of members there currently are in the Guild
-         * @type {Number}
+         * @type {number}
          */
         this.memberCount = guild.member_count;
 
         /**
          * The guild's name.
-         * @type {String}
+         * @type {string}
          */
         this.name = guild.name;
 
         /**
          * The guild's short description.
-         * @type {String}
+         * @type {string}
          */
         this.shortDescription = guild.short_description;
 
@@ -89,14 +89,14 @@ class Guild extends Base {
 
         /**
          * The guild's vanity, if any.
-         * @type {?String}
+         * @type {?string}
          */
         this.vanity = guild.vanity;
     }
 
     /**
      * Returns the guild's page URL.
-     * @type {String}
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/server/${this.id}`;
@@ -104,7 +104,7 @@ class Guild extends Base {
 
     /**
      * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
-     * @type {String|null}
+     * @type {string|null}
      */
     get vanityURL() {
         if (!this.vanity) return null;
@@ -114,7 +114,7 @@ class Guild extends Base {
     /**
      * Get the guild's owners.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<PartialUser>} An array of the guild's owners.
+     * @returns {PartialUser[]} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
      *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
@@ -135,7 +135,7 @@ class Guild extends Base {
 
     /**
      * Returns a string containing the guild name.
-     * @returns {String} The guild name.
+     * @returns {string} The guild name.
      */
     toString() {
         return this.name;

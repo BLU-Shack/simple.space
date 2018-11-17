@@ -25,110 +25,110 @@ class Bot extends Base {
 
         /**
          * The avatar URL of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.avatar = bot.avatar;
 
         /**
          * The discriminator of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.discriminator = bot.discriminator;
 
         /**
          * The bot's full description, if any.
-         * @type {?String}
+         * @type {?string}
          */
         this.fullDescription = bot.full_description;
 
         /**
          * The amount of guilds the bot is currently in, if the owner posted anything.
-         * @type {?Number}
+         * @type {?number}
          */
         this.guildSize = bot.server_count;
 
         /**
          * Returns the bot's invite URL.
-         * @type {String}
+         * @type {string}
          */
         this.inviteURL = bot.invite;
 
         /**
          * Whether or not the bot is approved.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isApproved = bot.approved;
 
         /**
          * Whether or not the bot's avatar is marked as child friendly.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isChildFriendly = bot.avatarChildFriendly;
 
         /**
          * Whether or not the bot is featured on the front page.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isFeatured = bot.featured;
 
         /**
          * The bot's library that was used for its production.
-         * @type {String}
+         * @type {string}
          */
         this.library = bot.library;
 
         /**
          * The bot's prefix.
-         * @type {String}
+         * @type {string}
          */
         this.prefix = bot.prefix;
 
         /**
          * Identical to {@link Bot#guildSize}
-         * @type {?Number}
+         * @type {?number}
          */
         this.serverCount = this.guildSize || null;
 
         /**
          * Returns, if any, an array of the bot's guild count for each of its shard.
-         * @type {?Array<Number>}
+         * @type {?number[]}
          */
         this.shards = bot.shards || null;
 
         /**
          * The short description of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.shortDescription = bot.short_description;
 
         /**
          * The bot's support code, if any.
-         * @type {?String}
+         * @type {?string}
          */
         this.supportCode = bot.links.support;
 
         /**
          * The bot's timestamp in which it was submitted to the site.
-         * @type {Number}
+         * @type {number}
          */
         this.timestamp = new Date(bot.timestamp).getTime();
 
         /**
          * The username of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.username = bot.username;
 
         /**
          * Returns, if any, the bot's vanity.
-         * @type {?String}
+         * @type {string}
          */
         this.vanity = bot.vanity;
     }
 
     /**
      * Returns the bot's invite URL with no permissions.
-     * @type {String}
+     * @type {string}
      */
     get inviteNoPerms() {
         return this.inviteURL.replace(/&permissions=[0-9]*/gi, '');
@@ -136,7 +136,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's support URL, if the support code exists.
-     * @type {?String}
+     * @type {?string}
      */
     get supportURL() {
         if (!this.supportCode) return null;
@@ -145,7 +145,7 @@ class Bot extends Base {
 
     /**
      * The tag of the bot.
-     * @type {String}
+     * @type {string}
      */
     get tag() {
         return `${this.username}#${this.discriminator}`;
@@ -153,7 +153,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's page URL.
-     * @type {String}
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/bot/${this.id}`;
@@ -161,7 +161,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's vanity in the form of a URL, if the bot has a vanity.
-     * @type {?String}
+     * @type {?string}
      */
     get vanityURL() {
         if (!this.vanity) return null;
@@ -171,7 +171,7 @@ class Bot extends Base {
     /**
      * Fetches all of the bot's owners, including the secondary ones.
      * @param {FetchOptions} [options={}] Fetch Options.
-     * @returns {Array<PartialUser>} An array of the bot's owners.
+     * @returns {PartialUser[]} An array of the bot's owners.
      * @example
      * Bot.owners({ specified: 'username' })
      *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
@@ -192,7 +192,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's mention, rather than the bot object.
-     * @returns {String} The bot mention.
+     * @returns {string} The bot mention.
      * @example
      * console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
      */

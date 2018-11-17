@@ -9,7 +9,7 @@ class Base {
     constructor(base) {
         /**
          * The Base's ID.
-         * @type {String}
+         * @type {string}
          */
         this.id = base.id;
     }

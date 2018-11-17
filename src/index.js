@@ -80,7 +80,7 @@ class Client extends EventEmitter {
     /**
      * Runs the automatic cache if this.options.cache is set to true.
      * @private
-     * @returns {Object} Updated data/empty object.
+     * @returns {Object} Updated/normal data i gues.
      * @fires Client#cacheUpdate
      */
     async _runCache() {
@@ -94,7 +94,7 @@ class Client extends EventEmitter {
             this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
-            return {};
+            return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         }
     }
 

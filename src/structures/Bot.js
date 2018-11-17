@@ -90,7 +90,7 @@ class Bot extends Base {
         this.serverCount = this.guildSize || null;
 
         /**
-         * Returns, if any, an array of the bot's guild count for each of its shard.
+         * If any, an array of the bot's guild count for each of its shard.
          * @type {?number[]}
          */
         this.shards = bot.shards || null;
@@ -120,8 +120,8 @@ class Bot extends Base {
         this.username = bot.username;
 
         /**
-         * Returns, if any, the bot's vanity.
-         * @type {string}
+         * If any, the bot's vanity.
+         * @type {?string}
          */
         this.vanity = bot.vanity;
     }

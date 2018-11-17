@@ -39,19 +39,19 @@ class Client extends EventEmitter {
 
         /**
          * Cached bots that are listed on the site, mapped through bot IDs.
-         * @type {Store<String, Bot>}
+         * @type {Store<string, Bot>}
          */
         this.bots = new Store();
 
         /**
          * Cached emojis that are listed on the site, mapped through emoji IDs.
-         * @type {Store<String, Emoji>}
+         * @type {Store<string, Emoji>}
          */
         this.emojis = new Store();
 
         /**
          * Cached guilds that are listed on the site, mapped through guild IDs.
-         * @type {Store<String, Guild>}
+         * @type {Store<string, Guild>}
          */
         this.guilds = new Store();
 
@@ -524,16 +524,16 @@ module.exports.version = 'v2.2.3';
  * Emitted when cache is ready/cache was never run but it still returned something.
  * @event Client#ready
  * @type {Object}
- * @property {Store<String, Bot>} bots
- * @property {Store<String, Guild>} guilds
- * @property {Store<String, Emoji>} emojis
+ * @property {Store<string, Bot>} bots
+ * @property {Store<string, Guild>} guilds
+ * @property {Store<string, Emoji>} emojis
  */
 
 /**
  * Emitted when cache is updated.
  * @event Client#cacheUpdate
  * @type {Object}
- * @property {Store<String, Bot>} bots
- * @property {Store<String, Guild>} guilds
- * @property {Store<String, Emoji>} emojis
+ * @property {Store<string, Bot>} bots
+ * @property {Store<string, Guild>} guilds
+ * @property {Store<string, Emoji>} emojis
  */

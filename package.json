@@ -9,8 +9,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "node examples/test.js",
-    "dev": "node examples-private/test.js",
-    "docs": "jsdoc src/ README.md -c ./.jsdoc.json"
+    "dev": "node examples-private/test.js"
   },
   "keywords": [
     "botlist.space",

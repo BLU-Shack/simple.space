@@ -471,7 +471,7 @@ class Client extends EventEmitter {
             Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json; charset=UTF-8' }, body: Options.data })
                 .then(async resolved => {
                     const body = await resolved.json();
-                    if (body.code) throw new FetchError(body, 'Bot');
+                    if (body.code !== 200) throw new FetchError(body, 'Bot');
                     resolve(body);
                 })
                 .catch(reject);

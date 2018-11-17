@@ -10,8 +10,8 @@ class UpvoteFetchOptions extends FetchOptions {
      * @param {Object} [options={}] Upvote Fetch Options.
      * @param {ClientOptions} [client] The original ClientOptions
      */
-    constructor(options = {}, client = { options: new ClientOptions(ClientOptions.default) }) {
-        super(options);
+    constructor(options = {}, client = ClientOptions.default) {
+        super(options, client);
 
         /**
          * Whether or not to only fetch the user IDs. Overrides {@link FetchOptions#specified} to false.
@@ -25,7 +25,7 @@ class UpvoteFetchOptions extends FetchOptions {
          * The API token. ``Overrides this.options.token.``
          * @type {String}
          */
-        this.token = options.token || client.options.token;
+        this.token = options.token || client.token;
         if (typeof this.token !== 'string' && typeof this.token !== 'boolean') throw new TypeError('options.token must be a string.');
     }
 }

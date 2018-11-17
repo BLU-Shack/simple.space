@@ -13,7 +13,7 @@ class FetchError extends Error {
         this.message = `${error.code} ${error.code === 404 ? `${name || '?'} Not Found` : error.message}`;
         this.name = 'FetchError';
 
-        Error.captureStackTrace(this, FetchError);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
     }
 
     toString() {

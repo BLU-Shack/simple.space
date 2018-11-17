@@ -85,10 +85,10 @@ class Store extends Map {
      * @returns {Array<K | V>} A random pair.
      */
     randomPair() {
-        const random = this.randomKey();
+        const key = this.randomKey();
         const pair = [];
 
-        pair.push(random, this.get(random));
+        pair.push(key, this.get(key));
         return pair;
     }
 }

@@ -14,7 +14,7 @@ class Store extends Map {
 
     /**
      * @ignore
-     * @param {any} key The key to use when fetching for a value.
+     * @param {K} key The key to use when fetching for a value.
      * @returns {V} The value retrieved.
      */
     get(key) {
@@ -66,7 +66,7 @@ class Store extends Map {
      * Maps each and every value in the Store, and returns an array containing the new values.
      * @param {Function} func The function to run for each value and key in the Store.
      * @param {*} bind The variable to bind ``this`` to the function.
-     * @returns {Array<*>} The thing.
+     * @returns {Array<*>} The mapped values.
      */
     map(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');

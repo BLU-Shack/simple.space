@@ -35,19 +35,19 @@ class Client extends EventEmitter {
         this.options;
 
         /**
-         * Cached bots that are listed on the site.
+         * Cached bots that are listed on the site, mapped through bot IDs.
          * @type {Store<String, Bot>}
          */
         this.bots = new Store();
 
         /**
-         * Cached emojis that are listed on the site.
+         * Cached emojis that are listed on the site, mapped through emoji IDs.
          * @type {Store<String, Emoji>}
          */
         this.emojis = new Store();
 
         /**
-         * Cached guilds that are listed on the site.
+         * Cached guilds that are listed on the site, mapped through guild IDs.
          * @type {Store<String, Guild>}
          */
         this.guilds = new Store();

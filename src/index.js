@@ -66,12 +66,16 @@ class Client extends EventEmitter {
         this.once('ready', () => { this.readyAt = new Date(); });
     }
 
+    /**
+     * The timestamp when Client was initially ready.
+     * @type {?Number}
+     */
     get readyTimestamp() {
         return this.readyAt ? this.readyAt.getTime() : null;
     }
 
     /**
-     * Runs the cache if this.options.cache is set to true.
+     * Runs the automatic cache if this.options.cache is set to true.
      * @private
      * @returns {Object} Updated data/empty object.
      * @fires Client#cacheUpdate
@@ -82,9 +86,7 @@ class Client extends EventEmitter {
             await this.fetchAllEmojis({ log: false });
             await this.fetchAllGuilds({ log: false });
 
-            if (this.options.cacheUpdateTimer > 0) {
-                setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
-            }
+            if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
 
             this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };

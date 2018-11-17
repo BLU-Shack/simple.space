@@ -31,7 +31,10 @@ class Client extends EventEmitter {
     constructor(options = ClientOptions.default) {
         super();
 
-        /** @ignore @type {ClientOptions} */
+        /**
+         * The Client Options.
+         * @type {ClientOptions}
+         */
         this.options;
 
         /**

@@ -56,6 +56,18 @@ class Client extends EventEmitter {
         this._runCache(this.options.cache)
             .then(e => this.emit('ready', e))
             .catch(console.error);
+
+        /**
+         * Date when Client was initially ready.
+         * @type {?Date}
+         */
+        this.readyAt = null;
+
+        this.once('ready', () => { this.readyAt = new Date(); });
+    }
+
+    get readyTimestamp() {
+        return this.readyAt ? this.readyAt.getTime() : null;
     }
 
     /**
@@ -204,13 +216,13 @@ class Client extends EventEmitter {
         if (!botID) throw new ReferenceError('botID must be present.');
         if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${botID}`)
                 .then(async bot => {
                     const body = await bot.json();
                     if (body.code) throw new FetchError(body, 'Bot');
                     this.bots.set(body.id, new Bot(body));
-                    const Options = new FetchOptions(options, this.options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
                         if (Options.log) console.log(resolved);
@@ -268,13 +280,13 @@ class Client extends EventEmitter {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}`)
                 .then(async guild => {
                     const body = await guild.json();
                     if (body.code) throw new FetchError(body, 'Guild');
                     this.guilds.set(body.id, new Guild(body));
-                    const Options = new FetchOptions(options, this.options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
                         if (Options.log) console.log(resolved);
@@ -339,12 +351,13 @@ class Client extends EventEmitter {
      * @returns {Promise<Stats>} Returns site stats/specified value.
      */
     fetchStats(options = {}) {
+        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/stats`)
                 .then(async stats => {
                     const body = await stats.json();
                     if (body.code) throw new FetchError(body, 'Stats');
-                    const Options = new FetchOptions(options, this.options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] || body.bots[Options.specified] : body;
                         if (Options.log) console.log(resolved);
@@ -406,12 +419,12 @@ class Client extends EventEmitter {
         if (!userID) throw new ReferenceError('userID must be supplied.');
         if (typeof userID !== 'string') throw new TypeError('userID must be a string.');
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/users/${userID}`)
                 .then(async user => {
                     const body = await user.json();
                     if (body.code) throw new FetchError(body, 'User');
-                    const Options = new FetchOptions(options, this.options);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
                         if (Options.log) console.log(resolved);

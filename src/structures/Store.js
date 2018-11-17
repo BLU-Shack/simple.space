@@ -63,6 +63,21 @@ class Store extends Map {
     }
 
     /**
+     * Maps each and every value in the Store, and returns an array containing the new values.
+     * @param {Function} func The function to run for each value and key in the Store.
+     * @param {*} bind The variable to bind ``this`` to the function.
+     * @returns {Array<*>} The thing.
+     */
+    map(func, bind) {
+        if (typeof func !== 'function') throw new TypeError('func must be a function.');
+        if (typeof bind !== 'undefined') func = func.bind(bind);
+
+        const mapped = [];
+        for (const [key, value] of this) mapped.push(func(value, key));
+        return mapped;
+    }
+
+    /**
      * Retrives a random value of the Store.
      * @returns {V} A random value.
      */

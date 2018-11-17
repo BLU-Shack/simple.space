@@ -38,7 +38,7 @@ class Client {
     /**
      * Edit at least one or more key-value pair in the instance.
      * @param {ClientOptions} [options=ClientOptions.default] A thing.
-     * @param {Boolean} [preset=false] Whether or not to have preset rules when setting values.
+     * @param {boolean} [preset=false] Whether or not to have preset rules when setting values.
      * @returns {ClientOptions} The new client options.
      * @example
      * console.log(Client.edit({ log: false }).options);
@@ -57,7 +57,7 @@ class Client {
     /**
      * Returns all bots on the site.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Promise<Array<Bot>>} All bots on the site.
+     * @returns {Promise<Bot[]>} All bots on the site.
      */
     fetchAllBots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -85,7 +85,7 @@ class Client {
     /**
      * Fetches all guilds on the site.
      * @param {FetchOptions} options Fetch Options
-     * @returns {Promise<Array<Guild>>} All guilds on the site.
+     * @returns {Promise<Guild[]>} All guilds on the site.
      */
     fetchAllGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -113,7 +113,7 @@ class Client {
     /**
      * Fetch all emojis listed on the site.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Promise<Array<Emoji>>} All emojis on the site.
+     * @returns {Promise<Emoji[]>} All emojis on the site.
      */
     fetchAllEmojis(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -140,7 +140,7 @@ class Client {
 
     /**
      * Fetch a bot from the site.
-     * @param {String} botID The bot ID to fetch from the list.
+     * @param {string} botID The bot ID to fetch from the list.
      * @param {FetchOptions} [options={}] FetchOptions.
      * @returns {Promise<Bot>} Returns the bot contents/specified item.
      * @example
@@ -175,7 +175,7 @@ class Client {
 
     /**
      * Fetch an emoji listed on the site.
-     * @param {String} emojiID The emoji ID to fetch.
+     * @param {string} emojiID The emoji ID to fetch.
      * @param {FetchOptions} options Fetch Options.
      * @returns {Promise<Emoji>}
      */
@@ -206,7 +206,7 @@ class Client {
 
     /**
      * Fetch a guild on the list.
-     * @param {String} guildID The guild ID to fetch from the list.
+     * @param {string} guildID The guild ID to fetch from the list.
      * @param {FetchOptions} [options={}] Supply if you want to get a specific value, etc. 'prefix'
      * @returns {Promise<Guild>} Returns the guild object.
      */
@@ -237,9 +237,9 @@ class Client {
 
     /**
      * Fetches a guild's emojis.
-     * @param {String} guildID The guild ID to fetch its emojis from.
+     * @param {string} guildID The guild ID to fetch its emojis from.
      * @param {FetchOptions} options Fetch Options.
-     * @returns {Promise<Array<Emoji>>} The array of the guild's emojis.
+     * @returns {Promise<Emoji[]>} The array of the guild's emojis.
      */
     fetchGuildEmojis(guildID, options = {}) {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
@@ -305,7 +305,7 @@ class Client {
     /**
      * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
-     * @returns {Promise<Array<PartialUser>>} The array of the user objects/user IDs.
+     * @returns {Promise<PartialUser[]>} The array of the user objects/user IDs.
      * @example
      * Client.fetchUpvotes({ ids: true });
      */
@@ -340,7 +340,7 @@ class Client {
 
     /**
      * Fetches a user that had logged on to botlist.space
-     * @param {String} userID The user ID to fetch.
+     * @param {string} userID The user ID to fetch.
      * @param {FetchOptions} [options={}] FetchOptions.
      * @returns {Promise<User>} Returns user object/specified value.
      */
@@ -371,8 +371,8 @@ class Client {
 
     /**
      * Checks if a user has upvoted your bot.
-     * @param {String} userID The user ID to check if they have upvoted your bot.
-     * @returns {Promise<Boolean>} Whether or not the user has upvoted your bot.
+     * @param {string} userID The user ID to check if they have upvoted your bot.
+     * @returns {Promise<boolean>} Whether or not the user has upvoted your bot.
      */
     hasUpvoted(userID) {
         return new Promise((resolve, reject) => {
@@ -386,9 +386,9 @@ class Client {
 
     /**
      * @param {PostOptions} [options] Post Options.
-     * @param {String} [options.token=this.options.token] The API token for posting.
-     * @param {String} [options.botID=this.options.botID] The bot ID for posting.
-     * @param {String} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
+     * @param {string} [options.token=this.options.token] The API token for posting.
+     * @param {string} [options.botID=this.options.botID] The bot ID for posting.
+     * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
      * @returns {Promise<Object>} Returns the code, and a message.
      */
     setGuilds(options = {}) {
@@ -417,7 +417,7 @@ class Client {
 
     /**
      * The endpoint URL, used to interact with the site.
-     * @type {String}
+     * @type {string}
      */
     static get endpoint() {
         return endpoint;

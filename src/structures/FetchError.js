@@ -6,7 +6,7 @@
 class FetchError extends Error {
     /**
      * @param {Object} error The error body.
-     * @param {String} name The item not found.
+     * @param {string} name The item not found.
      */
     constructor(error, name) {
         super(error);

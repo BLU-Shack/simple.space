@@ -22,44 +22,44 @@ class PartialUser extends Base {
 
         /**
          * The avatar of the user.
-         * @type {String}
+         * @type {string}
          */
         this.avatar = base.avatar;
 
         /**
          * The discriminator of the user.
-         * @type {String}
+         * @type {string}
          */
         this.discriminator = base.discriminator;
 
         /**
          * If any, the user's github username.
-         * @type {?String}
+         * @type {?string}
          */
         this.githubUsername = base.links.github;
 
         /**
          * If any, the user's gitlab username.
-         * @type {?String}
+         * @type {?string}
          */
         this.gitlabUsername = base.links.gitlab;
 
         /**
          * The short description of the user.
-         * @type {String}
+         * @type {string}
          */
         this.shortDescription = base.short_description;
 
         /**
          * The user's username.
-         * @type {String}
+         * @type {string}
          */
         this.username = base.username;
     }
 
     /**
      * The user's github URL.
-     * @type {?String}
+     * @type {?string}
      */
     get githubURL() {
         if (!this.githubUsername) return null;
@@ -68,7 +68,7 @@ class PartialUser extends Base {
 
     /**
      * The user's gitlab URL.
-     * @type {?String}
+     * @type {?string}
      */
     get gitlabURL() {
         if (!this.gitlabUsername) return null;
@@ -77,7 +77,7 @@ class PartialUser extends Base {
 
     /**
      * The user's tag.
-     * @type {String}
+     * @type {string}
      */
     get tag() {
         return `${this.username}#${this.discriminator}`;
@@ -85,7 +85,7 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's page URL.
-     * @type {String}
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/user/${this.id}`;
@@ -93,7 +93,7 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's mention, rather than the user object.
-     * @type {String}
+     * @type {string}
      * @example
      * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
      */

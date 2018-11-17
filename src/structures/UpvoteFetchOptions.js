@@ -16,7 +16,7 @@ class UpvoteFetchOptions extends FetchOptions {
 
         /**
          * Whether or not to only fetch the user IDs. Overrides {@link FetchOptions#specified} to false.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.ids = options.ids || false;
         if (typeof this.ids !== 'boolean') throw new TypeError('options.ids must be boolean.');
@@ -24,7 +24,7 @@ class UpvoteFetchOptions extends FetchOptions {
 
         /**
          * The API token. ``Overrides this.options.token.``
-         * @type {String}
+         * @type {string}
          */
         this.token = options.token || client.options.token;
         if (typeof this.token !== 'string' && typeof this.token !== 'boolean') throw new TypeError('options.token must be a string.');

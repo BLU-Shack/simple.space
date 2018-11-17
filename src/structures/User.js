@@ -19,7 +19,7 @@ class User extends PartialUser {
     /**
      * Fetches all bots that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Bot>} An array of bots.
+     * @returns {Bot[]} An array of bots.
      * @example
      * User.bots({ specified: 'username' })
      *  .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
@@ -41,7 +41,7 @@ class User extends PartialUser {
     /**
      * Fetches all guilds that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Guild>} An array of guilds.
+     * @returns {Guild[]} An array of guilds.
      * @example
      * User.guilds({ specified: 'name' })
      *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))

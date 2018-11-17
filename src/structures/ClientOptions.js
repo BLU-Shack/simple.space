@@ -10,13 +10,13 @@ class ClientOptions {
     constructor(newObj, oldObj = ClientOptions.default) {
         /**
          * The API token, required for some functions to work properly.
-         * @type {String|false}
+         * @type {string|false}
          */
         this.token = newObj.hasOwnProperty('token') ? newObj.token !== 'none' ? newObj.token : false : oldObj.token;
 
         /**
          * The Bot ID, used for self actions and posting guild count.
-         * @type {String|false}
+         * @type {string|false}
          */
         this.botID = newObj.hasOwnProperty('botID') ? newObj.botID !== 'none' ? newObj.botID : false : oldObj.botID;
 
@@ -28,7 +28,7 @@ class ClientOptions {
 
         /**
          * Whether or not to log everything when fetching something.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.log = newObj.hasOwnProperty('log') ? newObj.log !== 'none' ? newObj.log : false : oldObj.log;
     }

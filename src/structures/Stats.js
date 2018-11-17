@@ -17,9 +17,9 @@ class Stats {
 
         /**
          * All bot information.
-         * @property {Number} total The total number of bots that have been submitted to the site.
-         * @property {Number} approved The total number of approved bots.
-         * @property {Number} unapproved The total number of unapproved bots.
+         * @property {number} total The total number of bots that have been submitted to the site.
+         * @property {number} approved The total number of approved bots.
+         * @property {number} unapproved The total number of unapproved bots.
          */
         this.bots = {
             total: stats.bots.total,
@@ -29,7 +29,7 @@ class Stats {
 
         /**
          * The total number of guilds that had been submitted.
-         * @type {Number}
+         * @type {number}
          */
         this.guilds = stats.servers;
 
@@ -41,14 +41,14 @@ class Stats {
 
         /**
          * The total number of users that had logged in.
-         * @type {Number}
+         * @type {number}
          */
         this.users = stats.users;
     }
 
     /**
      * Fetch the total number of bots, servers, and users on the site.
-     * @type {Number}
+     * @type {number}
      */
     get total() {
         return this.bots.total + this.servers + this.users;

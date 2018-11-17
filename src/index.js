@@ -376,8 +376,9 @@ class Client {
      */
     hasUpvoted(userID) {
         return new Promise((resolve, reject) => {
-            this.fetchUpvotes({ ids: true })
+            this.fetchUpvotes({ ids: true, normal: true })
                 .then(users => {
+                    if (this.options.log) console.log(users.includes(userID));
                     resolve(users.includes(userID));
                 })
                 .catch(reject);

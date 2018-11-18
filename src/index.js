@@ -402,7 +402,7 @@ class Client extends EventEmitter {
                         resolve(resolved);
                     } else {
                         const SpaceUpvotes = body.map(info => {
-                            const obj = { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
+                            const obj = Options.ids ? info : { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
                             return obj;
                         });
                         const resolved = Options.specified ? SpaceUpvotes.map(v => v[Options.specified] || v.user[Options.specified]) : SpaceUpvotes;
@@ -452,7 +452,7 @@ class Client extends EventEmitter {
      */
     hasUpvoted(userID) {
         return new Promise((resolve, reject) => {
-            this.fetchUpvotes({ ids: true, normal: true })
+            this.fetchUpvotes({ ids: true, normal: true, log: false })
                 .then(users => {
                     if (this.options.log) console.log(users.includes(userID));
                     resolve(users.includes(userID));

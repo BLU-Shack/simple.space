@@ -1,6 +1,5 @@
 node-modules/
 package-lock.json
 examples-private/
-docs/
 .github
 .vscode

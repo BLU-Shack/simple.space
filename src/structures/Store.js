@@ -23,7 +23,7 @@ class Store extends Map {
 
     /**
      * Returns all the values of the Store in an array.
-     * @returns {Array<V>} The array of the Store's values.
+     * @returns {V[]} The array of the Store's values.
      */
     array() {
         return [...this.values()];
@@ -56,7 +56,7 @@ class Store extends Map {
 
     /**
      * Returns all the keys of the Store in an array.
-     * @returns {Array<K>} An array of the Store's keys.
+     * @returns {K[]} An array of the Store's keys.
      */
     keyArray() {
         return [...this.keys()];
@@ -96,8 +96,8 @@ class Store extends Map {
     }
 
     /**
-     * Retrieves a random key-value pair of the Store and returns a new Store.
-     * @returns {Array<K | V>} A random pair.
+     * Retrieves a random key-value pair of the Store and returns a new Array
+     * @returns {(K | V)[]} A random pair.
      */
     randomPair() {
         const key = this.randomKey();

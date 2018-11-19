@@ -467,6 +467,7 @@ class Client extends EventEmitter {
      * @param {string} [options.botID=this.options.botID] The bot ID for posting.
      * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
      * @returns {Promise<Object>} Returns the code, and a message.
+     * @fires Client#post
      */
     setGuilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -476,6 +477,7 @@ class Client extends EventEmitter {
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code !== 200) throw new FetchError(body, 'Bot');
+                    this.emit('post', body);
                     resolve(body);
                 })
                 .catch(reject);
@@ -536,4 +538,13 @@ module.exports.version = 'v2.2.3';
  * @property {Store<string, Bot>} bots
  * @property {Store<string, Guild>} guilds
  * @property {Store<string, Emoji>} emojis
+ */
+
+/**
+ * Emitted when a post is performed.
+ *
+ * @event Client#post
+ * @type {Object}
+ * @property {number} code
+ * @property {string} message
  */

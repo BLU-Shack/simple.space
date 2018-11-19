@@ -12,7 +12,7 @@ class FetchOptions {
     constructor(options = {}, preset = ClientOptions.default) {
         /**
          * Whether or not to log the output. Overrides this.options.log
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.log = typeof options.log !== 'undefined' ? options.log : (preset.log || false);
         if (typeof this.log !== 'boolean') throw new TypeError('options.log must be a boolean.');

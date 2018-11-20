@@ -71,7 +71,7 @@ class Client extends EventEmitter {
 
     /**
      * The timestamp when Client was initially ready.
-     * @type {?Number}
+     * @type {?number}
      */
     get readyTimestamp() {
         return this.readyAt ? this.readyAt.getTime() : null;
@@ -80,7 +80,7 @@ class Client extends EventEmitter {
     /**
      * Runs the automatic cache if this.options.cache is set to true.
      * @private
-     * @returns {Object} Updated/normal data i gues.
+     * @returns {object} Updated/normal data i gues.
      * @fires Client#cacheUpdate
      */
     async _runCache() {
@@ -466,7 +466,7 @@ class Client extends EventEmitter {
      * @param {string} [options.token=this.options.token] The API token for posting.
      * @param {string} [options.botID=this.options.botID] The bot ID for posting.
      * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
-     * @returns {Promise<Object>} Returns the code, and a message.
+     * @returns {Promise<object>} Returns the code, and a message.
      * @fires Client#post
      */
     setGuilds(options = {}) {
@@ -507,7 +507,7 @@ module.exports = Client;
 module.exports.version = 'v2.2.3';
 
 /**
- * @typedef {Object} Classes
+ * @typedef {object} Classes
  * @property {typeof ClientOptions} ClientOptions
  * @property {typeof FetchOptions} FetchOptions
  * @property {typeof PostOptions} PostOptions
@@ -525,7 +525,7 @@ module.exports.version = 'v2.2.3';
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.
  * @event Client#ready
- * @type {Object}
+ * @type {object}
  * @property {Store<string, Bot>} bots
  * @property {Store<string, Guild>} guilds
  * @property {Store<string, Emoji>} emojis
@@ -534,7 +534,7 @@ module.exports.version = 'v2.2.3';
 /**
  * Emitted when cache is updated.
  * @event Client#cacheUpdate
- * @type {Object}
+ * @type {object}
  * @property {Store<string, Bot>} bots
  * @property {Store<string, Guild>} guilds
  * @property {Store<string, Emoji>} emojis
@@ -544,7 +544,7 @@ module.exports.version = 'v2.2.3';
  * Emitted when a post is performed.
  *
  * @event Client#post
- * @type {Object}
+ * @type {object}
  * @property {number} code
  * @property {string} message
  */

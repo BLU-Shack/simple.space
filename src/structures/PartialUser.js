@@ -7,7 +7,7 @@ const Base = require('./Base.js').Base;
  */
 class PartialUser extends Base {
     /**
-     * @param {Object} base The partial user fetched from the API.
+     * @param {object} base The partial user fetched from the API.
      */
     constructor(base) {
         super(base);
@@ -16,7 +16,7 @@ class PartialUser extends Base {
 
         /**
          * The plain user object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.user = base;
 

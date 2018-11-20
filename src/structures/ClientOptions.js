@@ -4,8 +4,8 @@
  */
 class ClientOptions {
     /**
-     * @param {Object} newObj The new client options.
-     * @param {Object} [oldObj=ClientOptions.default] The preset or default client options.
+     * @param {object} newObj The new client options.
+     * @param {object} [oldObj=ClientOptions.default] The preset or default client options.
      */
     constructor(newObj, oldObj = ClientOptions.default) {
         /**

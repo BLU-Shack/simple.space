@@ -8,7 +8,7 @@ const ClientOptions = require('./ClientOptions.js').ClientOptions;
  */
 class UpvoteFetchOptions extends FetchOptions {
     /**
-     * @param {Object} [options={}] Upvote Fetch Options.
+     * @param {object} [options={}] Upvote Fetch Options.
      * @param {ClientOptions} [client] The original ClientOptions
      */
     constructor(options = {}, client = ClientOptions.default) {

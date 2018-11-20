@@ -9,7 +9,7 @@ const PartialUser = require('./PartialUser.js').PartialUser;
  */
 class Guild extends Base {
     /**
-     * @param {Object} guild The plain guild object, fetched from the API.
+     * @param {object} guild The plain guild object, fetched from the API.
      */
     constructor(guild) {
         super(guild);
@@ -17,7 +17,7 @@ class Guild extends Base {
 
         /**
          * The plain guild object.
-         * @type {Object}
+         * @type {object}
          */
         this.guild = guild;
 

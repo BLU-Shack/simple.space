@@ -10,7 +10,7 @@ const util = require('util'); // eslint-disable-line no-unused-vars
  */
 class Bot extends Base {
     /**
-     * @param {Object} bot The plain bot object, fetched from the API.
+     * @param {object} bot The plain bot object, fetched from the API.
      */
     constructor(bot) {
         super(bot);
@@ -19,7 +19,7 @@ class Bot extends Base {
 
         /**
          * The plain bot object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.bot = bot;
 

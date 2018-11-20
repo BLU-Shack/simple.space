@@ -4,19 +4,20 @@
  */
 class Stats {
     /**
-     * @param {Object} stats The plain stats object, fetched from the API.
+     * @param {object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {
         Object.defineProperty(this, 'stats', { writable: true, enumerable: false });
 
         /**
          * The plain stats object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.stats = stats;
 
         /**
          * All bot information.
+         * @type {object}
          * @property {number} total The total number of bots that have been submitted to the site.
          * @property {number} approved The total number of approved bots.
          * @property {number} unapproved The total number of unapproved bots.

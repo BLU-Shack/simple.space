@@ -3,6 +3,7 @@
   "version": "2.2.4",
   "description": "A simplified alternative for botlist.space",
   "main": "src/index.js",
+  "types": "typings/index.d.ts",
   "dependencies": {
     "node-fetch": "^2.2.1"
   },

@@ -47,12 +47,15 @@ class Store extends Map {
     }
 
     /**
-     * Checks a given key's index in the Store.
-     * @param {K} key The key to retrieve its index in the Store.
+     * Checks and returns a given key's index in the Store.
+     * Identical to
+     * [Array.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf)
+     * @param {K} key The key to retrieve its index from the Store.
+     * @param {number} [fromIndex=0] The index to start from.
      * @returns {number} The key's index; -1 if not found.
      */
-    indexOf(key) {
-        return this.keyArray().indexOf(key);
+    indexOf(key, fromIndex = 0) {
+        return this.keyArray().indexOf(key, fromIndex);
     }
 
     /**
@@ -61,6 +64,18 @@ class Store extends Map {
      */
     keyArray() {
         return [...this.keys()];
+    }
+
+    /**
+     * Checks and returns a given key's index in the Store,
+     * searching __backwords__. Identical to
+     * [Array.lastIndexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf)
+     * @param {K} key The key to retrieve its index from the Store.
+     * @param {number} [fromIndex=this.size - 1] The index to start from.
+     * @returns {number} The key's index; -1 if not found.
+     */
+    lastIndexOf(key, fromIndex = this.size - 1) {
+        return this.keyArray().lastIndexOf(key, fromIndex);
     }
 
     /**

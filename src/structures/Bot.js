@@ -84,13 +84,7 @@ class Bot extends Base {
         this.prefix = bot.prefix;
 
         /**
-         * Identical to {@link Bot#guildSize}
-         * @type {?number}
-         */
-        this.serverCount = this.guildSize || null;
-
-        /**
-         * If any, an array of the bot's guild count for each of its shard.
+         * Returns, if any, an array of the bot's guild count for each of its shard.
          * @type {?number[]}
          */
         this.shards = bot.shards || null;
@@ -124,6 +118,14 @@ class Bot extends Base {
          * @type {?string}
          */
         this.vanity = bot.vanity;
+    }
+
+    /**
+     * Identical to {@link Bot#guildSize}
+     * @type {?number}
+     */
+    get serverCount() {
+        return this.guildSize;
     }
 
     /**

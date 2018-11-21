@@ -15,13 +15,13 @@ declare module 'simple.space' {
 
         public static Classes: object;
         public static endpoint: string;
+        public static version: string;
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;
         public guilds: Store<string, Guild>;
         public options: ClientOptions;
         public readyAt?: Date;
         public readyTimestamp?: number;
-        public version: string;
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
         public fetchAllBots(options?: FetchOptions): Promise<Bot[]>;
         public fetchAllEmojis(options?: FetchOptions): Promise<Emoji[]>;

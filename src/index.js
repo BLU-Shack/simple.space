@@ -127,7 +127,7 @@ class Client extends EventEmitter {
 
     /**
      * Returns all bots on the site.
-     * @param {FetchOptions} options Fetch Options.
+     * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Bot[]>} All bots on the site.
      */
     fetchAllBots(options = {}) {
@@ -156,7 +156,7 @@ class Client extends EventEmitter {
 
     /**
      * Fetches all guilds on the site.
-     * @param {FetchOptions} options Fetch Options
+     * @param {FetchOptions} [options={}] Fetch Options
      * @returns {Promise<Guild[]>} All guilds on the site.
      */
     fetchAllGuilds(options = {}) {
@@ -185,7 +185,7 @@ class Client extends EventEmitter {
 
     /**
      * Fetch all emojis listed on the site.
-     * @param {FetchOptions} options Fetch Options.
+     * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Emoji[]>} All emojis on the site.
      */
     fetchAllEmojis(options = {}) {
@@ -251,7 +251,7 @@ class Client extends EventEmitter {
     /**
      * Fetch an emoji listed on the site.
      * @param {string} emojiID The emoji ID to fetch.
-     * @param {FetchOptions} options Fetch Options.
+     * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Emoji>} Returns the emoji contents/specified item.
      */
     fetchEmoji(emojiID, options = {}) {
@@ -315,7 +315,7 @@ class Client extends EventEmitter {
     /**
      * Fetches a guild's emojis.
      * @param {string} guildID The guild ID to fetch its emojis from.
-     * @param {FetchOptions} options Fetch Options.
+     * @param {FetchOptions} [options={}] Fetch Options.
      * @returns {Promise<Emoji[]>} The array of the guild's emojis.
      */
     fetchGuildEmojis(guildID, options = {}) {

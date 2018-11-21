@@ -4,11 +4,10 @@
 //   iREDMe <foodrickme@gmail.com> (https://github.com/iREDMe)
 // License: MIT
 
-import { EventEmitter } from "events";
+declare module 'Simple.Space' {
+    import { EventEmitter } from "events";
 
-declare module 'simple.space' {
     export const version: string;
-
     export default class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private _runCache(): Promise<object>;

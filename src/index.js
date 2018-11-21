@@ -87,7 +87,7 @@ class Client extends EventEmitter {
         if (this.options.cache) {
             await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
             if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
-            this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+            this.emit('cacheUpdateAll', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
 
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
@@ -139,6 +139,7 @@ class Client extends EventEmitter {
                     const bots = await body.json();
                     if (bots.code) throw new FetchError(bots, 'Bots');
                     this.bots = new Store([...bots.map(bot => [bot.id, new Bot(bot)])]);
+                    this.emit('cacheUpdateBots', this.bots);
                     if (Options.normal) {
                         const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
                         if (Options.log) console.log(resolved);
@@ -168,6 +169,7 @@ class Client extends EventEmitter {
                     const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
                     this.guilds = new Store([...guilds.map(guild => [guild.id, new Guild(guild)])]);
+                    this.emit('cacheUpdateGuilds', this.guilds);
                     if (Options.normal) {
                         const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
                         if (Options.log) console.log(resolved);
@@ -197,6 +199,7 @@ class Client extends EventEmitter {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
                     this.emojis = new Store([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
+                    this.emit('cacheUpdateEmojis', this.emojis);
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
                         if (Options.log) console.log(resolved);
@@ -233,6 +236,7 @@ class Client extends EventEmitter {
                     const body = await bot.json();
                     if (body.code) throw new FetchError(body, 'Bot');
                     this.bots.set(body.id, new Bot(body));
+                    this.emit('cacheUpdateBots', this.bots);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
                         if (Options.log) console.log(resolved);
@@ -265,6 +269,7 @@ class Client extends EventEmitter {
                     const emoji = await body.json();
                     if (emoji.code) throw new FetchError(emoji, 'Emoji');
                     this.emojis.set(emoji.id, new Emoji(emoji));
+                    this.emit('cacheUpdateEmojis', this.emojis);
                     if (Options.normal) {
                         const resolved = Options.specified ? emoji[Options.specified] : emoji;
                         if (Options.log) console.log(resolved);
@@ -297,6 +302,7 @@ class Client extends EventEmitter {
                     const body = await guild.json();
                     if (body.code) throw new FetchError(body, 'Guild');
                     this.guilds.set(body.id, new Guild(body));
+                    this.emit('cacheUpdateGuilds', this.guilds);
                     if (Options.normal) {
                         const resolved = Options.specified ? body[Options.specified] : body;
                         if (Options.log) console.log(resolved);
@@ -328,9 +334,8 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
-                    for (const emoji of emojis) {
-                        this.emojis.set(emoji.id, new Emoji(emoji));
-                    }
+                    for (const emoji of emojis) this.emojis.set(emoji.id, new Emoji(emoji));
+                    this.emit('cacheUpdateEmojis', this.emojis);
                     if (Options.normal) {
                         const resolved = Options.specified ? emojis[Options.specified] : emojis;
                         if (Options.log) console.log(resolved);
@@ -520,12 +525,30 @@ module.exports.version = 'v2.2.3';
  */
 
 /**
- * Emitted when cache is updated.
- * @event Client#cacheUpdate
+ * Emitted when all cache is updated.
+ * @event Client#cacheUpdateAll
  * @type {object}
  * @property {Store<string, Bot>} bots
  * @property {Store<string, Guild>} guilds
  * @property {Store<string, Emoji>} emojis
+ */
+
+/**
+ * Emitted when cache is updated.
+ * @event Client#cacheUpdateBots
+ * @type {Store<string, Bot>}
+ */
+
+/**
+ * Emitted when cache is updated.
+ * @event Client#cacheUpdateGuilds
+ * @type {Store<string, Guild>}
+ */
+
+/**
+ * Emitted when cache is updated.
+ * @event Client#cacheUpdateEmojis
+ * @type {Store<string, Emoji>}
  */
 
 /**

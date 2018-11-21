@@ -8,7 +8,6 @@ declare module 'simple.space' {
     import { EventEmitter } from "events";
     export = Client;
 
-    export const version: string;
     class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private _runCache(): Promise<object>;
@@ -22,6 +21,7 @@ declare module 'simple.space' {
         public options: ClientOptions;
         public readyAt?: Date;
         public readyTimestamp?: number;
+        public version: string;
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
         public fetchAllBots(options?: FetchOptions): Promise<Bot[]>;
         public fetchAllEmojis(options?: FetchOptions): Promise<Emoji[]>;

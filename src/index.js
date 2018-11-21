@@ -510,10 +510,17 @@ class Client extends EventEmitter {
     static get endpoint() {
         return endpoint;
     }
+
+    /**
+     * The Client Version in use.
+     * @type {string}
+     */
+    static get version() {
+        return 'v2.2.4';
+    }
 }
 
 module.exports = Client;
-module.exports.version = 'v2.2.3';
 
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.

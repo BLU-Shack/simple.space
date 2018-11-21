@@ -104,7 +104,7 @@ class Guild extends Base {
 
     /**
      * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
-     * @type {string|null}
+     * @type {?string}
      */
     get vanityURL() {
         if (!this.vanity) return null;

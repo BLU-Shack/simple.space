@@ -132,7 +132,7 @@ class Client extends EventEmitter {
      */
     fetchAllBots(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots`)
                 .then(async body => {
@@ -161,7 +161,7 @@ class Client extends EventEmitter {
      */
     fetchAllGuilds(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers`)
                 .then(async body => {
@@ -190,7 +190,7 @@ class Client extends EventEmitter {
      */
     fetchAllEmojis(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis`)
                 .then(async body => {
@@ -226,7 +226,7 @@ class Client extends EventEmitter {
         if (!botID) throw new ReferenceError('botID must be present.');
         if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${botID}`)
                 .then(async bot => {
@@ -258,7 +258,7 @@ class Client extends EventEmitter {
         if (!emojiID) throw new ReferenceError('emojiID must be defined.');
         if (typeof emojiID !== 'string') throw new TypeError('emojiID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis/${emojiID}`)
                 .then(async body => {
@@ -290,7 +290,7 @@ class Client extends EventEmitter {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}`)
                 .then(async guild => {
@@ -322,7 +322,7 @@ class Client extends EventEmitter {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}/emojis`)
                 .then(async body => {
@@ -428,7 +428,7 @@ class Client extends EventEmitter {
         if (!userID) throw new ReferenceError('userID must be supplied.');
         if (typeof userID !== 'string') throw new TypeError('userID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options);
+        const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/users/${userID}`)
                 .then(async user => {

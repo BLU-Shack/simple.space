@@ -7,10 +7,10 @@ const Base = require('./Base.js').Base;
  */
 class PartialUser extends Base {
     /**
-     * @param {object} base The partial user fetched from the API.
+     * @param {object} partialUser The partial user fetched from the API.
      */
-    constructor(base) {
-        super(base);
+    constructor(partialUser) {
+        super(partialUser);
 
         Object.defineProperty(this, 'user', { writable: true, enumerable: false });
 
@@ -18,43 +18,43 @@ class PartialUser extends Base {
          * The plain user object itself.
          * @type {object}
          */
-        this.user = base;
+        this.user = partialUser;
 
         /**
          * The avatar of the user.
          * @type {string}
          */
-        this.avatar = base.avatar;
+        this.avatar = partialUser.avatar;
 
         /**
          * The discriminator of the user.
          * @type {string}
          */
-        this.discriminator = base.discriminator;
+        this.discriminator = partialUser.discriminator;
 
         /**
          * If any, the user's github username.
          * @type {?string}
          */
-        this.githubUsername = base.links.github;
+        this.githubUsername = partialUser.links.github;
 
         /**
          * If any, the user's gitlab username.
          * @type {?string}
          */
-        this.gitlabUsername = base.links.gitlab;
+        this.gitlabUsername = partialUser.links.gitlab;
 
         /**
          * The short description of the user.
          * @type {string}
          */
-        this.shortDescription = base.short_description;
+        this.shortDescription = partialUser.short_description;
 
         /**
          * The user's username.
          * @type {string}
          */
-        this.username = base.username;
+        this.username = partialUser.username;
     }
 
     /**

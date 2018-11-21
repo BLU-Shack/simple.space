@@ -23,7 +23,7 @@ class Store extends Map {
      * Filters the store using a passed function, and
      * returns a new Store including the filtered values.
      *
-     * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The provided function to test against the Store.
+     * @param {Function} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to func's "this" value.
      * @returns {Store<K, V>} The new Store containing the filtered contents.
      * @example
@@ -83,7 +83,7 @@ class Store extends Map {
      * an array containing the new values.
      *
      * @template T
-     * @param {(v: V, k: K, s: Store<K, V>) => T} func The function to run for each value and key in the Store.
+     * @param {Function} func The function to run for each value and key in the Store.
      * @param {*} [bind] The variable to bind func's ``this`` value.
      * @returns {T[]} The mapped values.
      */
@@ -131,7 +131,7 @@ class Store extends Map {
      * Splits the Store into two stores based on a function that
      * testifies each pair in the Store, those that pass to the
      * first Store and those that fail in the second Store.
-     * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The function passed to testify.
+     * @param {Function} func The function passed to testify.
      * @param {*} [bind] The value to bind func's "this" value.
      * @returns {[Store<K, V>, Store<K, V>]}
      * @example

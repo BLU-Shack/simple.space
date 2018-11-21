@@ -83,7 +83,7 @@ class Guild extends Base {
 
         /**
          * The guild's timestamp, in which the guild had been submitted.
-         * @type {Number}
+         * @type {number}
          */
         this.timestamp = new Date(guild.timestamp).getTime();
 

@@ -42,7 +42,7 @@ class Emoji extends Base {
 
     /**
      * The plain guild object the emoji is in.
-     * @type {Object}
+     * @type {object}
      */
     get normalGuild() {
         return this.emoji.server;

@@ -4,7 +4,7 @@
 //   iREDMe <foodrickme@gmail.com> (https://github.com/iREDMe)
 // License: MIT
 
-declare module 'Simple.Space' {
+declare module 'simple.space' {
     import { EventEmitter } from "events";
 
     export const version: string;

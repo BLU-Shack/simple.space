@@ -24,7 +24,7 @@ class Store extends Map {
      * returns a new Store including the filtered values.
      *
      * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The provided function to test against the Store.
-     * @param {*} [bind] The value to bind to "this" value.
+     * @param {*} [bind] The value to bind to func's "this" value.
      * @returns {Store<K, V>} The new Store containing the filtered contents.
      * @example
      * Client.fetchAllBots()
@@ -84,7 +84,7 @@ class Store extends Map {
      *
      * @template T
      * @param {(v: V, k: K, s: Store<K, V>) => T} func The function to run for each value and key in the Store.
-     * @param {*} [bind] The variable to bind ``this`` to the function.
+     * @param {*} [bind] The variable to bind func's ``this`` value.
      * @returns {T[]} The mapped values.
      */
     map(func, bind) {
@@ -132,7 +132,7 @@ class Store extends Map {
      * testifies each pair in the Store, those that pass to the
      * first Store and those that fail in the second Store.
      * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The function passed to testify.
-     * @param {*} [bind] The value to bind ``this`` to the function.
+     * @param {*} [bind] The value to bind func's "this" value.
      * @returns {Store<K, V>[]}
      * @example
      * const [approvedBots, unapprovedBots] = Client.bots.split(bot => bot.isApproved);

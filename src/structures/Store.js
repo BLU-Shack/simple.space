@@ -46,6 +46,15 @@ class Store extends Map {
     }
 
     /**
+     * Checks a given key's index in the Store.
+     * @param {K} key The key to retrieve its index in the Store.
+     * @returns {number} The key's index; -1 if not found.
+     */
+    indexOf(key) {
+        return this.keyArray().indexOf(key);
+    }
+
+    /**
      * Returns all the keys of the Store in an array.
      * @returns {K[]} An array of the Store's keys.
      */

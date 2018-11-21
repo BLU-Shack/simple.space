@@ -111,7 +111,7 @@ class Store extends Map {
     }
 
     /**
-     * Slices the Store into two stores based on a function that
+     * Splits the Store into two stores based on a function that
      * testifies each pair in the Store, those that pass to the
      * first Store and those that fail in the second Store.
      * @param {(v: V, k: K) => boolean} func The function passed to testify.

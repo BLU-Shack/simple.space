@@ -492,7 +492,7 @@ class Client extends EventEmitter {
 
     /**
      * All of the classes used.
-     * @type {Classes}
+     * @type {object}
      * @static
      * @private
      */
@@ -511,22 +511,6 @@ class Client extends EventEmitter {
 
 module.exports = Client;
 module.exports.version = 'v2.2.3';
-
-/**
- * @typedef {object} Classes
- * @property {typeof ClientOptions} ClientOptions
- * @property {typeof FetchOptions} FetchOptions
- * @property {typeof PostOptions} PostOptions
- * @property {typeof UpvoteFetchOptions} UpvoteFetchOptions
- * @property {typeof Bot} Bot
- * @property {typeof Emoji} Emoji
- * @property {typeof Guild} Guild
- * @property {typeof PartialUser} PartialUser
- * @property {typeof User} User
- * @property {typeof FetchError} FetchError
- * @property {typeof Stats} Stats
- * @property {typeof Store} Store
- */
 
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.

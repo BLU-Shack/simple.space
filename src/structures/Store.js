@@ -31,6 +31,7 @@ class Store extends Map {
 
     /**
      * Filters the store using a passed function, and returns a new Store including the filtered values.
+     *
      * @param {(v: V, k: K) => boolean} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to "this" value.
      * @returns {Store<K, V>} The new Store containing the filtered contents.
@@ -64,10 +65,11 @@ class Store extends Map {
 
     /**
      * Maps each and every value in the Store, and returns an array containing the new values.
+     *
+     * @template T
      * @param {(v: V, k: K) => T} func The function to run for each value and key in the Store.
      * @param {*} [bind] The variable to bind ``this`` to the function.
      * @returns {T[]} The mapped values.
-     * @template T
      */
     map(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');

@@ -1,5 +1,4 @@
 node-modules/
-package-lock.json
 examples-private/
 .github
 .vscode

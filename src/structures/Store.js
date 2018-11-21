@@ -133,7 +133,7 @@ class Store extends Map {
      * first Store and those that fail in the second Store.
      * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The function passed to testify.
      * @param {*} [bind] The value to bind func's "this" value.
-     * @returns {Store<K, V>[]}
+     * @returns {[Store<K, V>, Store<K, V>]}
      * @example
      * const [approvedBots, unapprovedBots] = Client.bots.split(bot => bot.isApproved);
      * console.log(`The total of approved bots are ${approvedBots.size}, with ${unapprovedBots.size} being unapproved!`)

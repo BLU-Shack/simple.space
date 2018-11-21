@@ -20,7 +20,8 @@ class Store extends Map {
     }
 
     /**
-     * Filters the store using a passed function, and returns a new Store including the filtered values.
+     * Filters the store using a passed function, and
+     * returns a new Store including the filtered values.
      *
      * @param {(v: V, k: K, s: Store<K, V>) => boolean} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to "this" value.
@@ -63,7 +64,8 @@ class Store extends Map {
     }
 
     /**
-     * Maps each and every value in the Store, and returns an array containing the new values.
+     * Maps each and every value in the Store, and returns
+     * an array containing the new values.
      *
      * @template T
      * @param {(v: V, k: K, s: Store<K, V>) => T} func The function to run for each value and key in the Store.
@@ -98,7 +100,8 @@ class Store extends Map {
     }
 
     /**
-     * Retrieves a random key-value pair of the Store and returns a new Array
+     * Retrieves a random key-value pair of the Store and
+     * returns a new Array
      * @returns {(K | V)[]} A random pair.
      */
     randomPair() {
@@ -117,10 +120,10 @@ class Store extends Map {
      * @param {*} [bind] The value to bind ``this`` to the function.
      * @returns {Store<K, V>[]}
      * @example
-     * const [approvedBots, unapprovedBots] = Client.bots.slice(bot => bot.isApproved);
+     * const [approvedBots, unapprovedBots] = Client.bots.split(bot => bot.isApproved);
      * console.log(`The total of approved bots are ${approvedBots.size}, with ${unapprovedBots.size} being unapproved!`)
      */
-    slice(func, bind) {
+    split(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a Function.');
         if (typeof bind !== 'undefined') func = func.bind(bind);
 

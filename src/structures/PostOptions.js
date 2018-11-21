@@ -1,3 +1,5 @@
+const ClientOptions = require('./ClientOptions.js').ClientOptions;
+
 /**
  * Options when Posting.
  * @class
@@ -5,18 +7,18 @@
 class PostOptions {
     /**
      * @param {object} options Options to override the preconfigured options.
-     * @param {object} preset Preset Client Options.
+     * @param {ClientOptions} [preset=ClientOptions.default] Preset Client Options.
      */
-    constructor(options, preset) {
+    constructor(options, preset = ClientOptions.default) {
         /**
          * The discord.js#Client object. Usable to not require the guildSize parameter.
-         * @type {Client}
+         * @type {*}
          */
         this.client = options.client || preset.client;
 
         /**
          * The bot ID for posting.
-         * @type {string}
+         * @type {?string}
          */
         this.botID = options.botID || preset.botID;
         if (!this.botID) throw new ReferenceError('options.botID must be defined.');
@@ -24,15 +26,15 @@ class PostOptions {
 
         /**
          * The size number/array for posting.
-         * @type {number|number[]}
+         * @type {?number|number[]}
          */
-        this.guildSize = options.guildSize || (this.client ? this.client.guilds.size : false);
-        if (!this.guildSize) throw new ReferenceError('guildSize must be defined.');
+        this.guildSize = options.guildSize || (this.client ? this.client.guilds.size : null);
+        if (this.guildSize === null) throw new ReferenceError('guildSize must be defined.');
         if (typeof this.guildSize !== 'number' && !(this.guildSize instanceof Array)) throw new TypeError('options.guildSize must be either a number or an array of numbers.');
 
         /**
          * The API token for posting.
-         * @type {string}
+         * @type {?string}
          */
         this.token = options.token || preset.token;
         if (!this.token) throw new ReferenceError('options.token must be defined.');

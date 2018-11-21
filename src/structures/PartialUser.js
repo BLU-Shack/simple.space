@@ -46,9 +46,9 @@ class PartialUser extends Base {
 
         /**
          * The short description of the user.
-         * @type {string}
+         * @type {?string}
          */
-        this.shortDescription = partialUser.short_description;
+        this.shortDescription = partialUser.short_description || null;
 
         /**
          * The user's username.

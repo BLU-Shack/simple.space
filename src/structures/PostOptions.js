@@ -4,8 +4,8 @@
  */
 class PostOptions {
     /**
-     * @param {Object} options Options to override the preconfigured options.
-     * @param {Object} preset Preconfigured options.
+     * @param {object} options Options to override the preconfigured options.
+     * @param {object} preset Preset Client Options.
      */
     constructor(options, preset) {
         /**

@@ -7,7 +7,7 @@ const Base = require('./Base.js').Base;
  */
 class PartialUser extends Base {
     /**
-     * @param {Object} base The partial user fetched from the API.
+     * @param {object} base The partial user fetched from the API.
      */
     constructor(base) {
         super(base);
@@ -16,7 +16,7 @@ class PartialUser extends Base {
 
         /**
          * The plain user object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.user = base;
 
@@ -93,7 +93,7 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's mention, rather than the user object.
-     * @type {string}
+     * @returns {string} The user mention.
      * @example
      * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
      */

@@ -1,12 +1,22 @@
+const ClientOptions = require('./ClientOptions.js').ClientOptions;
+
 /**
  * The fetch options when fetching for a Bot/Guild/User on the site.
  * @class
  */
 class FetchOptions {
     /**
-     * @param {FetchOptions} [options={}] The selected object.
+     * @param {object} [options={}] The selected object.
+     * @param {ClientOptions} [preset=ClientOptions.default] Preset Client Options.
      */
-    constructor(options = {}) {
+    constructor(options = {}, preset = ClientOptions.default) {
+        /**
+         * Whether or not to log the output. Overrides this.options.log
+         * @type {boolean}
+         */
+        this.log = typeof options.log !== 'undefined' ? options.log : (preset.log || false);
+        if (typeof this.log !== 'boolean') throw new TypeError('options.log must be a boolean.');
+
         /**
          * Whether or not to only get a specific value from the object.
          * @type {string|boolean}

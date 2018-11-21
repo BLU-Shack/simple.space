@@ -8,36 +8,36 @@ const Guild = require('./Guild.js').Guild;
  */
 class Emoji extends Base {
     /**
-     * @param {Object} base The emoji object fetched from the API.
+     * @param {object} emoji The emoji object fetched from the API.
      */
-    constructor(base) {
-        super(base);
+    constructor(emoji) {
+        super(emoji);
 
         Object.defineProperty(this, 'emoji', { writable: true, enumerable: false });
 
         /**
          * The plain emoji object itself.
-         * @type {Object}
+         * @type {object}
          */
-        this.emoji = base;
+        this.emoji = emoji;
 
         /**
          * Whether or not the emoji is animated.
          * @type {boolean}
          */
-        this.animated = base.animated;
+        this.animated = emoji.animated;
 
         /**
          * The emoji's name.
          * @type {string}
          */
-        this.name = base.name;
+        this.name = emoji.name;
 
         /**
          * The emoji's image URL.
          * @type {string}
          */
-        this.imageURL = base.url;
+        this.imageURL = emoji.url;
     }
 
     /**
@@ -66,7 +66,7 @@ class Emoji extends Base {
 
     /**
      * Returns the text that forms a readable Discord emoji in discord messages.
-     * @returns {string}
+     * @returns {string} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
      */
     toString() {
         return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;

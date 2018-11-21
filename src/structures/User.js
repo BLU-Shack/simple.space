@@ -10,7 +10,7 @@ const PartialUser = require('./PartialUser.js').PartialUser;
  */
 class User extends PartialUser {
     /**
-     * @param {Object} user The plain user object from the API.
+     * @param {object} user The plain user object from the API.
      */
     constructor(user) {
         super(user);

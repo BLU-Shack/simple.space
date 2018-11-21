@@ -4,7 +4,7 @@
  */
 class Base {
     /**
-     * @param {Object} base A Bot/Emoji/Guild/User object fetched from the API.
+     * @param {object} base A Bot/Emoji/Guild/User object fetched from the API.
      */
     constructor(base) {
         /**

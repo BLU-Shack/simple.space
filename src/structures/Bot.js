@@ -10,7 +10,7 @@ const util = require('util'); // eslint-disable-line no-unused-vars
  */
 class Bot extends Base {
     /**
-     * @param {Object} bot The plain bot object, fetched from the API.
+     * @param {object} bot The plain bot object, fetched from the API.
      */
     constructor(bot) {
         super(bot);
@@ -19,7 +19,7 @@ class Bot extends Base {
 
         /**
          * The plain bot object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.bot = bot;
 
@@ -114,8 +114,8 @@ class Bot extends Base {
         this.username = bot.username;
 
         /**
-         * Returns, if any, the bot's vanity.
-         * @type {string}
+         * If any, the bot's vanity.
+         * @type {?string}
          */
         this.vanity = bot.vanity;
     }
@@ -194,7 +194,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's mention, rather than the bot object.
-     * @type {string}
+     * @returns {string} The bot mention.
      * @example
      * console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
      */

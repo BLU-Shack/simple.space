@@ -85,13 +85,10 @@ class Client extends EventEmitter {
      */
     async _runCache() {
         if (this.options.cache) {
-            await this.fetchAllBots({ log: false });
-            await this.fetchAllEmojis({ log: false });
-            await this.fetchAllGuilds({ log: false });
-
+            await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
             if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
-
             this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };

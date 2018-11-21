@@ -1,7 +1,7 @@
 /**
  * A storage class that includes additional methods.
  * @class
- * @extends {Map}
+ * @extends {Map<K, V>}
  * @template K, V
  */
 class Store extends Map {
@@ -108,6 +108,30 @@ class Store extends Map {
 
         pair.push(key, this.get(key));
         return pair;
+    }
+
+    /**
+     * Slices the Store into two stores based on a function that
+     * testifies each pair in the Store, those that pass to the
+     * first Store and those that fail in the second Store.
+     * @param {(v: V, k: K) => boolean} func The function passed to testify.
+     * @param {*} [bind] The value to bind ``this`` to the function.
+     * @returns {Store<K, V>[]}
+     * @example
+     * // This example uses [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+     * const [approvedBots, unapprovedBots] = Client.bots.slice(bot => bot.isApproved);
+     * console.log(`The total of approved bots are ${approvedBots.size}, with ${unapprovedBots.size} being unapproved!`)
+     */
+    slice(func, bind) {
+        if (typeof func !== 'function') throw new TypeError('func must be a Function.');
+        if (typeof bind !== 'undefined') func = func.bind(bind);
+
+        const [first, second] = [new this.constructor[Symbol.species](), new this.constructor[Symbol.species]()];
+        for (const [key, value] of this) {
+            if (func(value, key)) first.set(key, value);
+            else second.set(key, value);
+        }
+        return [first, second];
     }
 }
 

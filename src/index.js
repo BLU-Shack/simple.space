@@ -80,7 +80,7 @@ class Client extends EventEmitter {
     /**
      * Runs the automatic cache if this.options.cache is set to true.
      * @private
-     * @returns {object} Updated/normal data i gues.
+     * @returns {Promise<object>} Updated/normal data i gues.
      * @fires Client#cacheUpdate
      */
     async _runCache() {

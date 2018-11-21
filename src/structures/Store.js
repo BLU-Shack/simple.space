@@ -118,7 +118,6 @@ class Store extends Map {
      * @param {*} [bind] The value to bind ``this`` to the function.
      * @returns {Store<K, V>[]}
      * @example
-     * // This example uses [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
      * const [approvedBots, unapprovedBots] = Client.bots.slice(bot => bot.isApproved);
      * console.log(`The total of approved bots are ${approvedBots.size}, with ${unapprovedBots.size} being unapproved!`)
      */

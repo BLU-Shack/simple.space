@@ -36,6 +36,15 @@ class Client {
     }
 
     /**
+     * Checks whether or not a given item is an object.
+     * @param {object} obj The item to testify against.
+     * @returns {boolean} Whether or not the item that is testifyed is an object.
+     */
+    static isObject(obj) {
+        return (obj === Object(obj) || obj instanceof Array);
+    }
+
+    /**
      * Edit at least one or more key-value pair in the instance.
      * @param {ClientOptions} [options=ClientOptions.default] A thing.
      * @param {boolean} [preset=false] Whether or not to have preset rules when setting values.
@@ -45,7 +54,7 @@ class Client {
      */
     edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         if (options.token && typeof options.token !== 'string') throw new TypeError('token must be a string.');
         if (options.botID && typeof options.botID !== 'string') throw new TypeError('botID must be a string.');
         if (options.log && typeof options.log !== 'boolean') throw new TypeError('log must be a boolean value.');
@@ -60,7 +69,7 @@ class Client {
      * @returns {Promise<Bot[]>} All bots on the site.
      */
     fetchAllBots(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots`)
@@ -88,7 +97,7 @@ class Client {
      * @returns {Promise<Guild[]>} All guilds on the site.
      */
     fetchAllGuilds(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers`)
@@ -116,7 +125,7 @@ class Client {
      * @returns {Promise<Emoji[]>} All emojis on the site.
      */
     fetchAllEmojis(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis`)
@@ -151,7 +160,7 @@ class Client {
     fetchBot(botID, options = {}) {
         if (!botID) throw new ReferenceError('botID must be present.');
         if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${botID}`)
                 .then(async bot => {
@@ -182,7 +191,7 @@ class Client {
     fetchEmoji(emojiID, options = {}) {
         if (!emojiID) throw new ReferenceError('emojiID must be defined.');
         if (typeof emojiID !== 'string') throw new TypeError('emojiID must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis/${emojiID}`)
@@ -213,7 +222,7 @@ class Client {
     fetchGuild(guildID, options = {}) {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}`)
                 .then(async guild => {
@@ -244,7 +253,7 @@ class Client {
     fetchGuildEmojis(guildID, options = {}) {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}/emojis`)
@@ -310,7 +319,7 @@ class Client {
      * Client.fetchUpvotes({ ids: true });
      */
     fetchUpvotes(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new UpvoteFetchOptions(options);
         if (!Options.token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
         if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { botID: \'BOT_ID\', ... }) ');
@@ -347,7 +356,7 @@ class Client {
     fetchUser(userID, options = {}) {
         if (!userID) throw new ReferenceError('userID must be supplied.');
         if (typeof userID !== 'string') throw new TypeError('userID must be a string.');
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/users/${userID}`)
                 .then(async user => {
@@ -393,7 +402,7 @@ class Client {
      * @returns {Promise<Object>} Returns the code, and a message.
      */
     setGuilds(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new PostOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json; charset=UTF-8' }, body: Options.data })

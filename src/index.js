@@ -109,8 +109,7 @@ class Client extends EventEmitter {
      * @param {ClientOptions} [options=ClientOptions.default] A thing.
      * @param {boolean} [preset=false] Whether or not to have preset rules when setting values.
      * @returns {ClientOptions} The new client options.
-     * @example
-     * console.log(Client.edit({ log: false }).options);
+     * @example console.log(Client.edit({ log: false }).options); // { log: false, ... }
      */
     edit(options = ClientOptions.default, preset = false) {
         if (!options) throw new ReferenceError('options must be defined.');
@@ -388,8 +387,7 @@ class Client extends EventEmitter {
      * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
      * @returns {Promise<PartialUser[]>} The array of the user objects/user IDs.
-     * @example
-     * Client.fetchUpvotes({ ids: true });
+     * @example Client.fetchUpvotes({ ids: true, log: true }); // { ... }
      */
     fetchUpvotes(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');

@@ -94,8 +94,7 @@ class PartialUser extends Base {
     /**
      * Returns the user's mention, rather than the user object.
      * @returns {string} The user mention.
-     * @example
-     * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
+     * @example console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
      */
     toString() {
         return `<@${this.id}>`;

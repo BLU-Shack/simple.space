@@ -74,7 +74,8 @@ class Emoji extends Base {
 
     /**
      * Returns the text that forms a readable Discord emoji in discord messages.
-     * @returns {string} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
+     * @returns {string} Returns just {@link Emoji#raw}
+     * @example channel.send(`Hey look there's an emoji ${emoji}`); // Varies depending on the emoji.
      */
     toString() {
         return this.raw;

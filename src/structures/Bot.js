@@ -195,8 +195,7 @@ class Bot extends Base {
     /**
      * Returns the bot's mention, rather than the bot object.
      * @returns {string} The bot mention.
-     * @example
-     * console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
+     * @example console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
      */
     toString() {
         return `<@${this.id}>`;

@@ -136,6 +136,7 @@ class Guild extends Base {
     /**
      * Returns a string containing the guild name.
      * @returns {string} The guild name.
+     * @example console.log(`Hey look a guild with a name ${guild}!`); // Hey look a guild with a name Hell's Door!
      */
     toString() {
         return this.name;

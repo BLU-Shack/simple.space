@@ -57,6 +57,14 @@ class Emoji extends Base {
     }
 
     /**
+     * Returns the raw text that turns into a Discord Readable Emoji when used correctly.
+     * @type {string}
+     */
+    get raw() {
+        return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;
+    }
+
+    /**
      * The emoji's page URL.
      * @type {string}
      */
@@ -69,7 +77,7 @@ class Emoji extends Base {
      * @returns {string} The text-that-turns-into-a-Discord-Emoji-if-used-correctly-in-a-message
      */
     toString() {
-        return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;
+        return this.raw;
     }
 }
 

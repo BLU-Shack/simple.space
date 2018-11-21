@@ -6,9 +6,10 @@
 
 declare module 'simple.space' {
     import { EventEmitter } from "events";
+    export = Client;
 
     export const version: string;
-    export default class Client extends EventEmitter {
+    class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private _runCache(): Promise<object>;
         private static isObject(obj: any): boolean;

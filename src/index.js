@@ -365,7 +365,7 @@ class Client extends EventEmitter {
      * @returns {Promise<Stats>} Returns site stats/specified value.
      */
     fetchStats(options = {}) {
-        if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/stats`)

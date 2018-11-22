@@ -432,9 +432,9 @@ class Client extends EventEmitter {
      */
     postCount(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new PostOptions(options, this.options);
+        const { botID, token, data } = new PostOptions(options, this.options);
         return new Promise((resolve, reject) => {
-            Fetch(`${endpoint}/bots/${Options.botID}`, { method: 'POST', headers: { Authorization: Options.token, 'Content-Type': 'application/json; charset=UTF-8' }, body: Options.data })
+            Fetch(`${endpoint}/bots/${botID}`, { method: 'POST', headers: { Authorization: token, 'Content-Type': 'application/json; charset=UTF-8' }, body: data })
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code !== 200) throw new FetchError(body, 'Bot');

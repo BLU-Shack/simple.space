@@ -131,7 +131,7 @@ class Client extends EventEmitter {
      */
     fetchAllBots(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots`)
                 .then(async body => {
@@ -139,16 +139,10 @@ class Client extends EventEmitter {
                     if (bots.code) throw new FetchError(bots, 'Bots');
                     this.bots = new Store([...bots.map(bot => [bot.id, new Bot(bot)])]);
                     this.emit('cacheUpdateBots', this.bots);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? bots.map(bot => bot[Options.specified]) : bots;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceBots = bots.map(bot => new Bot(bot));
-                        const resolved = Options.specified ? SpaceBots.map(bot => bot[Options.specified]) : SpaceBots;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const all = !normal ? bots.map(bot => new Bot(bot)) : bots;
+                    const resolved = specified ? all.map(bot => bot[specified]) : stringify ? all.map(bot => bot.toString()) : all;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -161,7 +155,7 @@ class Client extends EventEmitter {
      */
     fetchAllGuilds(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers`)
                 .then(async body => {
@@ -169,16 +163,10 @@ class Client extends EventEmitter {
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
                     this.guilds = new Store([...guilds.map(guild => [guild.id, new Guild(guild)])]);
                     this.emit('cacheUpdateGuilds', this.guilds);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? guilds.map(guild => guild[Options.specified]) : guilds;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceGuilds = guilds.map(guild => new Guild(guild));
-                        const resolved = Options.specified ? SpaceGuilds.map(guild => guild[Options.specified]) : SpaceGuilds;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const all = !normal ? guilds.map(guild => new Guild(guild)) : guilds;
+                    const resolved = all.map(guild => stringify ? guild.toString() : specified ? guild[specified] : guild);
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -191,7 +179,7 @@ class Client extends EventEmitter {
      */
     fetchAllEmojis(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis`)
                 .then(async body => {
@@ -199,16 +187,10 @@ class Client extends EventEmitter {
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
                     this.emojis = new Store([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
                     this.emit('cacheUpdateEmojis', this.emojis);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? emojis.map(emoji => emoji[Options.specified]) : emojis;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
-                        const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
+                    const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -228,24 +210,18 @@ class Client extends EventEmitter {
         if (!botID) throw new ReferenceError('botID must be present.');
         if (typeof botID !== 'string') throw new TypeError('botID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/bots/${botID}`)
-                .then(async bot => {
-                    const body = await bot.json();
+                .then(async response => {
+                    const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Bot');
                     this.bots.set(body.id, new Bot(body));
                     this.emit('cacheUpdateBots', this.bots);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? body[Options.specified] : body;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceBot = Options.stringify ? new Bot(body).toString() : new Bot(body);
-                        const resolved = Options.specified ? SpaceBot[options.specified] : SpaceBot;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const bot = !normal ? new Bot(body) : body;
+                    const resolved = stringify ? bot.toString() : specified ? bot[specified] : bot;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -261,24 +237,18 @@ class Client extends EventEmitter {
         if (!emojiID) throw new ReferenceError('emojiID must be defined.');
         if (typeof emojiID !== 'string') throw new TypeError('emojiID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/emojis/${emojiID}`)
-                .then(async body => {
-                    const emoji = await body.json();
-                    if (emoji.code) throw new FetchError(emoji, 'Emoji');
-                    this.emojis.set(emoji.id, new Emoji(emoji));
+                .then(async response => {
+                    const body = await response.json();
+                    if (body.code) throw new FetchError(body, 'Emoji');
+                    this.emojis.set(body.id, new Emoji(body));
                     this.emit('cacheUpdateEmojis', this.emojis);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? emoji[Options.specified] : emoji;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceEmoji = Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji);
-                        const resolved = Options.specified ? SpaceEmoji[Options.specified] : SpaceEmoji;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const emoji = !normal ? new Emoji(body) : body;
+                    const resolved = stringify ? emoji.toString() : specified ? emoji[specified] : emoji;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -294,24 +264,18 @@ class Client extends EventEmitter {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}`)
-                .then(async guild => {
-                    const body = await guild.json();
+                .then(async response => {
+                    const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Guild');
                     this.guilds.set(body.id, new Guild(body));
                     this.emit('cacheUpdateGuilds', this.guilds);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? body[Options.specified] : body;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceGuild = Options.stringify ? new Guild(body).toString() : new Guild(body);
-                        const resolved = Options.specified ? SpaceGuild[Options.specified] : SpaceGuild;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const guild = !normal ? new Guild(body) : body;
+                    const resolved = stringify ? guild.toString() : specified ? guild[specified] : guild;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -327,24 +291,18 @@ class Client extends EventEmitter {
         if (!guildID) throw new ReferenceError('guildID must be supplied.');
         if (typeof guildID !== 'string') throw new TypeError('guildID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/servers/${guildID}/emojis`)
-                .then(async body => {
-                    const emojis = await body.json();
+                .then(async response => {
+                    const emojis = await response.json();
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
                     for (const emoji of emojis) this.emojis.set(emoji.id, new Emoji(emoji));
                     this.emit('cacheUpdateEmojis', this.emojis);
-                    if (Options.normal) {
-                        const resolved = Options.specified ? emojis[Options.specified] : emojis;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceEmojis = emojis.map(emoji => Options.stringify ? new Emoji(emoji).toString() : new Emoji(emoji));
-                        const resolved = Options.specified ? SpaceEmojis.map(emoji => emoji[Options.specified]) : SpaceEmojis;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
+                    const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -366,22 +324,16 @@ class Client extends EventEmitter {
      */
     fetchStats(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/stats`)
-                .then(async stats => {
-                    const body = await stats.json();
+                .then(async response => {
+                    const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Stats');
-                    if (Options.normal) {
-                        const resolved = Options.specified ? body[Options.specified] || body.bots[Options.specified] : body;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceStats = new Stats(body);
-                        const resolved = Options.specified ? SpaceStats[Options.specified] || SpaceStats.bots[Options.specified] : SpaceStats;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const stats = !normal ? new Stats(body) : body;
+                    const resolved = specified ? stats[specified] || stats.bots[specified] : stats;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });
@@ -432,22 +384,16 @@ class Client extends EventEmitter {
         if (!userID) throw new ReferenceError('userID must be supplied.');
         if (typeof userID !== 'string') throw new TypeError('userID must be a string.');
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new FetchOptions(options, this.options);
+        const { normal, specified, log, stringify } = new FetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             Fetch(`${endpoint}/users/${userID}`)
-                .then(async user => {
-                    const body = await user.json();
+                .then(async response => {
+                    const body = await response.json();
                     if (body.code) throw new FetchError(body, 'User');
-                    if (Options.normal) {
-                        const resolved = Options.specified ? body[Options.specified] : body;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceUser = Options.stringify ? new User(body).toString() : new User(body);
-                        const resolved = Options.specified ? SpaceUser[Options.specified] : SpaceUser;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const user = !normal ? new User(body) : body;
+                    const resolved = stringify ? user.toString() : specified ? user[specified] || user.links[specified] : user;
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });

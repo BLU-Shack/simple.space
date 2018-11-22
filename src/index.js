@@ -2,24 +2,29 @@ const Classes = require('./structures/Classes.js').Classes;
 const Client = require('./Client.js');
 
 module.exports = {
-    Client: Client,
-    version: require('../package.json').version,
+    // The Client and Version
+    get Client() { return Client; },
+    get version() { return require('../package.json').version; },
 
-    Bot: Classes.Bot,
-    Emoji: Classes.Emoji,
-    Guild: Classes.Guild,
-    User: Classes.User,
+    // The Main Classes
+    get Bot() { return Classes.Bot; },
+    get Emoji() { return Classes.Emoji; },
+    get Guild() { return Classes.Guild; },
+    get User() { return Classes.User; },
 
-    PartialUser: Classes.PartialUser,
-    UpvoteUser: Classes.UpvoteUser,
-    Base: Classes.Base,
+    // The Extension Classes
+    get PartialUser() { return Classes.PartialUser; },
+    get UpvoteUser() { return Classes.UpvoteUser; },
+    get Base() { return Classes.Base; },
 
-    ClientOptions: Classes.ClientOptions,
-    FetchOptions: Classes.FetchOptions,
-    PostOptions: Classes.PostOptions,
-    UpvoteFetchOptions: Classes.UpvoteFetchOptions,
+    // The Options for Fetch/Post/Init
+    get ClientOptions() { return Classes.ClientOptions; },
+    get FetchOptions() { return Classes.FetchOptions; },
+    get PostOptions() { return Classes.PostOptions; },
+    get UpvoteFetchOptions() { return Classes.UpvoteFetchOptions; },
 
-    FetchError: Classes.FetchError,
-    Stats: Classes.Stats,
-    Store: Classes.Store
+    // Misc Classes
+    get FetchError() { return Classes.FetchError; },
+    get Stats() { return Classes.Stats; },
+    get Store() { return Classes.Store; }
 };

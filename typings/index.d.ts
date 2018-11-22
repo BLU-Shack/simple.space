@@ -13,9 +13,7 @@ declare module 'simple.space' {
         private _runCache(): Promise<object>;
         private static isObject(obj: any): boolean;
 
-        public static Classes: object;
         public static endpoint: string;
-        public static version: string;
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;
         public guilds: Store<string, Guild>;
@@ -121,7 +119,7 @@ declare module 'simple.space' {
     export class FetchOptions {
         constructor(options?: object, preset?: ClientOptions);
         public log?: boolean;
-        public specified?: string;
+        public specified?: Specifiable;
         public normal?: boolean;
         public stringify?: boolean;
     }
@@ -213,3 +211,25 @@ declare module 'simple.space' {
         public guilds(options?: FetchOptions): Guild[];
     }
 }
+
+type BotSVs =   'id'            | 'bot'                 | 'avatar'          |
+                'discriminator' | 'fullDescription'     | 'guildSize'       |
+                'inviteURL'     | 'isApproved'          | 'isChildFriendly' |
+                'isFeatured'    | 'library'             | 'prefix'          |
+                'shards'        | 'shortDescription'    | 'supportCode'     |
+                'timestamp'     | 'username'            | 'vanity';
+
+type EmojiSVs = 'id'    | 'emoji'   | 'animated' |
+                'name'  | 'imageURL';
+
+type GuildSVs = 'id'                | 'guild'       | 'compliance'          |
+                'fullDescription'   | 'icon'        | 'isChildFriendly'     |
+                'isFeatured'        | 'isPremium'   | 'isPublic'            |
+                'memberCount'       | 'name'        | 'shortDescription'    |
+                'timestamp'         | 'vanity';
+
+type UserSVs = 'id'                 | 'user'            | 'avatar'          |
+               'discriminator'      | 'githubUsername'  | 'gitlabUsername'  |
+               'shortDescription'   | 'username';
+
+type Specifiable = BotSVs | EmojiSVs | GuildSVs | UserSVs;

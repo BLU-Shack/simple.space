@@ -43,6 +43,7 @@ class PostOptions {
 
     /**
      * The returned data.
+     * @readonly
      * @type {string}
      */
     get data() {

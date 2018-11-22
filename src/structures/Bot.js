@@ -122,6 +122,7 @@ class Bot extends Base {
 
     /**
      * Identical to {@link Bot#guildSize}
+     * @readonly
      * @type {?number}
      */
     get serverCount() {
@@ -130,6 +131,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's invite URL with no permissions.
+     * @readonly
      * @type {string}
      */
     get inviteNoPerms() {
@@ -138,6 +140,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's support URL, if the support code exists.
+     * @readonly
      * @type {?string}
      */
     get supportURL() {
@@ -147,6 +150,7 @@ class Bot extends Base {
 
     /**
      * The tag of the bot.
+     * @readonly
      * @type {string}
      */
     get tag() {
@@ -155,6 +159,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's page URL.
+     * @readonly
      * @type {string}
      */
     get url() {
@@ -163,6 +168,7 @@ class Bot extends Base {
 
     /**
      * Returns the bot's vanity in the form of a URL, if the bot has a vanity.
+     * @readonly
      * @type {?string}
      */
     get vanityURL() {

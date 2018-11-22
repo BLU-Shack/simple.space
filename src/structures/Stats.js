@@ -49,6 +49,7 @@ class Stats {
 
     /**
      * Fetch the total combined number of bots, servers, and users on the site.
+     * @readonly
      * @type {number}
      */
     get combined() {

@@ -47,6 +47,7 @@ class ClientOptions {
 
     /**
      * The default client options.
+     * @readonly
      * @static
      */
     static get default() {

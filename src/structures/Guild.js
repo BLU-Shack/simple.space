@@ -96,6 +96,7 @@ class Guild extends Base {
 
     /**
      * Returns the guild's page URL.
+     * @readonly
      * @type {string}
      */
     get url() {
@@ -104,6 +105,7 @@ class Guild extends Base {
 
     /**
      * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
+     * @readonly
      * @type {?string}
      */
     get vanityURL() {

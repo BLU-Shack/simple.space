@@ -59,6 +59,7 @@ class PartialUser extends Base {
 
     /**
      * The user's github URL.
+     * @readonly
      * @type {?string}
      */
     get githubURL() {
@@ -68,6 +69,7 @@ class PartialUser extends Base {
 
     /**
      * The user's gitlab URL.
+     * @readonly
      * @type {?string}
      */
     get gitlabURL() {
@@ -77,6 +79,7 @@ class PartialUser extends Base {
 
     /**
      * The user's tag.
+     * @readonly
      * @type {string}
      */
     get tag() {
@@ -85,6 +88,7 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's page URL.
+     * @readonly
      * @type {string}
      */
     get url() {

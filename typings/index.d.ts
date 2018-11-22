@@ -62,31 +62,38 @@ declare module 'simple.space' {
         public discriminator: string;
         public fullDescription?: string;
         public guildSize?: number;
-        public inviteNoPerms: string;
         public inviteURL: string;
         public isApproved: boolean;
         public isChildFriendly: boolean;
         public isFeatured: boolean;
         public library: string;
         public prefix: string;
-        public serverCount?: number;
         public shards?: number[];
         public shortDescription: string;
         public supportCode?: string;
-        public supportURL?: string;
-        public tag: string;
         public timestamp: number;
-        public url: string;
         public user: string;
         public vanity?: string;
-        public vanityURL?: string;
+        public readonly inviteNoPerms: string;
+        public readonly serverCount?: number;
+        public readonly supportURL?: string;
+        public readonly tag: string;
+        public readonly url: string;
+        public readonly vanityURL?: string;
         public owners(options?: FetchOptions<UserSVs>): PartialUser[];
         public toString(): string;
     }
 
     export class ClientOptions {
         constructor(newObj: object, oldObj?: object);
-        private default: object;
+        private readonly default: {
+            cache: false,
+            cacheUpdateTimer: 180000,
+            client: null,
+            botID: null,
+            token: null,
+            log: false
+        }
 
         public cache?: boolean;
         public cacheUpdateTimer?: number;
@@ -103,10 +110,10 @@ declare module 'simple.space' {
         public animated: boolean;
         public name: string;
         public imageURL: string;
-        public normalGuild: object;
-        public guild: Guild;
-        public raw: string;
-        public url: string;
+        public readonly normalGuild: object;
+        public readonly guild: Guild;
+        public readonly raw: string;
+        public readonly url: string;
         public toString(): string;
     }
 
@@ -140,9 +147,9 @@ declare module 'simple.space' {
         public name: string;
         public shortDescription: string;
         public timestamp: number;
-        public url: string;
         public vanity?: string;
-        public vanityURL?: string;
+        public readonly url: string;
+        public readonly vanityURL?: string;
         public owners(options?: FetchOptions<UserSVs>): PartialUser[];
     }
 
@@ -152,13 +159,13 @@ declare module 'simple.space' {
 
         public avatar: string;
         public discriminator: string;
-        public githubURL?: string;
-        public gitlabURL?: string;
         public githubUsername?: string;
         public gitlabUsername?: string;
         public shortDescription?: string;
-        public tag: string;
-        public url: string;
+        public readonly githubURL?: string;
+        public readonly gitlabURL?: string;
+        public readonly tag: string;
+        public readonly url: string;
         public username: string;
         public toString(): string;
     }
@@ -169,7 +176,7 @@ declare module 'simple.space' {
         public botID?: string;
         public guildSize?: number | number[];
         public token?: string;
-        public data: string;
+        public readonly data: string;
     }
 
     export class Stats {
@@ -183,8 +190,8 @@ declare module 'simple.space' {
         }
         public guilds: number;
         public successful: boolean;
-        public combined: number;
         public users: number;
+        public readonly combined: number;
     }
 
     export class Store<K, V> extends Map<K, V> {

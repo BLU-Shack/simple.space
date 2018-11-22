@@ -442,6 +442,7 @@ class Client extends EventEmitter {
 
     /**
      * The endpoint URL, used to interact with the site.
+     * @readonly
      * @type {string}
      */
     static get endpoint() {

@@ -42,6 +42,7 @@ class Emoji extends Base {
 
     /**
      * The plain guild object the emoji is in.
+     * @readonly
      * @type {object}
      */
     get normalGuild() {
@@ -50,6 +51,7 @@ class Emoji extends Base {
 
     /**
      * The guild the emoji is in.
+     * @readonly
      * @type {Guild}
      */
     get guild() {
@@ -58,6 +60,7 @@ class Emoji extends Base {
 
     /**
      * Returns the raw text that turns into a Discord Readable Emoji when used correctly.
+     * @readonly
      * @type {string}
      */
     get raw() {
@@ -66,6 +69,7 @@ class Emoji extends Base {
 
     /**
      * The emoji's page URL.
+     * @readonly
      * @type {string}
      */
     get url() {

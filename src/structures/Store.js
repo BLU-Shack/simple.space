@@ -5,9 +5,6 @@
  * @template K, V
  */
 class Store extends Map {
-    /**
-     * @param {Iterable<[*, *]>} [iterable] An iterable object.
-     */
     constructor(iterable) {
         super(iterable);
     }
@@ -117,7 +114,7 @@ class Store extends Map {
     /**
      * Retrieves a random key-value pair of the Store and
      * returns a new Array
-     * @returns {(K | V)[]} A random pair.
+     * @returns {Array<K|V>} A random pair.
      */
     randomPair() {
         const key = this.randomKey();
@@ -133,7 +130,7 @@ class Store extends Map {
      * first Store and those that fail in the second Store.
      * @param {Function} func The function passed to testify.
      * @param {*} [bind] The value to bind func's "this" value.
-     * @returns {[Store<K, V>, Store<K, V>]}
+     * @returns {Store[]}
      * @example
      * const [approvedBots, unapprovedBots] = Client.bots.split(bot => bot.isApproved);
      * console.log(`The total of approved bots are ${approvedBots.size}, with ${unapprovedBots.size} being unapproved!`)

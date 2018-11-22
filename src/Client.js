@@ -11,7 +11,7 @@ const UpvoteFetchOptions = Classes.UpvoteFetchOptions;
 const Bot = Classes.Bot;
 const Emoji = Classes.Emoji;
 const Guild = Classes.Guild;
-const PartialUser = Classes.PartialUser;
+const UpvoteUser = Classes.UpvoteUser;
 const User = Classes.User;
 
 const FetchError = Classes.FetchError;
@@ -342,33 +342,23 @@ class Client extends EventEmitter {
     /**
      * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
-     * @returns {Promise<PartialUser[]>} The array of the user objects/user IDs.
+     * @returns {Promise<UpvoteUser[]>} The array of the user objects/user IDs.
      * @example Client.fetchUpvotes({ ids: true, log: true }); // { ... }
      */
     fetchUpvotes(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new UpvoteFetchOptions(options);
-        if (!Options.token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
-        if (!this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { botID: \'BOT_ID\', ... }) ');
-        if (typeof this.options.botID !== 'string') throw new TypeError('options.botID must be a string.');
+        const { token, botID, ids, normal, specified, stringify, log } = new UpvoteFetchOptions(options, this.options);
+        if (!token && !this.options.token) throw new ReferenceError('options.token must either be defined in ClientOptions or in the UpvoteFetchOptions (etc. { token: \'TOKEN\', ... })');
+        if (!botID && !this.options.botID) throw new ReferenceError('options.botID must be either defined in ClientOptions or in UpvoteFetchOptions (etc. { botID: \'BOT_ID\', ... }) ');
         return new Promise((resolve, reject) => {
-            Fetch(`${endpoint}/bots/${this.options.botID}/upvotes?ids=${Options.ids}`, { headers: { Authorization: this.options.token } })
-                .then(async upvotes => {
-                    const body = await upvotes.json();
+            Fetch(`${endpoint}/bots/${botID}/upvotes?ids=${ids}`, { headers: { Authorization: token } })
+                .then(async response => {
+                    const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Bot');
-                    if (Options.normal) {
-                        const resolved = Options.specified ? body.map(user => user[Options.specified]) : body;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    } else {
-                        const SpaceUpvotes = body.map(info => {
-                            const obj = Options.ids ? info : { timestamp: info.timestamp, user: Options.stringify ? new PartialUser(info.user).toString() : new PartialUser(info.user) };
-                            return obj;
-                        });
-                        const resolved = Options.specified ? SpaceUpvotes.map(v => v[Options.specified] || v.user[Options.specified]) : SpaceUpvotes;
-                        if (Options.log) console.log(resolved);
-                        resolve(resolved);
-                    }
+                    const upvotes = body.map(contents => !ids ? !normal ? new UpvoteUser(contents) : contents : contents);
+                    const resolved = upvotes.map(contents => stringify ? (!ids ? contents.user.toString() : `<@${contents}>`) : specified ? contents[specified] || contents.user[specified] || (contents.user.links ? contents.user.links[specified] : undefined) : contents);
+                    if (log) console.log(resolved);
+                    resolve(resolved);
                 })
                 .catch(reject);
         });

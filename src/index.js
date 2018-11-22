@@ -11,6 +11,7 @@ module.exports = {
     User: Classes.User,
 
     PartialUser: Classes.PartialUser,
+    UpvoteUser: Classes.UpvoteUser,
     Base: Classes.Base,
 
     ClientOptions: Classes.ClientOptions,

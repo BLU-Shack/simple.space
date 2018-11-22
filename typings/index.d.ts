@@ -204,12 +204,19 @@ declare module 'simple.space' {
         constructor(options?: object, client?: ClientOptions);
         public ids?: boolean;
         public token?: string;
+        public botID?: string;
     }
 
     export class User extends PartialUser {
         constructor(user: object);
         public bots(options?: FetchOptions): Bot[];
         public guilds(options?: FetchOptions): Guild[];
+    }
+
+    export class UpvoteUser {
+        constructor(body: object);
+        public timestamp: number;
+        public user: PartialUser;
     }
 }
 

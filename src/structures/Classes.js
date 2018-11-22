@@ -1,5 +1,6 @@
 exports.Classes = {
     PartialUser: require('./PartialUser.js').PartialUser,
+    UpvoteUser: require('./UpvoteUser.js').UpvoteUser,
     Base: require('./Base.js').Base,
 
     Bot: require('./Bot.js').Bot,

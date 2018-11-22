@@ -30,9 +30,9 @@ declare module 'simple.space' {
         public fetchGuildEmojis(guildID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
         public fetchSelf(options?: FetchOptions<BotSVs>): Promise<Bot>;
         public fetchStats(options?: FetchOptions<StatsSVs>): Promise<Stats>;
-        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteUser[]>;
+        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteUser[] | string[]>;
         public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
-        public hasUpvoted(userID: string, log?: boolean): Promise<boolean>;
+        public hasUpvoted(userID: string | string[], log?: boolean): Promise<boolean | Store<string, boolean>>;
         public setGuilds(options?: PostOptions): Promise<object>;
         public postCount(options?: PostOptions): Promise<object>;
 

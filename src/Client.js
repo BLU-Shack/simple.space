@@ -342,7 +342,7 @@ class Client extends EventEmitter {
     /**
      * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
-     * @returns {Promise<UpvoteUser[]>} The array of the user objects/user IDs.
+     * @returns {Promise<UpvoteUser[]|string[]>} The array of the user objects/user IDs.
      * @example Client.fetchUpvotes({ ids: true, log: true }); // { ... }
      */
     fetchUpvotes(options = {}) {
@@ -391,16 +391,19 @@ class Client extends EventEmitter {
 
     /**
      * Checks if a user has upvoted your bot.
-     * @param {string} userID The user ID to check if they have upvoted your bot.
+     * @param {string | string[]} userID The user ID to check if they have upvoted your bot.
      * @param {boolean} [log=this.options.log] Whether or not to log the output. Overrides ``this.options.log``
-     * @returns {Promise<boolean>} Whether or not the user has upvoted your bot.
+     * @returns {Promise<boolean|Store<string, boolean>>} Whether or not the user has upvoted your bot.
      */
     hasUpvoted(userID, log = this.options.log) {
         return new Promise((resolve, reject) => {
             this.fetchUpvotes({ ids: true, normal: true, log: false })
-                .then(users => {
-                    if (log) console.log(users.includes(userID));
-                    resolve(users.includes(userID));
+                .then(response => {
+                    const res = userID instanceof Array ?
+                                new Store(userID.map(id => [id, response.includes(id)])) :
+                                response.includes(userID);
+                    if (log) console.log(res);
+                    resolve(res);
                 })
                 .catch(reject);
         });

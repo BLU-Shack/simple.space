@@ -2,23 +2,22 @@ const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
-const ClientOptions = require('./structures/ClientOptions.js').ClientOptions;
-const FetchOptions = require('./structures/FetchOptions').FetchOptions;
-const PostOptions = require('./structures/PostOptions').PostOptions;
-const UpvoteFetchOptions = require('./structures/UpvoteFetchOptions.js').UpvoteFetchOptions;
+const Classes = require('./structures/Classes.js').Classes;
+const ClientOptions = Classes.ClientOptions;
+const FetchOptions = Classes.FetchOptions;
+const PostOptions = Classes.PostOptions;
+const UpvoteFetchOptions = Classes.UpvoteFetchOptions;
 
-const Bot = require('./structures/Bot.js').Bot;
-const Emoji = require('./structures/Emoji.js').Emoji;
-const Guild = require('./structures/Guild.js').Guild;
-const PartialUser = require('./structures/PartialUser.js').PartialUser;
-const User = require('./structures/User.js').User;
+const Bot = Classes.Bot;
+const Emoji = Classes.Emoji;
+const Guild = Classes.Guild;
+const PartialUser = Classes.PartialUser;
+const User = Classes.User;
 
-const FetchError = require('./structures/FetchError.js').FetchError;
-const Stats = require('./structures/Stats.js').Stats;
-const Store = require('./structures/Store.js').Store;
+const FetchError = Classes.FetchError;
+const Stats = Classes.Stats;
+const Store = Classes.Store;
 const endpoint = 'https://botlist.space/api';
-
-const AllClasses = { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, PartialUser, User, FetchError, Stats, Store };
 
 /**
  * Main client class for interacting to botlist.space
@@ -495,12 +494,12 @@ class Client extends EventEmitter {
 
     /**
      * All of the classes used.
-     * @type {object}
+     * @type {Classes}
      * @static
      * @private
      */
     static get Classes() {
-        return AllClasses;
+        return Classes;
     }
 
     /**

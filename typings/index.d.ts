@@ -80,7 +80,7 @@ declare module 'simple.space' {
         public user: string;
         public vanity?: string;
         public vanityURL?: string;
-        public owners(options?: FetchOptions): PartialUser[];
+        public owners(options?: FetchOptions<UserSVs>): PartialUser[];
         public toString(): string;
     }
 
@@ -143,7 +143,7 @@ declare module 'simple.space' {
         public url: string;
         public vanity?: string;
         public vanityURL?: string;
-        public owners(options?: FetchOptions): PartialUser[];
+        public owners(options?: FetchOptions<UserSVs>): PartialUser[];
     }
 
     export class PartialUser extends Base {
@@ -200,7 +200,7 @@ declare module 'simple.space' {
         public split(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): [Store<K, V>, Store<K, V>];
     }
 
-    export class UpvoteFetchOptions extends FetchOptions {
+    export class UpvoteFetchOptions<T> extends FetchOptions<T> {
         constructor(options?: object, client?: ClientOptions);
         public ids?: boolean;
         public token?: string;
@@ -209,8 +209,8 @@ declare module 'simple.space' {
 
     export class User extends PartialUser {
         constructor(user: object);
-        public bots(options?: FetchOptions): Bot[];
-        public guilds(options?: FetchOptions): Guild[];
+        public bots(options?: FetchOptions<BotSVs>): Bot[];
+        public guilds(options?: FetchOptions<GuildSVs>): Guild[];
     }
 
     export class UpvoteUser {

@@ -48,10 +48,10 @@ class Stats {
     }
 
     /**
-     * Fetch the total number of bots, servers, and users on the site.
+     * Fetch the total combined number of bots, servers, and users on the site.
      * @type {number}
      */
-    get total() {
+    get combined() {
         return this.bots.total + this.servers + this.users;
     }
 }

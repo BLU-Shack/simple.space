@@ -153,8 +153,8 @@ declare module 'simple.space' {
         public avatar: string;
         public discriminator: string;
         public githubURL?: string;
-        public githubUsername?: string;
         public gitlabURL?: string;
+        public githubUsername?: string;
         public gitlabUsername?: string;
         public shortDescription?: string;
         public tag: string;
@@ -183,7 +183,7 @@ declare module 'simple.space' {
         }
         public guilds: number;
         public successful: boolean;
-        public total: number;
+        public combined: number;
         public users: number;
     }
 
@@ -225,23 +225,28 @@ type BotSVs =   'id'            | 'bot'                 | 'avatar'          |
                 'inviteURL'     | 'isApproved'          | 'isChildFriendly' |
                 'isFeatured'    | 'library'             | 'prefix'          |
                 'shards'        | 'shortDescription'    | 'supportCode'     |
-                'timestamp'     | 'username'            | 'vanity';
+                'timestamp'     | 'username'            | 'vanity'          |
+                'serverCount'   | 'inviteNoPerms'       | 'supportURL'      |
+                'tag'           | 'url'                 | 'vanityURL';
 
-type EmojiSVs = 'id'    | 'emoji'   | 'animated' |
-                'name'  | 'imageURL';
+type EmojiSVs = 'id'    | 'emoji'       | 'animated'    |
+                'name'  | 'imageURL'    | 'normalGuild' |
+                'guild' | 'raw'         | 'url';
 
 type GuildSVs = 'id'                | 'guild'       | 'compliance'          |
                 'fullDescription'   | 'icon'        | 'isChildFriendly'     |
                 'isFeatured'        | 'isPremium'   | 'isPublic'            |
                 'memberCount'       | 'name'        | 'shortDescription'    |
-                'timestamp'         | 'vanity';
+                'timestamp'         | 'vanity'      | 'url'                 |
+                'vanityURL';
 
-type UserSVs = 'id'                 | 'user'            | 'avatar'          |
-               'discriminator'      | 'githubUsername'  | 'gitlabUsername'  |
-               'shortDescription'   | 'username';
+type UserSVs =  'id'                | 'user'            | 'avatar'          |
+                'discriminator'     | 'githubUsername'  | 'gitlabUsername'  |
+                'shortDescription'  | 'username'        | 'githubURL'       |
+                'gitlabURL'         | 'tag'             | 'url';
 
 type UpvoteUserSVs = UserSVs | 'timestamp';
 
-type StatsSVs = 'bots' | 'guilds' | 'successful' |
-                'users' | 'total' | 'approved' |
-                'unapproved';
+type StatsSVs = 'bots'          | 'guilds'  | 'successful'    |
+                'users'         | 'total'   | 'approved'      |
+                'unapproved'    | 'combined';

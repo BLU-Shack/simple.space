@@ -470,6 +470,13 @@ class Client extends EventEmitter {
     }
 
     /**
+     * @deprecated Use {@link Client#postCount} instead.
+     */
+    setGuilds(options = {}) {
+        return this.postCount(options);
+    }
+
+    /**
      * @param {PostOptions} [options] Post Options.
      * @param {string} [options.token=this.options.token] The API token for posting.
      * @param {string} [options.botID=this.options.botID] The bot ID for posting.
@@ -477,7 +484,7 @@ class Client extends EventEmitter {
      * @returns {Promise<object>} Returns the code, and a message.
      * @fires Client#post
      */
-    setGuilds(options = {}) {
+    postCount(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const Options = new PostOptions(options, this.options);
         return new Promise((resolve, reject) => {
@@ -502,6 +509,8 @@ class Client extends EventEmitter {
 }
 
 module.exports = Client;
+
+Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#setGuilds() => Use Client#postCount() instead.');
 
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.

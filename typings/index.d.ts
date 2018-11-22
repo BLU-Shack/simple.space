@@ -5,7 +5,7 @@
 // License: MIT
 
 declare module 'simple.space' {
-    import { EventEmitter } from "events";
+    import { EventEmitter } from 'events';
 
     export const version: string;
     export class Client extends EventEmitter {
@@ -13,7 +13,6 @@ declare module 'simple.space' {
         private _runCache(): Promise<object>;
         private static isObject(obj: any): boolean;
 
-        public static Classes: object;
         public static endpoint: string;
         public static version: string;
         public bots: Store<string, Bot>;

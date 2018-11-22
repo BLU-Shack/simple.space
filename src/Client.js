@@ -493,16 +493,6 @@ class Client extends EventEmitter {
     }
 
     /**
-     * All of the classes used.
-     * @type {Classes}
-     * @static
-     * @private
-     */
-    static get Classes() {
-        return Classes;
-    }
-
-    /**
      * The endpoint URL, used to interact with the site.
      * @type {string}
      */

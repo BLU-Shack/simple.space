@@ -36,7 +36,7 @@ class Stats {
 
         /**
          * Whether or not it was successful at fetching statistics.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.successful = stats.success;
 

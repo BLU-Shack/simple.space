@@ -450,6 +450,7 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
 
 /**
  * Emitted when cache is ready/cache was never run but it still returned something.
+ *
  * @event Client#ready
  * @type {object}
  * @property {Store<string, Bot>} bots
@@ -459,6 +460,7 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
 
 /**
  * Emitted when all cache is updated.
+ *
  * @event Client#cacheUpdateAll
  * @type {object}
  * @property {Store<string, Bot>} bots
@@ -468,18 +470,21 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
 
 /**
  * Emitted when cache is updated.
+ *
  * @event Client#cacheUpdateBots
  * @type {Store<string, Bot>}
  */
 
 /**
  * Emitted when cache is updated.
+ *
  * @event Client#cacheUpdateGuilds
  * @type {Store<string, Guild>}
  */
 
 /**
  * Emitted when cache is updated.
+ *
  * @event Client#cacheUpdateEmojis
  * @type {Store<string, Emoji>}
  */

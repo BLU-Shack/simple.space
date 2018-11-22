@@ -6,9 +6,9 @@
 
 declare module 'simple.space' {
     import { EventEmitter } from "events";
-    export = Client;
 
-    class Client extends EventEmitter {
+    export const version: string;
+    export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private _runCache(): Promise<object>;
         private static isObject(obj: any): boolean;
@@ -49,168 +49,167 @@ declare module 'simple.space' {
         public once(event: 'ready' | 'cacheUpdateAll', listener: (data: { bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild> }) => void): this;
         public once(event: 'post', listener: (info: object) => void): this;
     }
-}
 
-declare class Base {
-    constructor(base: object);
-    public id: string;
-}
-
-declare class Bot extends Base {
-    constructor(bot: object);
-    private bot: object;
-
-    public avatar: string;
-    public discriminator: string;
-    public fullDescription?: string;
-    public guildSize?: number;
-    public inviteNoPerms: string;
-    public inviteURL: string;
-    public isApproved: boolean;
-    public isChildFriendly: boolean;
-    public isFeatured: boolean;
-    public library: string;
-    public prefix: string;
-    public serverCount?: number;
-    public shards?: number[];
-    public shortDescription: string;
-    public supportCode?: string;
-    public supportURL?: string;
-    public tag: string;
-    public timestamp: number;
-    public url: string;
-    public user: string;
-    public vanity?: string;
-    public vanityURL?: string;
-    public owners(options?: FetchOptions): PartialUser[];
-    public toString(): string;
-}
-
-declare class ClientOptions {
-    constructor(newObj: object, oldObj?: object);
-    private default: object;
-
-    public cache?: boolean;
-    public cacheUpdateTimer?: number;
-    public token?: string;
-    public botID?: string;
-    public client?: any;
-    public log?: boolean;
-}
-
-declare class Emoji extends Base {
-    constructor(emoji: object);
-    private emoji: object;
-
-    public animated: boolean;
-    public name: string;
-    public imageURL: string;
-    public normalGuild: object;
-    public guild: Guild;
-    public raw: string;
-    public url: string;
-    public toString(): string;
-}
-
-declare class FetchError extends Error {
-    constructor(error: object, name: string);
-    public message: string;
-    public name: string;
-    public toString(): string;
-}
-
-declare class FetchOptions {
-    constructor(options?: object, preset?: ClientOptions);
-    public log?: boolean;
-    public specified?: string;
-    public normal?: boolean;
-    public stringify?: boolean;
-}
-
-declare class Guild extends Base {
-    constructor(guild: object);
-    private guild: object;
-
-    public compliance: boolean;
-    public fullDescription?: string;
-    public icon: string;
-    public isChildFriendly: boolean;
-    public isFeatured: boolean;
-    public isPremium: boolean;
-    public isPublic: boolean;
-    public memberCount: number;
-    public name: string;
-    public shortDescription: string;
-    public timestamp: number;
-    public url: string;
-    public vanity?: string;
-    public vanityURL?: string;
-    public owners(options?: FetchOptions): PartialUser[];
-}
-
-declare class PartialUser extends Base {
-    constructor(partialUser: object);
-    private user: object;
-
-    public avatar: string;
-    public discriminator: string;
-    public githubURL?: string;
-    public githubUsername?: string;
-    public gitlabURL?: string;
-    public gitlabUsername?: string;
-    public shortDescription?: string;
-    public tag: string;
-    public url: string;
-    public username: string;
-    public toString(): string;
-}
-
-declare class PostOptions {
-    constructor(options: object, preset?: ClientOptions);
-    public client?: any;
-    public botID?: string;
-    public guildSize?: number | number[];
-    public token?: string;
-    public data: string;
-}
-
-declare class Stats {
-    constructor(stats: object);
-    private stats: object;
-
-    public bots: {
-        total: number,
-        approved: number,
-        unapproved: number
+    export class Base {
+        constructor(base: object);
+        public id: string;
     }
-    public guilds: number;
-    public successful: boolean;
-    public total: number;
-    public users: number;
-}
 
-declare class Store<K, V> extends Map<K, V> {
-    public array(): V[];
-    public filter(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): Store<K, V>;
-    public indexOf(key: K, fromIndex?: number): number;
-    public keyArray(): K[];
-    public lastIndexOf(key: K, fromIndex?: number): number;
-    public map<T>(func: (v: V, k: K, s: Store<K, V>) => T, bind?: any): T[];
-    public random(): V;
-    public randomKey(): K;
-    public randomPair(): (K | V)[];
-    public split(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): [Store<K, V>, Store<K, V>];
-}
+    export class Bot extends Base {
+        constructor(bot: object);
+        private bot: object;
 
-declare class UpvoteFetchOptions extends FetchOptions {
-    constructor(options?: object, client?: ClientOptions);
+        public avatar: string;
+        public discriminator: string;
+        public fullDescription?: string;
+        public guildSize?: number;
+        public inviteNoPerms: string;
+        public inviteURL: string;
+        public isApproved: boolean;
+        public isChildFriendly: boolean;
+        public isFeatured: boolean;
+        public library: string;
+        public prefix: string;
+        public serverCount?: number;
+        public shards?: number[];
+        public shortDescription: string;
+        public supportCode?: string;
+        public supportURL?: string;
+        public tag: string;
+        public timestamp: number;
+        public url: string;
+        public user: string;
+        public vanity?: string;
+        public vanityURL?: string;
+        public owners(options?: FetchOptions): PartialUser[];
+        public toString(): string;
+    }
 
-    public ids?: boolean;
-    public token?: string;
-}
+    export class ClientOptions {
+        constructor(newObj: object, oldObj?: object);
+        private default: object;
 
-declare class User extends PartialUser {
-    constructor(user: object);
-    public bots(options?: FetchOptions): Bot[];
-    public guilds(options?: FetchOptions): Guild[];
+        public cache?: boolean;
+        public cacheUpdateTimer?: number;
+        public token?: string;
+        public botID?: string;
+        public client?: any;
+        public log?: boolean;
+    }
+
+    export class Emoji extends Base {
+        constructor(emoji: object);
+        private emoji: object;
+
+        public animated: boolean;
+        public name: string;
+        public imageURL: string;
+        public normalGuild: object;
+        public guild: Guild;
+        public raw: string;
+        public url: string;
+        public toString(): string;
+    }
+
+    export class FetchError extends Error {
+        constructor(error: object, name: string);
+        public message: string;
+        public name: string;
+        public toString(): string;
+    }
+
+    export class FetchOptions {
+        constructor(options?: object, preset?: ClientOptions);
+        public log?: boolean;
+        public specified?: string;
+        public normal?: boolean;
+        public stringify?: boolean;
+    }
+
+    export class Guild extends Base {
+        constructor(guild: object);
+        private guild: object;
+
+        public compliance: boolean;
+        public fullDescription?: string;
+        public icon: string;
+        public isChildFriendly: boolean;
+        public isFeatured: boolean;
+        public isPremium: boolean;
+        public isPublic: boolean;
+        public memberCount: number;
+        public name: string;
+        public shortDescription: string;
+        public timestamp: number;
+        public url: string;
+        public vanity?: string;
+        public vanityURL?: string;
+        public owners(options?: FetchOptions): PartialUser[];
+    }
+
+    export class PartialUser extends Base {
+        constructor(partialUser: object);
+        private user: object;
+
+        public avatar: string;
+        public discriminator: string;
+        public githubURL?: string;
+        public githubUsername?: string;
+        public gitlabURL?: string;
+        public gitlabUsername?: string;
+        public shortDescription?: string;
+        public tag: string;
+        public url: string;
+        public username: string;
+        public toString(): string;
+    }
+
+    export class PostOptions {
+        constructor(options: object, preset?: ClientOptions);
+        public client?: any;
+        public botID?: string;
+        public guildSize?: number | number[];
+        public token?: string;
+        public data: string;
+    }
+
+    export class Stats {
+        constructor(stats: object);
+        private stats: object;
+
+        public bots: {
+            total: number,
+            approved: number,
+            unapproved: number
+        }
+        public guilds: number;
+        public successful: boolean;
+        public total: number;
+        public users: number;
+    }
+
+    export class Store<K, V> extends Map<K, V> {
+        public array(): V[];
+        public filter(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): Store<K, V>;
+        public indexOf(key: K, fromIndex?: number): number;
+        public keyArray(): K[];
+        public lastIndexOf(key: K, fromIndex?: number): number;
+        public map<T>(func: (v: V, k: K, s: Store<K, V>) => T, bind?: any): T[];
+        public random(): V;
+        public randomKey(): K;
+        public randomPair(): (K | V)[];
+        public split(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): [Store<K, V>, Store<K, V>];
+    }
+
+    export class UpvoteFetchOptions extends FetchOptions {
+        constructor(options?: object, client?: ClientOptions);
+        public ids?: boolean;
+        public token?: string;
+    }
+
+    export class User extends PartialUser {
+        constructor(user: object);
+        public bots(options?: FetchOptions): Bot[];
+        public guilds(options?: FetchOptions): Guild[];
+    }
 }

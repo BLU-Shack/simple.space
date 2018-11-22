@@ -6,8 +6,6 @@
 
 **Reasoning?** Place reasoning behind it. If ONLY JUST a README.md minor change, put "Typo Fixes", "Title Rename", and/or "Word Replacement"
 
-- [ ] I made a pull request to the [Documentary](https://blu-shack.gitbook.io/simple-space/)/The documentary doesn't need updating. (Learn how to properly [change the docs](https://github.com/BLU-Shack/simple.space/blob/master/.github/CONTRIBUTING.md))
-
 - [ ] Includes changing Library Code.
     - [ ] Includes Minor Changes (includes variable changes, method parameters/properties renamed)
     - [ ] Includes Major Changes (includes method renames, change of structure names, a property switched to a method and vice versa)

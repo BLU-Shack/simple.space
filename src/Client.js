@@ -381,7 +381,7 @@ class Client extends EventEmitter {
                     const body = await response.json();
                     if (body.code) throw new FetchError(body, 'User');
                     const user = !normal ? new User(body) : body;
-                    const resolved = stringify ? user.toString() : specified ? user[specified] || user.links[specified] : user;
+                    const resolved = stringify ? user.toString() : specified ? user[specified] || (user.links ? user.links[specified] : undefined) : user;
                     if (log) console.log(resolved);
                     resolve(resolved);
                 })

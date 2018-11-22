@@ -10,8 +10,8 @@ declare module 'simple.space' {
     export const version: string;
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
-        private _runCache(): Promise<object>;
         private static isObject(obj: any): boolean;
+        private _runCache(): Promise<object>;
 
         public static endpoint: string;
         public bots: Store<string, Bot>;
@@ -21,17 +21,17 @@ declare module 'simple.space' {
         public readyAt?: Date;
         public readyTimestamp?: number;
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
-        public fetchAllBots(options?: FetchOptions): Promise<Bot[]>;
-        public fetchAllEmojis(options?: FetchOptions): Promise<Emoji[]>;
-        public fetchAllGuilds(options?: FetchOptions): Promise<Guild[]>;
-        public fetchBot(botID: string, options?: FetchOptions): Promise<Bot>;
-        public fetchEmoji(emojiID: string, options?: FetchOptions): Promise<Emoji>;
-        public fetchGuild(guildID: string, options?: FetchOptions): Promise<Guild>;
-        public fetchGuildEmojis(guildID: string, options?: FetchOptions): Promise<Emoji[]>;
-        public fetchSelf(options?: FetchOptions): Promise<Bot>;
-        public fetchStats(options?: FetchOptions): Promise<Stats>;
-        public fetchUpvotes(options?: UpvoteFetchOptions): Promise<PartialUser[]>;
-        public fetchUser(userID: string, options?: FetchOptions): Promise<User>;
+        public fetchAllBots(options?: FetchOptions<BotSVs>): Promise<Bot[]>;
+        public fetchAllEmojis(options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
+        public fetchAllGuilds(options?: FetchOptions<GuildSVs>): Promise<Guild[]>;
+        public fetchBot(botID: string, options?: FetchOptions<BotSVs>): Promise<Bot>;
+        public fetchEmoji(emojiID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji>;
+        public fetchGuild(guildID: string, options?: FetchOptions<GuildSVs>): Promise<Guild>;
+        public fetchGuildEmojis(guildID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
+        public fetchSelf(options?: FetchOptions<BotSVs>): Promise<Bot>;
+        public fetchStats(options?: FetchOptions<StatsSVs>): Promise<Stats>;
+        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteUser[]>;
+        public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
         public hasUpvoted(userID: string): Promise<boolean>;
         public setGuilds(options?: PostOptions): Promise<object>;
         public postCount(options?: PostOptions): Promise<object>;
@@ -117,10 +117,10 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
-    export class FetchOptions {
+    export class FetchOptions<T> {
         constructor(options?: object, preset?: ClientOptions);
         public log?: boolean;
-        public specified?: Specifiable;
+        public specified?: T;
         public normal?: boolean;
         public stringify?: boolean;
     }
@@ -240,4 +240,8 @@ type UserSVs = 'id'                 | 'user'            | 'avatar'          |
                'discriminator'      | 'githubUsername'  | 'gitlabUsername'  |
                'shortDescription'   | 'username';
 
-type Specifiable = BotSVs | EmojiSVs | GuildSVs | UserSVs;
+type UpvoteUserSVs = UserSVs | 'timestamp';
+
+type StatsSVs = 'bots' | 'guilds' | 'successful' |
+                'users' | 'total' | 'approved' |
+                'unapproved';

@@ -32,7 +32,7 @@ declare module 'simple.space' {
         public fetchStats(options?: FetchOptions<StatsSVs>): Promise<Stats>;
         public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteUser[]>;
         public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
-        public hasUpvoted(userID: string): Promise<boolean>;
+        public hasUpvoted(userID: string, log?: boolean): Promise<boolean>;
         public setGuilds(options?: PostOptions): Promise<object>;
         public postCount(options?: PostOptions): Promise<object>;
 

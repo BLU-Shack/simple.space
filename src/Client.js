@@ -392,13 +392,14 @@ class Client extends EventEmitter {
     /**
      * Checks if a user has upvoted your bot.
      * @param {string} userID The user ID to check if they have upvoted your bot.
+     * @param {boolean} [log=this.options.log] Whether or not to log the output. Overrides ``this.options.log``
      * @returns {Promise<boolean>} Whether or not the user has upvoted your bot.
      */
-    hasUpvoted(userID) {
+    hasUpvoted(userID, log = this.options.log) {
         return new Promise((resolve, reject) => {
             this.fetchUpvotes({ ids: true, normal: true, log: false })
                 .then(users => {
-                    if (this.options.log) console.log(users.includes(userID));
+                    if (log) console.log(users.includes(userID));
                     resolve(users.includes(userID));
                 })
                 .catch(reject);
@@ -419,6 +420,7 @@ class Client extends EventEmitter {
      * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
      * @returns {Promise<object>} Returns the code, and a message.
      * @fires Client#post
+     * @example SpaceClient.postCount({ guildSize: client.guilds.size });
      */
     postCount(options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');

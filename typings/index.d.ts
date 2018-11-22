@@ -1,4 +1,4 @@
-// Type definitions for simple.space v2.2.4
+// Type definitions for simple.space v2.3.0
 // Project: https://github.com/BLU-Shack/simple.space
 // Definitions by:
 //   iREDMe <foodrickme@gmail.com> (https://github.com/iREDMe)

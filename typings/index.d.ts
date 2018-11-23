@@ -5,7 +5,7 @@
 // License: MIT
 
 declare module 'simple.space' {
-    import { EventEmitter } from "events";
+    import { EventEmitter } from 'events';
 
     export const version: string;
     export class Client extends EventEmitter {

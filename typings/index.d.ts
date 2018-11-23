@@ -36,7 +36,7 @@ declare module 'simple.space' {
         public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
         public hasUpvoted(userID: string | string[], options?: UpvoteFetchOptions<null>): Promise<boolean | Store<string, boolean>>;
         public setGuilds(options?: PostOptions): Promise<object>;
-        public postCount(options?: PostOptions): Promise<object>;
+        public postCount(options?: number | PostOptions): Promise<object>;
 
         public on(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public on(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;

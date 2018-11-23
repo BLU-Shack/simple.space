@@ -11,7 +11,7 @@ class FetchError extends Error {
     constructor(error, name) {
         super(error);
         this.message = `${error.code} ${error.code === 404 ? `${name || '?'} Not Found` : error.message}`;
-        this.name = 'FetchError';
+        Object.defineProperty(this, 'name', { value: 'FetchError' });
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
     }

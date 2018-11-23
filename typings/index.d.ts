@@ -9,6 +9,7 @@ declare module 'simple.space' {
     export const version: string;
 
 //#region Classes
+    /** The Client for interacting with botlist.space */
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private static isObject(obj: any): boolean;
@@ -50,11 +51,13 @@ declare module 'simple.space' {
         public once(event: 'post', listener: (info: object) => void): this;
     }
 
+    /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */
     export class Base {
         constructor(base: object);
         public id: string;
     }
 
+    /** Represents a Bot on the site. */
     export class Bot extends Base {
         constructor(bot: object);
         private readonly bot: object;
@@ -85,6 +88,7 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
+    /** Options passed when initializing the Client. */
     export class ClientOptions {
         constructor(newObj: object, oldObj?: object);
         private readonly default: {
@@ -104,6 +108,7 @@ declare module 'simple.space' {
         public log?: boolean;
     }
 
+    /** Represents an Emoji on the site. */
     export class Emoji extends Base {
         constructor(emoji: object);
         private readonly emoji: object;
@@ -118,6 +123,7 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
+    /** When an error is caught while fetching, this is thrown. */
     export class FetchError extends Error {
         constructor(error: object, name: string);
         public message: string;
@@ -125,6 +131,7 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
+    /** Options when Fetching. */
     export class FetchOptions<T> {
         constructor(options?: object, preset?: ClientOptions);
         public log?: boolean;
@@ -133,6 +140,7 @@ declare module 'simple.space' {
         public stringify?: boolean;
     }
 
+    /** Represents a Guild on the site. */
     export class Guild extends Base {
         constructor(guild: object);
         private readonly guild: object;
@@ -154,6 +162,7 @@ declare module 'simple.space' {
         public owners(options?: FetchOptions<UserSVs>): PartialUser[];
     }
 
+    /** Represents a user on the site with limited information. */
     export class PartialUser extends Base {
         constructor(partialUser: object);
         private readonly user: object;
@@ -171,6 +180,7 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
+    /** Options when posting Guild Count. */
     export class PostOptions {
         constructor(options: object, preset?: ClientOptions);
         public client?: any;
@@ -180,6 +190,7 @@ declare module 'simple.space' {
         public readonly data: string;
     }
 
+    /** The site statistics. */
     export class Stats {
         constructor(stats: object);
         private stats: object;
@@ -195,6 +206,7 @@ declare module 'simple.space' {
         public readonly combined: number;
     }
 
+    /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) with additional methods. */
     export class Store<K, V> extends Map<K, V> {
         public array(): V[];
         public filter(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): Store<K, V>;
@@ -208,6 +220,7 @@ declare module 'simple.space' {
         public split(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): [Store<K, V>, Store<K, V>];
     }
 
+    /** Fetch Options but for Upvotes. */
     export class UpvoteFetchOptions<T> extends FetchOptions<T> {
         constructor(options?: object, client?: ClientOptions);
         public ids?: boolean;
@@ -215,12 +228,14 @@ declare module 'simple.space' {
         public botID?: string;
     }
 
+    /** Represents a user with full information on the site. */
     export class User extends PartialUser {
         constructor(user: object);
         public bots(options?: FetchOptions<BotSVs>): Bot[];
         public guilds(options?: FetchOptions<GuildSVs>): Guild[];
     }
 
+    /** Represents a user fetched through checking a Bot's upvotes. */
     export class UpvoteUser {
         constructor(body: object);
         public timestamp: number;

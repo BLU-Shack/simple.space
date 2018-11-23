@@ -6,8 +6,8 @@
 
 declare module 'simple.space' {
     import { EventEmitter } from 'events';
-
     export const version: string;
+
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private static isObject(obj: any): boolean;
@@ -19,7 +19,7 @@ declare module 'simple.space' {
         public guilds: Store<string, Guild>;
         public options: ClientOptions;
         public readyAt?: Date;
-        public readyTimestamp?: number;
+        public readonly readyTimestamp?: number;
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
         public fetchAllBots(options?: FetchOptions<BotSVs>): Promise<Bot[]>;
         public fetchAllEmojis(options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;

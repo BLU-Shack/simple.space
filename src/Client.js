@@ -39,19 +39,19 @@ class Client extends EventEmitter {
 
         /**
          * Cached bots that are listed on the site, mapped through bot IDs.
-         * @type {Store<string, Bot>}
+         * @type {Store}
          */
         this.bots = new Store();
 
         /**
          * Cached emojis that are listed on the site, mapped through emoji IDs.
-         * @type {Store<string, Emoji>}
+         * @type {Store}
          */
         this.emojis = new Store();
 
         /**
          * Cached guilds that are listed on the site, mapped through guild IDs.
-         * @type {Store<string, Guild>}
+         * @type {Store}
          */
         this.guilds = new Store();
 
@@ -71,6 +71,7 @@ class Client extends EventEmitter {
 
     /**
      * The timestamp when Client was initially ready.
+     * @readonly
      * @type {?number}
      */
     get readyTimestamp() {
@@ -138,7 +139,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const bots = await body.json();
                     if (bots.code) throw new FetchError(bots, 'Bots');
-                    this.bots = new Store([...bots.map(bot => [bot.id, new Bot(bot)])]);
+                    this.bots = new Store(bots.map(bot => [bot.id, new Bot(bot)]));
                     this.emit('cacheUpdateBots', this.bots);
                     const all = !normal ? bots.map(bot => new Bot(bot)) : bots;
                     const resolved = specified ? all.map(bot => bot[specified]) : stringify ? all.map(bot => bot.toString()) : all;
@@ -162,7 +163,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
-                    this.guilds = new Store([...guilds.map(guild => [guild.id, new Guild(guild)])]);
+                    this.guilds = new Store(guilds.map(guild => [guild.id, new Guild(guild)]));
                     this.emit('cacheUpdateGuilds', this.guilds);
                     const all = !normal ? guilds.map(guild => new Guild(guild)) : guilds;
                     const resolved = all.map(guild => stringify ? guild.toString() : specified ? guild[specified] : guild);
@@ -186,7 +187,7 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
-                    this.emojis = new Store([...emojis.map(emoji => [emoji.id, new Emoji(emoji)])]);
+                    this.emojis = new Store(emojis.map(emoji => [emoji.id, new Emoji(emoji)]));
                     this.emit('cacheUpdateEmojis', this.emojis);
                     const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
                     const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
@@ -394,7 +395,7 @@ class Client extends EventEmitter {
      * Checks if a user has upvoted your bot.
      * @param {string | string[]} userID The user ID to check if they have upvoted your bot.
      * @param {boolean} [log=this.options.log] Whether or not to log the output. Overrides ``this.options.log``
-     * @returns {Promise<boolean|Store<string, boolean>>} Whether or not the user has upvoted your bot.
+     * @returns {Promise<boolean|Store>} Whether or not the user has upvoted your bot.
      */
     hasUpvoted(userID, log = this.options.log) {
         return new Promise((resolve, reject) => {
@@ -460,9 +461,9 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
  *
  * @event Client#ready
  * @type {object}
- * @property {Store<string, Bot>} bots
- * @property {Store<string, Guild>} guilds
- * @property {Store<string, Emoji>} emojis
+ * @property {Store} bots
+ * @property {Store} guilds
+ * @property {Store} emojis
  */
 
 /**
@@ -470,30 +471,30 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
  *
  * @event Client#cacheUpdateAll
  * @type {object}
- * @property {Store<string, Bot>} bots
- * @property {Store<string, Guild>} guilds
- * @property {Store<string, Emoji>} emojis
+ * @property {Store} bots
+ * @property {Store} guilds
+ * @property {Store} emojis
  */
 
 /**
  * Emitted when cache is updated.
  *
  * @event Client#cacheUpdateBots
- * @type {Store<string, Bot>}
+ * @type {Store}
  */
 
 /**
  * Emitted when cache is updated.
  *
  * @event Client#cacheUpdateGuilds
- * @type {Store<string, Guild>}
+ * @type {Store}
  */
 
 /**
  * Emitted when cache is updated.
  *
  * @event Client#cacheUpdateEmojis
- * @type {Store<string, Emoji>}
+ * @type {Store}
  */
 
 /**

@@ -421,7 +421,7 @@ class Client extends EventEmitter {
     }
 
     /**
-     * @param {PostOptions} [options] Post Options.
+     * @param {PostOptions|number} [options] Post Options.
      * @param {string} [options.token=this.options.token] The API token for posting.
      * @param {string} [options.botID=this.options.botID] The bot ID for posting.
      * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
@@ -430,6 +430,7 @@ class Client extends EventEmitter {
      * @example SpaceClient.postCount({ guildSize: client.guilds.size });
      */
     postCount(options = {}) {
+        if (typeof options === 'number') options = { guildSize: options };
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const { botID, token, data } = new PostOptions(options, this.options);
         return new Promise((resolve, reject) => {

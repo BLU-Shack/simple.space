@@ -8,6 +8,7 @@ declare module 'simple.space' {
     import { EventEmitter } from 'events';
     export const version: string;
 
+//#region Classes
     export class Client extends EventEmitter {
         constructor(options?: ClientOptions);
         private static isObject(obj: any): boolean;
@@ -225,35 +226,38 @@ declare module 'simple.space' {
         public timestamp: number;
         public user: PartialUser;
     }
+//#endregion
+
+//#region Typedefs
+    type BotSVs = 'id' | 'bot' | 'avatar' |
+        'discriminator' | 'fullDescription' | 'guildSize' |
+        'inviteURL' | 'isApproved' | 'isChildFriendly' |
+        'isFeatured' | 'library' | 'prefix' |
+        'shards' | 'shortDescription' | 'supportCode' |
+        'timestamp' | 'username' | 'vanity' |
+        'serverCount' | 'inviteNoPerms' | 'supportURL' |
+        'tag' | 'url' | 'vanityURL';
+
+    type EmojiSVs = 'id' | 'emoji' | 'animated' |
+        'name' | 'imageURL' | 'normalGuild' |
+        'guild' | 'raw' | 'url';
+
+    type GuildSVs = 'id' | 'guild' | 'compliance' |
+        'fullDescription' | 'icon' | 'isChildFriendly' |
+        'isFeatured' | 'isPremium' | 'isPublic' |
+        'memberCount' | 'name' | 'shortDescription' |
+        'timestamp' | 'vanity' | 'url' |
+        'vanityURL';
+
+    type UserSVs = 'id' | 'user' | 'avatar' |
+        'discriminator' | 'githubUsername' | 'gitlabUsername' |
+        'shortDescription' | 'username' | 'githubURL' |
+        'gitlabURL' | 'tag' | 'url';
+
+    type UpvoteUserSVs = UserSVs | 'timestamp';
+
+    type StatsSVs = 'bots' | 'guilds' | 'successful' |
+        'users' | 'total' | 'approved' |
+        'unapproved' | 'combined';
+//#endregion
 }
-
-type BotSVs =   'id'            | 'bot'                 | 'avatar'          |
-                'discriminator' | 'fullDescription'     | 'guildSize'       |
-                'inviteURL'     | 'isApproved'          | 'isChildFriendly' |
-                'isFeatured'    | 'library'             | 'prefix'          |
-                'shards'        | 'shortDescription'    | 'supportCode'     |
-                'timestamp'     | 'username'            | 'vanity'          |
-                'serverCount'   | 'inviteNoPerms'       | 'supportURL'      |
-                'tag'           | 'url'                 | 'vanityURL';
-
-type EmojiSVs = 'id'    | 'emoji'       | 'animated'    |
-                'name'  | 'imageURL'    | 'normalGuild' |
-                'guild' | 'raw'         | 'url';
-
-type GuildSVs = 'id'                | 'guild'       | 'compliance'          |
-                'fullDescription'   | 'icon'        | 'isChildFriendly'     |
-                'isFeatured'        | 'isPremium'   | 'isPublic'            |
-                'memberCount'       | 'name'        | 'shortDescription'    |
-                'timestamp'         | 'vanity'      | 'url'                 |
-                'vanityURL';
-
-type UserSVs =  'id'                | 'user'            | 'avatar'          |
-                'discriminator'     | 'githubUsername'  | 'gitlabUsername'  |
-                'shortDescription'  | 'username'        | 'githubURL'       |
-                'gitlabURL'         | 'tag'             | 'url';
-
-type UpvoteUserSVs = UserSVs | 'timestamp';
-
-type StatsSVs = 'bots'          | 'guilds'  | 'successful'    |
-                'users'         | 'total'   | 'approved'      |
-                'unapproved'    | 'combined';

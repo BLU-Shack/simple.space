@@ -1,4 +1,4 @@
-const { EventEmitter } = require('events');
+const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
@@ -22,6 +22,7 @@ const endpoint = 'https://botlist.space/api';
 /**
  * Main client class for interacting to botlist.space
  * @class
+ * @extends {EventEmitter}
  */
 class Client extends EventEmitter {
     /**

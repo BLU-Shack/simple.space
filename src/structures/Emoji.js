@@ -13,13 +13,12 @@ class Emoji extends Base {
     constructor(emoji) {
         super(emoji);
 
-        Object.defineProperty(this, 'emoji', { writable: true, enumerable: false });
-
         /**
          * The plain emoji object itself.
+         * @readonly
          * @type {object}
          */
-        this.emoji = emoji;
+        Object.defineProperty(this, 'emoji', { value: emoji });
 
         /**
          * Whether or not the emoji is animated.

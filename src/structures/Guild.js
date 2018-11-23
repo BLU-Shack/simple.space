@@ -13,13 +13,13 @@ class Guild extends Base {
      */
     constructor(guild) {
         super(guild);
-        Object.defineProperty(this, 'guild', { writable: true, enumerable: false });
 
         /**
-         * The plain guild object.
+         * The plain guild object itself.
+         * @readonly
          * @type {object}
          */
-        this.guild = guild;
+        Object.defineProperty(this, 'guild', { value: guild });
 
         /**
          * Whether or not the guild is in compliance with listing its emojis.

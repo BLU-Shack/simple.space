@@ -12,13 +12,12 @@ class PartialUser extends Base {
     constructor(partialUser) {
         super(partialUser);
 
-        Object.defineProperty(this, 'user', { writable: true, enumerable: false });
-
         /**
          * The plain user object itself.
+         * @readonly
          * @type {object}
          */
-        this.user = partialUser;
+        Object.defineProperty(this, 'user', { value: partialUser });
 
         /**
          * The avatar of the user.

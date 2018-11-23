@@ -15,13 +15,12 @@ class Bot extends Base {
     constructor(bot) {
         super(bot);
 
-        Object.defineProperty(this, 'bot', { writable: true, enumerable: false });
-
         /**
          * The plain bot object itself.
+         * @readonly
          * @type {object}
          */
-        this.bot = bot;
+        Object.defineProperty(this, 'bot', { value: bot });
 
         /**
          * The avatar URL of the bot.

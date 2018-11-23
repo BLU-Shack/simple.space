@@ -56,7 +56,7 @@ declare module 'simple.space' {
 
     export class Bot extends Base {
         constructor(bot: object);
-        private bot: object;
+        private readonly bot: object;
 
         public avatar: string;
         public discriminator: string;
@@ -105,7 +105,7 @@ declare module 'simple.space' {
 
     export class Emoji extends Base {
         constructor(emoji: object);
-        private emoji: object;
+        private readonly emoji: object;
 
         public animated: boolean;
         public name: string;
@@ -134,7 +134,7 @@ declare module 'simple.space' {
 
     export class Guild extends Base {
         constructor(guild: object);
-        private guild: object;
+        private readonly guild: object;
 
         public compliance: boolean;
         public fullDescription?: string;
@@ -155,7 +155,7 @@ declare module 'simple.space' {
 
     export class PartialUser extends Base {
         constructor(partialUser: object);
-        private user: object;
+        private readonly user: object;
 
         public avatar: string;
         public discriminator: string;

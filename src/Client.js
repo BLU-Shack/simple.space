@@ -399,8 +399,7 @@ class Client extends EventEmitter {
      */
     hasUpvoted(userID, options = { log: true }) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        if (typeof options.log === 'undefined') options.log = this.options.log;
-        const { log, token, botID } = new UpvoteFetchOptions(options);
+        const { log, token, botID } = new UpvoteFetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             this.fetchUpvotes({ ids: true, normal: true, log: false, token: token, botID: botID })
                 .then(response => {

@@ -394,12 +394,15 @@ class Client extends EventEmitter {
     /**
      * Checks if a user has upvoted your bot.
      * @param {string | string[]} userID The user ID to check if they have upvoted your bot.
-     * @param {boolean} [log=this.options.log] Whether or not to log the output. Overrides ``this.options.log``
+     * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options. Some properties are ignored.
      * @returns {Promise<boolean|Store>} Whether or not the user has upvoted your bot.
      */
-    hasUpvoted(userID, log = this.options.log) {
+    hasUpvoted(userID, options = { log: true }) {
+        if (!Client.isObject(options)) throw new TypeError('options must be an object.');
+        if (typeof options.log === 'undefined') options.log = this.options.log;
+        const { log, token, botID } = new UpvoteFetchOptions(options);
         return new Promise((resolve, reject) => {
-            this.fetchUpvotes({ ids: true, normal: true, log: false })
+            this.fetchUpvotes({ ids: true, normal: true, log: false, token: token, botID: botID })
                 .then(response => {
                     const res = userID instanceof Array ?
                                 new Store(userID.map(id => [id, response.includes(id)])) :

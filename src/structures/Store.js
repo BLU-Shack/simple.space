@@ -1,8 +1,7 @@
 /**
  * A storage class that includes additional methods.
  * @class
- * @extends {Map<K, V>}
- * @template K, V
+ * @extends {Map}
  */
 class Store extends Map {
     constructor(iterable) {
@@ -10,7 +9,7 @@ class Store extends Map {
     }
     /**
      * Returns all the values of the Store in an array.
-     * @returns {V[]} The array of the Store's values.
+     * @returns {Array} The array of the Store's values.
      */
     array() {
         return [...this.values()];
@@ -22,7 +21,7 @@ class Store extends Map {
      *
      * @param {Function} func The provided function to test against the Store.
      * @param {*} [bind] The value to bind to func's "this" value.
-     * @returns {Store<K, V>} The new Store containing the filtered contents.
+     * @returns {Store} The new Store containing the filtered contents.
      * @example
      * Client.fetchAllBots()
      *  .then(bots => {
@@ -57,7 +56,7 @@ class Store extends Map {
 
     /**
      * Returns all the keys of the Store in an array.
-     * @returns {K[]} An array of the Store's keys.
+     * @returns {Array} An array of the Store's keys.
      */
     keyArray() {
         return [...this.keys()];
@@ -79,10 +78,9 @@ class Store extends Map {
      * Maps each and every value in the Store, and returns
      * an array containing the new values.
      *
-     * @template T
      * @param {Function} func The function to run for each value and key in the Store.
      * @param {*} [bind] The variable to bind func's ``this`` value.
-     * @returns {T[]} The mapped values.
+     * @returns {Array} The mapped values.
      */
     map(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');
@@ -95,7 +93,7 @@ class Store extends Map {
 
     /**
      * Retrives a random value of the Store.
-     * @returns {V} A random value.
+     * @returns {*} A random value.
      */
     random() {
         const values = this.array();
@@ -104,7 +102,7 @@ class Store extends Map {
 
     /**
      * Retrieves a random key of the Store.
-     * @returns {K} A random key.
+     * @returns {*} A random key.
      */
     randomKey() {
         const keys = this.keyArray();
@@ -114,7 +112,7 @@ class Store extends Map {
     /**
      * Retrieves a random key-value pair of the Store and
      * returns a new Array
-     * @returns {Array<K|V>} A random pair.
+     * @returns {Array} A random pair.
      */
     randomPair() {
         const key = this.randomKey();

@@ -7,10 +7,13 @@
   "dependencies": {
     "node-fetch": "^2.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "toast-jsdoc": "^1.0.2"
+  },
   "scripts": {
     "test": "node examples/test.js",
-    "dev": "node examples-private/test.js"
+    "dev": "node examples-private/test.js",
+    "docs": "jsdoc src/ README.md -c ./jsdoc.json"
   },
   "keywords": [
     "botlist.space",

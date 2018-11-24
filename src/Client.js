@@ -422,9 +422,6 @@ class Client extends EventEmitter {
 
     /**
      * @param {PostOptions|number} [options] Post Options.
-     * @param {string} [options.token=this.options.token] The API token for posting.
-     * @param {string} [options.botID=this.options.botID] The bot ID for posting.
-     * @param {string} [options.guildSize] The number (if no shards)/an array of numbers (if shards) to push to the API. Unneeded if a client was supplied.
      * @returns {Promise<object>} Returns the code, and a message.
      * @fires Client#post
      * @example SpaceClient.postCount({ guildSize: client.guilds.size });

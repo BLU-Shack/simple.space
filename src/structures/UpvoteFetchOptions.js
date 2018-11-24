@@ -18,7 +18,7 @@ class UpvoteFetchOptions extends FetchOptions {
          * Whether or not to only fetch the user IDs. Overrides {@link FetchOptions#specified} to null
          * @type {?boolean}
          */
-        this.ids = options.ids || false;
+        this.ids = typeof options.ids !== 'undefined' ? options.ids : false;
         if (typeof this.ids !== 'boolean') throw new TypeError('options.ids must be boolean.');
         if (this.ids) this.specified = null;
 

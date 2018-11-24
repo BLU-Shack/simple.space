@@ -25,10 +25,10 @@ class PostOptions {
         if (typeof this.botID !== 'string') throw new TypeError('options.botID must be a string.');
 
         /**
-         * The size number/array for posting.
+         * The number/array of numbers (if shards) to be posted onto the site.
          * @type {?number|number[]}
          */
-        this.guildSize = options.guildSize || (this.client ? this.client.guilds.size : null);
+        this.guildSize = typeof options.guildSize !== 'undefined' ? options.guildSize : (this.client ? this.client.guilds.size : null);
         if (this.guildSize === null) throw new ReferenceError('guildSize must be defined.');
         if (typeof this.guildSize !== 'number' && !(this.guildSize instanceof Array)) throw new TypeError('options.guildSize must be either a number or an array of numbers.');
 

@@ -21,21 +21,21 @@ class FetchOptions {
          * Whether or not to only get a specific value from the object.
          * @type {?string}
          */
-        this.specified = options.specified || null;
+        this.specified = typeof options.specified !== 'undefined' ? options.specified : null;
         if (this.specified !== null && typeof this.specified !== 'string') throw new TypeError('options.specified must be a string.');
 
         /**
          * Whether or not to only return the plain object.
          * @type {?boolean}
          */
-        this.normal = options.normal || false;
+        this.normal = typeof options.normal !== 'undefined' ? options.normal : false;
         if (typeof this.normal !== 'boolean') throw new TypeError('options.normal must be boolean.');
 
         /**
          * Whether or not to return the stringified form of the object. This will override the specified and normal parameters.
          * @type {?boolean}
          */
-        this.stringify = options.stringify || false;
+        this.stringify = typeof options.stringify !== 'undefined' ? options.stringify : false;
         if (typeof this.stringify !== 'boolean') throw new TypeError('options.stringify must be boolean.');
         if (this.stringify) {
             this.specified = null;

@@ -397,7 +397,7 @@ class Client extends EventEmitter {
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options. Some properties are ignored.
      * @returns {Promise<boolean|Store>} Whether or not the user has upvoted your bot.
      */
-    hasUpvoted(userID, options = { log: true }) {
+    hasUpvoted(userID, options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
         const { log, token, botID } = new UpvoteFetchOptions(options, this.options);
         return new Promise((resolve, reject) => {

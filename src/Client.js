@@ -399,13 +399,15 @@ class Client extends EventEmitter {
      */
     hasUpvoted(userID, options = {}) {
         if (!Client.isObject(options)) throw new TypeError('options must be an object.');
-        const { log, token, botID } = new UpvoteFetchOptions(options, this.options);
+        const { log, token, botID, ids } = new UpvoteFetchOptions(options, this.options);
         return new Promise((resolve, reject) => {
             this.fetchUpvotes({ ids: true, normal: true, log: false, token: token, botID: botID })
                 .then(response => {
-                    const res = userID instanceof Array ?
-                                new Store(userID.map(id => [id, response.includes(id)])) :
-                                response.includes(userID);
+                    const res = userID instanceof Array
+                                ? ids
+                                ? userID.filter(id => response.includes(id))
+                                : new Store(userID.map(id => [id, response.includes(id)]))
+                                : response.includes(userID);
                     if (log) console.log(res);
                     resolve(res);
                 })

@@ -66,7 +66,7 @@ class Client extends EventEmitter {
          */
         this.readyAt = null;
 
-        this.once('ready', () => { this.readyAt = new Date(); });
+        this.once('ready', () => this.readyAt = new Date());
     }
 
     /**

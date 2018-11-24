@@ -16,6 +16,26 @@ class Store extends Map {
     }
 
     /**
+     * Returns a copy of the Store.
+     * @returns {Store}
+     */
+    clone() {
+        return new this.constructor[Symbol.species](this);
+    }
+
+    /**
+     * Clones the store and merges with other stores if supplied.
+     * @param {...Store} [stores] The stores to concat/merge with the Store.
+     * @returns {Store} A cloned Store with other merged Stores.
+     * @example Client.bots.concat(Client.emojis, Client.guilds); // Why?
+     */
+    concat(...stores) {
+        const store = this.clone();
+        for (const [[key, value]] of stores) store.set(key, value);
+        return store;
+    }
+
+    /**
      * Filters the store using a passed function, and
      * returns a new Store including the filtered values.
      *

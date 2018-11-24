@@ -41,13 +41,13 @@ declare module 'simple.space' {
         public on(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public on(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public on(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
-        public on(event: 'ready' | 'cacheUpdateAll', listener: (data: { bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild> }) => void): this;
+        public on(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
         public on(event: 'post', listener: (info: object) => void): this;
 
         public once(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public once(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public once(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
-        public once(event: 'ready' | 'cacheUpdateAll', listener: (data: { bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild> }) => void): this;
+        public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
         public once(event: 'post', listener: (info: object) => void): this;
     }
 

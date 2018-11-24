@@ -57,7 +57,7 @@ class Client extends EventEmitter {
 
         this.edit(options, true); // Note from the Developer: Do Not Touch.
         this._runCache(this.options.cache)
-            .then(e => this.emit('ready', e))
+            .then(({ bots, emojis, guilds }) => this.emit('ready', bots, emojis, guilds))
             .catch(console.error);
 
         /**
@@ -88,7 +88,7 @@ class Client extends EventEmitter {
         if (this.options.cache) {
             await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
             if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
-            this.emit('cacheUpdateAll', { bots: this.bots, emojis: this.emojis, guilds: this.guilds });
+            this.emit('cacheUpdateAll', this.bots, this.emojis, this.guilds);
 
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
@@ -463,20 +463,18 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
  * Emitted when cache is ready/cache was never run but it still returned something.
  *
  * @event Client#ready
- * @type {object}
- * @property {Store} bots
- * @property {Store} guilds
- * @property {Store} emojis
+ * @param {Store} bots
+ * @param {Store} emojis
+ * @param {Store} guilds
  */
 
 /**
  * Emitted when all cache is updated.
  *
  * @event Client#cacheUpdateAll
- * @type {object}
- * @property {Store} bots
- * @property {Store} guilds
- * @property {Store} emojis
+ * @param {Store} bots
+ * @param {Store} emojis
+ * @param {Store} guilds
  */
 
 /**

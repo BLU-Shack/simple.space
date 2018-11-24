@@ -209,6 +209,8 @@ declare module 'simple.space' {
     /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) with additional methods. */
     export class Store<K, V> extends Map<K, V> {
         public array(): V[];
+        public clone(): Store<K, V>;
+        public concat(...stores: Store<K, V>[]): Store<K, V>;
         public filter(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): Store<K, V>;
         public indexOf(key: K, fromIndex?: number): number;
         public keyArray(): K[];

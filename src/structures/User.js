@@ -19,8 +19,8 @@ class User extends PartialUser {
      * @returns {Bot[]} An array of bots.
      * @example
      * User.bots({ specified: 'username' })
-     *  .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
-     *  .catch(console.log);
+     *     .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
+     *     .catch(console.log);
      */
     bots(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
@@ -41,8 +41,8 @@ class User extends PartialUser {
      * @returns {Guild[]} An array of guilds.
      * @example
      * User.guilds({ specified: 'name' })
-     *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
-     *  .catch(console.log);
+     *     .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
+     *     .catch(console.log);
      */
     guilds(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

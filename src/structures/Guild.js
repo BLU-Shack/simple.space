@@ -118,8 +118,8 @@ class Guild extends Base {
      * @returns {PartialUser[]} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
-     *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
-     *  .catch(console.log);
+     *     .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
+     *     .catch(console.log);
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

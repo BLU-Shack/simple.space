@@ -198,8 +198,8 @@ class Client extends EventEmitter {
      * @returns {Promise<Bot>} Returns the bot contents/specified item.
      * @example
      * Client.fetchBot('463803888072523797', { specified: 'username' })
-     *  .then(username => console.log(username))
-     *  .catch(console.log);
+     *     .then(username => console.log(username))
+     *     .catch(console.log);
      */
     fetchBot(botID, options = {}) {
         if (!botID) throw new ReferenceError('botID must be present.');

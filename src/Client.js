@@ -451,7 +451,7 @@ class Client extends EventEmitter {
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code !== 200) throw new FetchError(body, 'Bot');
-                    this.emit('post', body);
+                    this.emit('post', body, options.guildSize);
                     resolve(body);
                 })
                 .catch(reject);
@@ -515,7 +515,6 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
  * Emitted when a post is performed.
  *
  * @event Client#post
- * @type {object}
- * @property {number} code
- * @property {string} message
+ * @param {object} info
+ * @param {number|number[]} guildSize
  */

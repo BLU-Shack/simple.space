@@ -43,13 +43,13 @@ declare module 'simple.space' {
         public on(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public on(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
         public on(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-        public on(event: 'post', listener: (info: { code: number, message: string }) => void): this;
+        public on(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
 
         public once(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public once(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public once(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
         public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-        public once(event: 'post', listener: (info: { code: number, message: string }) => void): this;
+        public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
     }
 
     /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */

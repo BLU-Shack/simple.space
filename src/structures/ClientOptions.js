@@ -15,7 +15,9 @@ class ClientOptions {
         this.cache = newObj.hasOwnProperty('cache') ? newObj.cache !== 'none' ? newObj.cache : null : oldObj.cache;
 
         /**
-         * The number of milliseconds to wait until the cache is automatically updated. Set to ``0`` to disable automatic cache updating. Note that updating may not be consistent, and may be later than intended.
+         * The number of milliseconds to wait until the cache is automatically updated.
+         * Set to ``0`` to disable automatic cache updating. Note that updating may not
+         * be consistent, and may be later than intended.
          * @type {?number}
          */
         this.cacheUpdateTimer = newObj.hasOwnProperty('cacheUpdateTimer') ? newObj.cacheUpdateTimer !== 'none' ? newObj.cacheUpdateTimer : oldObj.cacheUpdateTimer : oldObj.cacheUpdateTimer;

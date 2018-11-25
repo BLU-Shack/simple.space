@@ -207,7 +207,7 @@ declare module 'simple.space' {
         public readonly combined: number;
     }
 
-    /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) with additional methods. */
+    /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) with additional utility methods. */
     export class Store<K, V> extends Map<K, V> {
         public array(): V[];
         public clone(): Store<K, V>;

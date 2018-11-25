@@ -1,19 +1,19 @@
 exports.Classes = {
-    PartialUser: require('./PartialUser.js').PartialUser,
-    UpvoteUser: require('./UpvoteUser.js').UpvoteUser,
-    Base: require('./Base.js').Base,
+    get PartialUser() { return require('./PartialUser.js').PartialUser; },
+    get UpvoteUser() { return require('./UpvoteUser.js').UpvoteUser; },
+    get Base() { return require('./Base.js').Base; },
 
-    Bot: require('./Bot.js').Bot,
-    Emoji: require('./Emoji.js').Emoji,
-    Guild: require('./Guild.js').Guild,
-    User: require('./User.js').User,
+    get Bot() { return require('./Bot.js').Bot; },
+    get Emoji() { return require('./Emoji.js').Emoji; },
+    get Guild() { return require('./Guild.js').Guild; },
+    get User() { return require('./User.js').User; },
 
-    ClientOptions: require('./ClientOptions.js').ClientOptions,
-    FetchOptions: require('./FetchOptions.js').FetchOptions,
-    PostOptions: require('./PostOptions.js').PostOptions,
-    UpvoteFetchOptions: require('./UpvoteFetchOptions.js').UpvoteFetchOptions,
+    get ClientOptions() { return require('./ClientOptions.js').ClientOptions; },
+    get FetchOptions() { return require('./FetchOptions.js').FetchOptions; },
+    get PostOptions() { return require('./PostOptions.js').PostOptions; },
+    get UpvoteFetchOptions() { return require('./UpvoteFetchOptions.js').UpvoteFetchOptions; },
 
-    FetchError: require('./FetchError.js').FetchError,
-    Stats: require('./Stats.js').Stats,
-    Store: require('./Store.js').Store
+    get FetchError() { return require('./FetchError.js').FetchError; },
+    get Stats() { return require('./Stats.js').Stats; },
+    get Store() { return require('./Store.js').Store; }
 };

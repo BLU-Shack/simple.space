@@ -48,12 +48,12 @@ class Stats {
     }
 
     /**
-     * Fetch the total combined number of bots, servers, and users on the site.
+     * Fetch the total combined number of bots, guilds, and users on the site.
      * @readonly
      * @type {number}
      */
     get combined() {
-        return this.bots.total + this.servers + this.users;
+        return this.bots.total + this.guilds + this.users;
     }
 }
 

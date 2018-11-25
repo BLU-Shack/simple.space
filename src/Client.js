@@ -2,21 +2,8 @@ const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
-const Classes = require('./structures/Classes.js').Classes;
-const ClientOptions = Classes.ClientOptions;
-const FetchOptions = Classes.FetchOptions;
-const PostOptions = Classes.PostOptions;
-const UpvoteFetchOptions = Classes.UpvoteFetchOptions;
+const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 
-const Bot = Classes.Bot;
-const Emoji = Classes.Emoji;
-const Guild = Classes.Guild;
-const UpvoteUser = Classes.UpvoteUser;
-const User = Classes.User;
-
-const FetchError = Classes.FetchError;
-const Stats = Classes.Stats;
-const Store = Classes.Store;
 const endpoint = 'https://botlist.space/api';
 
 /**

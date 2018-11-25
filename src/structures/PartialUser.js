@@ -1,62 +1,65 @@
 const Base = require('./Base.js').Base;
 
 /**
- * The user that is fetched when looking for a bot's owners/upvotes.
+ * A user with limited information.
  * @class
- * @constructor
+ * @extends {Base}
  */
 class PartialUser extends Base {
     /**
-     * @param {Object} base The partial user fetched from the API.
+     * @param {object} partialUser The partial user fetched from the API.
      */
-    constructor(base) {
-        super(base);
-
-        /**
-         * The avatar of the user.
-         * @type {String}
-         */
-        this.avatar = base.avatar;
-
-        /**
-         * The discriminator of the user.
-         * @type {String}
-         */
-        this.discriminator = base.discriminator;
-
-        /**
-         * If any, the user's github username.
-         * @type {String}
-         */
-        this.githubUsername = base.links.github;
-
-        /**
-         * If any, the user's gitlab username.
-         * @type {String}
-         */
-        this.gitlabUsername = base.links.gitlab;
+    constructor(partialUser) {
+        super(partialUser);
 
         /**
          * The plain user object itself.
-         * @type {Object}
+         * @readonly
+         * @type {object}
          */
-        this.user = base;
+        Object.defineProperty(this, 'user', { value: partialUser });
+
+        /**
+         * The avatar of the user.
+         * @type {string}
+         */
+        this.avatar = partialUser.avatar;
+
+        /**
+         * The discriminator of the user.
+         * @type {string}
+         */
+        this.discriminator = partialUser.discriminator;
+
+        /**
+         * If any, the user's github username.
+         * @type {?string}
+         */
+        this.githubUsername = partialUser.links.github;
+
+        /**
+         * If any, the user's gitlab username.
+         * @type {?string}
+         */
+        this.gitlabUsername = partialUser.links.gitlab;
 
         /**
          * The short description of the user.
-         * @type {String}
+         * @type {?string}
          */
-        this.shortDescription = base.short_description;
+        this.shortDescription = partialUser.short_description || null;
 
         /**
          * The user's username.
+         * @type {string}
          */
-        this.username = base.username;
+        this.username = partialUser.username;
     }
 
     /**
      * The user's github URL.
-     * @type {String}
+     * @readonly
+     * @type {?string}
      */
     get githubURL() {
         if (!this.githubUsername) return null;
@@ -65,7 +68,8 @@ class PartialUser extends Base {
 
     /**
      * The user's gitlab URL.
-     * @type {String}
+     * @readonly
+     * @type {?string}
      */
     get gitlabURL() {
         if (!this.gitlabUsername) return null;
@@ -74,7 +78,8 @@ class PartialUser extends Base {
 
     /**
      * The user's tag.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get tag() {
         return `${this.username}#${this.discriminator}`;
@@ -82,7 +87,8 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's page URL.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/user/${this.id}`;
@@ -90,9 +96,8 @@ class PartialUser extends Base {
 
     /**
      * Returns the user's mention, rather than the user object.
-     * @type {String}
-     * @example
-     * console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
+     * @returns {string} The user mention.
+     * @example console.log(`Hey look a random user ${user}`) // Hey look a random user <@235593018332282884>
      */
     toString() {
         return `<@${this.id}>`;

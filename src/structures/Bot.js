@@ -1,133 +1,137 @@
 const FetchOptions = require('./FetchOptions').FetchOptions;
 const Base = require('./Base').Base;
 const PartialUser = require('./PartialUser.js').PartialUser;
-const util = require('util');
+const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**
  * Represents any bot that has been submitted onto botlist.space.
  * @class
- * @constructor
  * @extends {Base}
  */
 class Bot extends Base {
     /**
-     * @param {Object} bot The plain bot object, fetched from the API.
+     * @param {object} bot The plain bot object, fetched from the API.
      */
     constructor(bot) {
         super(bot);
 
         /**
+         * The plain bot object itself.
+         * @readonly
+         * @type {object}
+         */
+        Object.defineProperty(this, 'bot', { value: bot });
+
+        /**
          * The avatar URL of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.avatar = bot.avatar;
 
         /**
-         * The plain bot object itself.
-         * @type {Object}
-         */
-        this.bot = bot;
-
-        /**
          * The discriminator of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.discriminator = bot.discriminator;
 
         /**
          * The bot's full description, if any.
-         * @type {String|null}
+         * @type {?string}
          */
         this.fullDescription = bot.full_description;
 
         /**
          * The amount of guilds the bot is currently in, if the owner posted anything.
-         * @type {Number|null}
+         * @type {?number}
          */
         this.guildSize = bot.server_count;
 
         /**
          * Returns the bot's invite URL.
-         * @type {String}
+         * @type {string}
          */
         this.inviteURL = bot.invite;
 
         /**
          * Whether or not the bot is approved.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isApproved = bot.approved;
 
         /**
          * Whether or not the bot's avatar is marked as child friendly.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isChildFriendly = bot.avatarChildFriendly;
 
         /**
          * Whether or not the bot is featured on the front page.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isFeatured = bot.featured;
 
         /**
          * The bot's library that was used for its production.
-         * @type {String}
+         * @type {string}
          */
         this.library = bot.library;
 
         /**
          * The bot's prefix.
-         * @type {String}
+         * @type {string}
          */
         this.prefix = bot.prefix;
 
         /**
-         * Identical to {@link Bot#guildSize}
-         * @type {Number|null}
-         */
-        this.serverCount = this.guildSize || null;
-
-        /**
          * Returns, if any, an array of the bot's guild count for each of its shard.
-         * @type {Array<Number>|null}
+         * @type {?number[]}
          */
         this.shards = bot.shards || null;
 
         /**
          * The short description of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.shortDescription = bot.short_description;
 
         /**
          * The bot's support code, if any.
-         * @type {String|null}
+         * @type {?string}
          */
         this.supportCode = bot.links.support;
 
         /**
          * The bot's timestamp in which it was submitted to the site.
-         * @type {Number}
+         * @type {number}
          */
         this.timestamp = new Date(bot.timestamp).getTime();
 
         /**
          * The username of the bot.
-         * @type {String}
+         * @type {string}
          */
         this.username = bot.username;
 
         /**
-         * Returns, if any, the bot's vanity.
-         * @type {String}
+         * If any, the bot's vanity.
+         * @type {?string}
          */
         this.vanity = bot.vanity;
     }
 
     /**
+     * Identical to {@link Bot#guildSize}
+     * @readonly
+     * @type {?number}
+     */
+    get serverCount() {
+        return this.guildSize;
+    }
+
+    /**
      * Returns the bot's invite URL with no permissions.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get inviteNoPerms() {
         return this.inviteURL.replace(/&permissions=[0-9]*/gi, '');
@@ -135,7 +139,8 @@ class Bot extends Base {
 
     /**
      * Returns the bot's support URL, if the support code exists.
-     * @type {String|null}
+     * @readonly
+     * @type {?string}
      */
     get supportURL() {
         if (!this.supportCode) return null;
@@ -144,7 +149,8 @@ class Bot extends Base {
 
     /**
      * The tag of the bot.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get tag() {
         return `${this.username}#${this.discriminator}`;
@@ -152,7 +158,8 @@ class Bot extends Base {
 
     /**
      * Returns the bot's page URL.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/bot/${this.id}`;
@@ -160,7 +167,8 @@ class Bot extends Base {
 
     /**
      * Returns the bot's vanity in the form of a URL, if the bot has a vanity.
-     * @type {String|null}
+     * @readonly
+     * @type {?string}
      */
     get vanityURL() {
         if (!this.vanity) return null;
@@ -170,7 +178,7 @@ class Bot extends Base {
     /**
      * Fetches all of the bot's owners, including the secondary ones.
      * @param {FetchOptions} [options={}] Fetch Options.
-     * @returns {Array<PartialUser>} An array of the bot's owners.
+     * @returns {PartialUser[]} An array of the bot's owners.
      * @example
      * Bot.owners({ specified: 'username' })
      *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
@@ -183,37 +191,20 @@ class Bot extends Base {
         if (Options.normal) {
             return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
         } else {
-            const Owners = this.bot.owners.map(owner => new PartialUser(owner));
-            return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            const Owners = Options.stringify ? this.bot.owners.map(owner => new PartialUser(owner).toString()) : this.bot.owners.map(owner => new PartialUser(owner));
+            const resolved = Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            return resolved;
         }
     }
 
     /**
      * Returns the bot's mention, rather than the bot object.
-     * @type {String}
-     * @example
-     * console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
+     * @returns {string} The bot mention.
+     * @example console.log(`Hey look a random boat ${Bot}`); // Hey look a random boat <@1039280320983029>
      */
     toString() {
         return `<@${this.id}>`;
     }
-
-    /**
-     * @deprecated Use {@link Bot#inviteURL} or {@link Bot#inviteNoPerms}
-     */
-    invite() {
-        return this.inviteURL;
-    }
-
-    /**
-     * @deprecated Use {@link Bot#supportCode} or {@link Bot#supportURL}
-     */
-    support() {
-        return this.supportURL;
-    }
 }
-
-Bot.prototype.invite = util.deprecate(Bot.prototype.invite, 'Bot#invite() => Use Bot#inviteURL or Bot#inviteNoPerms');
-Bot.prototype.support = util.deprecate(Bot.prototype.support, 'Bot#support() => Use Bot#supportCode or Bot#supportURL');
 
 exports.Bot = Bot;

@@ -10,8 +10,7 @@ const PartialUser = require('./PartialUser.js').PartialUser;
  */
 class User extends PartialUser {
     /**
-     * @constructor
-     * @param {Object} user The plain user object from the API.
+     * @param {object} user The plain user object from the API.
      */
     constructor(user) {
         super(user);
@@ -20,7 +19,7 @@ class User extends PartialUser {
     /**
      * Fetches all bots that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Bot>} An array of bots.
+     * @returns {Bot[]} An array of bots.
      * @example
      * User.bots({ specified: 'username' })
      *  .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
@@ -33,15 +32,16 @@ class User extends PartialUser {
         if (Options.normal) {
             return Options.specified ? this.user.bots.map(bot => bot[Options.specified]) : this.user.bots;
         } else {
-            const Bots = this.user.bots.map(bot => new Bot(bot));
-            return Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
+            const Bots = Options.stringify ? this.user.bots.map(bot => new Bot(bot).toString()) : this.user.bots.map(bot => new Bot(bot));
+            const resolved = Options.specified ? Bots.map(bot => bot[Options.specified]) : Bots;
+            return resolved;
         }
     }
 
     /**
      * Fetches all guilds that the user owns.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<Guild>} An array of guilds.
+     * @returns {Guild[]} An array of guilds.
      * @example
      * User.guilds({ specified: 'name' })
      *  .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
@@ -54,8 +54,9 @@ class User extends PartialUser {
         if (Options.normal) {
             return Options.specified ? this.user.servers.map(guild => guild[Options.specified]) : this.user.servers;
         } else {
-            const Guilds = this.user.servers.map(guild => new Guild(guild));
-            return Options.specified ? Guilds.map(owner => owner[Options.specified]) : Guilds;
+            const Guilds = Options.stringify ? this.user.servers.map(guild => new Guild(guild).toString()) : this.user.servers.map(guild => new Guild(guild));
+            const resolved = Options.specified ? Guilds.map(guild => guild[Options.specified]) : Guilds;
+            return resolved;
         }
     }
 }

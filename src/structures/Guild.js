@@ -9,94 +9,95 @@ const PartialUser = require('./PartialUser.js').PartialUser;
  */
 class Guild extends Base {
     /**
-     * @constructor
-     * @param {Object} guild The plain guild object, fetched from the API.
+     * @param {object} guild The plain guild object, fetched from the API.
      */
     constructor(guild) {
         super(guild);
 
         /**
+         * The plain guild object itself.
+         * @readonly
+         * @type {object}
+         */
+        Object.defineProperty(this, 'guild', { value: guild });
+
+        /**
          * Whether or not the guild is in compliance with listing its emojis.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.compliance = guild.compliance;
 
         /**
-         * The plain guild object itself.
-         * @type {Object}
+         * The guild's full description, if any.
+         * @type {?string}
          */
-        this.guild = guild;
-
-        /**
-         * Whether or not the guild is featured on the front page.
-         * @type {Boolean}
-         */
-        this.isFeatured = guild.featured;
+        this.fullDescription = guild.full_description;
 
         /**
          * The guild's icon URL.
-         * @type {String}
+         * @type {string}
          */
         this.icon = guild.icon;
 
         /**
          * Whether or not the guild's icon is marked as child friendly.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.isChildFriendly = guild.iconChildFriendly;
 
         /**
+         * Whether or not the guild is featured on the front page.
+         * @type {boolean}
+         */
+        this.isFeatured = guild.featured;
+
+        /**
+         * Whether or not the guild is Premium.
+         * @type {boolean}
+         */
+        this.isPremium = guild.premium;
+
+        /**
+         * Whether or not the guild's not listed publicly (due to inactive invite)
+         * @type {boolean}
+         */
+        this.isPublic = guild.public;
+
+        /**
          * The number of members there currently are in the Guild
-         * @type {Number}
+         * @type {number}
          */
         this.memberCount = guild.member_count;
 
         /**
          * The guild's name.
-         * @type {String}
+         * @type {string}
          */
         this.name = guild.name;
 
         /**
-         * Whether or not the guild's not listed publicly (due to inactive invite)
-         * @type {Boolean}
-         */
-        this.isPublic = guild.public;
-
-        /**
-         * Whether or not the guild is Premium.
-         * @type {Boolean}
-         */
-        this.isPremium = guild.premium;
-
-        /**
          * The guild's short description.
-         * @type {String}
+         * @type {string}
          */
         this.shortDescription = guild.short_description;
 
         /**
-         * The guild's full description, if any.
-         * @type {String|null}
-         */
-        this.fullDescription = guild.full_description;
-
-        /**
          * The guild's timestamp, in which the guild had been submitted.
-         * @type {Date}
+         * @type {number}
          */
         this.timestamp = new Date(guild.timestamp).getTime();
 
         /**
          * The guild's vanity, if any.
-         * @type {String|null}
+         * @type {?string}
          */
         this.vanity = guild.vanity;
     }
 
     /**
      * Returns the guild's page URL.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/server/${this.id}`;
@@ -104,7 +105,8 @@ class Guild extends Base {
 
     /**
      * Returns the guild's vanity in the form of a URL, if the guild has a vanity.
-     * @type {String|null}
+     * @readonly
+     * @type {?string}
      */
     get vanityURL() {
         if (!this.vanity) return null;
@@ -114,7 +116,7 @@ class Guild extends Base {
     /**
      * Get the guild's owners.
      * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Array<PartialUser>} An array of the guild's owners.
+     * @returns {PartialUser[]} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
      *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
@@ -127,14 +129,16 @@ class Guild extends Base {
         if (Options.normal) {
             return Options.specified ? this.guild.owners.map(owner => owner[Options.specified]) : this.guild.owners;
         } else {
-            const Owners = this.guild.owners.map(owner => new PartialUser(owner));
-            return Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            const Owners = Options.stringify ? this.guild.owners.map(owner => new PartialUser(owner).toString()) : this.guild.owners.map(owner => new PartialUser(owner));
+            const resolved = Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
+            return resolved;
         }
     }
 
     /**
      * Returns a string containing the guild name.
-     * @returns {String} The guild name.
+     * @returns {string} The guild name.
+     * @example console.log(`Hey look a guild with a name ${guild}!`); // Hey look a guild with a name Hell's Door!
      */
     toString() {
         return this.name;

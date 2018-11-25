@@ -13,45 +13,49 @@ To install, use ``npm i simple.space``; But you already know that, right?
 
 ## What sets the difference than the original?
 
-|Key Differences from [Main Package](https://www.npmjs.com/package/botlist.space)|Examples|
+|Differences from [Main Package](https://www.npmjs.com/package/botlist.space)|Examples|
 |-|-|
 |Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
 |Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|
+|Uses ``node-fetch`` instead of ``snekfetch``|No Code Example Here, Mate|
 
 ## Examples
 
-Wait, before we get in, let me explain things.
+<details>
+<summary>An Example Format</summary>
+<br>
 
-* The ``value = example`` part is the default value if not supplied. If there is none, either it's required, or it doesn't supply a default value since it's not needed.
-* The function formats are as follows:
 ```js
-// Small description of what thing does
-// For each value: valueExample (TypeOfValue) => Description of how value affects function.
-// EXAMPLE: token (String) => This value requires a String-type value to be passed in.
-// Sometimes, there is a ? before the Type, which means Optional.
+// something (Type) => A random definition.
+// notNeeded (?Type) => An optional definition.
+Options.example(something, ?notNeeded);
 ```
 
+</details>
+<br>
 <details>
 <summary>Initialize The Package</summary>
 <br>
 
 ```js
-// First, you have to initialize the package. Obviously.
-const SimpleSpace = require('simple.space');
+// Require the package!
+const Space = require('simple.space');
 
-// options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log FETCH actions.
-const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies
+// options (?ClientOptions) => The options for initiation.
+// options.token (?string) => The API token, required for some actions.
+// options.botID (?string) => The bot ID for self functions.
+// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of postCount() without needing to supply a value.
+// options.log (?boolean) => Whether or not to log FETCH actions.
+// options.cacheUpdateTimer (?number) => The # of milliseconds to wait for each automatic cache update. Set to 0 to disable.
+// options.cache (?boolean) => Whether or not to enable caching.
+const SpaceClient = new Space.Client(?options = { token: false, botID: false, client: false, log: false, }); // Example varies
 ```
 
 For future assumptions, let's say:
-1. ``options.token`` is invalid.
-2. ``options.botID`` is ``'228537642583588864'`` (id goes to the [Vexera Bot](https://vexera.io) )
-3. ``options.client`` is invalid.
-4. ``options.log`` is ``true``.
+1. ``options.token`` is ``null``
+2. ``options.botID`` is ``'228537642583588864'`` (id => [Vexera Bot](https://vexera.io))
+3. ``options.client`` is ``null``
+4. ``options.log`` is ``true`` because it can.
 
 </details>
 <br>
@@ -60,11 +64,10 @@ For future assumptions, let's say:
 <br>
 
 ```js
-// Fetches the site statistics.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchStats(?options);
-Example.fetchStats(); // Example varies
-Example.fetchStats({ specified: 'total' }); // Example varies.
+SpaceClient.fetchStats(?options);
+SpaceClient.fetchStats(); // Example varies
+SpaceClient.fetchStats({ specified: 'total' }); // Example varies.
 ```
 
 </details>
@@ -74,14 +77,10 @@ Example.fetchStats({ specified: 'total' }); // Example varies.
 <br>
 
 ```js
-// Post your guild count onto the site.
 // options (PostOptions) => Post Options.
-// options.guildSize (Number | Array<Number>) => The number/array of numbers to pass to the site.
-// options.token (?String) => The API token to use. Overrides this.options.token
-// options.botID (?String) => The Bot ID to use. Overrides this.options.botID
-Example.setGuilds(?options);
-Example.setGuilds({ guildSize: 69 }); // Don't bother.
-Example.setGuilds({ guildSize: 1337, token: 'OOF' }); // You failed.
+SpaceClient.postCount(?options);
+SpaceClient.postCount({ guildSize: 69 }); // Don't bother.
+SpaceClient.postCount({ guildSize: 1337, token: 'OOF' }); // You failed.
 ```
 
 </details>
@@ -91,12 +90,11 @@ Example.setGuilds({ guildSize: 1337, token: 'OOF' }); // You failed.
 <br>
 
 ```js
-// Fetch a bot from the site.
-// botID (String) => The bot ID to fetch from the site.
+// botID (string) => The bot ID to fetch from the site.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchBot(botID, ?options);
-Example.fetchBot('228537642583588864'); // Example too large
-Example.fetchBot('228537642583588864', { specified: 'username' }); // Vexera
+SpaceClient.fetchBot(botID, ?options);
+SpaceClient.fetchBot('228537642583588864'); // Example too large
+SpaceClient.fetchBot('228537642583588864', { specified: 'username' }); // Vexera
 ```
 
 </details>
@@ -106,11 +104,10 @@ Example.fetchBot('228537642583588864', { specified: 'username' }); // Vexera
 <br>
 
 ```js
-// Fetches the bot by using the ID supplied during initialization.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchSelf(?options);
-Example.fetchSelf(); // Example too large
-Example.fetchSelf({ specified: 'username' }); // Vexera
+SpaceClient.fetchSelf(?options);
+SpaceClient.fetchSelf(); // Example too large
+SpaceClient.fetchSelf({ specified: 'username' }); // Vexera
 ```
 
 </details>
@@ -120,12 +117,11 @@ Example.fetchSelf({ specified: 'username' }); // Vexera
 <br>
 
 ```js
-// Fetches a guild in the database.
-// guildID (String) => The guild ID to fetch.
+// guildID (string) => The guild ID to fetch.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchGuild(guildID, ?options);
-Example.fetchGuild('467868565073035284');
-Example.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU Shack
+SpaceClient.fetchGuild(guildID, ?options);
+SpaceClient.fetchGuild('467868565073035284');
+SpaceClient.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU Shack
 ```
 
 </details>
@@ -135,11 +131,10 @@ Example.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU S
 <br>
 
 ```js
-// Fetch all bots on the site.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchAllBots(?options);
-Example.fetchAllBots({ specified: 'prefix' }); // [ '!', '?', ... ]
-Example.fetchAllBots({ stringify: true }); // [ '<@139823297389273>', '<@1337133713371337>', ... ]
+SpaceClient.fetchAllBots(?options);
+SpaceClient.fetchAllBots({ specified: 'prefix' }); // [ '!', '?', ... ]
+SpaceClient.fetchAllBots({ stringify: true }); // [ '<@139823297389273>', '<@1337133713371337>', ... ]
 ```
 
 </details>
@@ -149,11 +144,10 @@ Example.fetchAllBots({ stringify: true }); // [ '<@139823297389273>', '<@1337133
 <br>
 
 ```js
-// Fetch all guilds on the site.
 // options (?FetchOptions) => Fetch Options.
-Example.fetchAllGuilds(?options);
-Example.fetchAllGuilds({ specified: 'id' }); // [ '293829083209323', '1337133713371337', ... ]
-Example.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]
+SpaceClient.fetchAllGuilds(?options);
+SpaceClient.fetchAllGuilds({ specified: 'id' }); // [ '293829083209323', '1337133713371337', ... ]
+SpaceClient.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]
 ```
 
 </details>
@@ -163,12 +157,11 @@ Example.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]
 <br>
 
 ```js
-// Fetch a user that has logged onto the site.
-// userID (String) => The user ID to fetch.
+// userID (string) => The user ID to fetch.
 // options (?FetchOptions) Fetch Options.
-Example.fetchUser(userID, ?options);
-Example.fetchUser('235593018332282884'); // Example too large to show
-Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED
+SpaceClient.fetchUser(userID, ?options);
+SpaceClient.fetchUser('235593018332282884'); // Example too large to show
+SpaceClient.fetchUser('235593018332282884', { specified: 'username' }); // iRED
 ```
 
 </details>
@@ -178,13 +171,25 @@ Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED
 <br>
 
 ```js
-// Fetch a bot's upvotes in the past 24 hours.
 // options (?UpvoteFetchOptions) => Upvote Fetch Options.
-// options.ids (?Boolean) => Whether or not to only fetch the user IDs.
-// options.token (?String) => The API token to supply.
-Example.fetchUpvotes(?options);
-Example.fetchUpvotes(); // Example varies
-Example.fetchUpvotes({ ids: true }); // Example varies
+SpaceClient.fetchUpvotes(?options);
+SpaceClient.fetchUpvotes(); // Example varies
+SpaceClient.fetchUpvotes({ ids: true }); // Example varies
+```
+
+</details>
+<br>
+<details>
+<summary>Check If User Upvoted Bot</summary>
+<br>
+
+```js
+// userID (string | string[]) => A user ID/array of user IDs to test against.
+// options (?UpvoteFetchOptions) => Upvote Fetch Options.
+SpaceClient.hasUpvoted(userID, ?options);
+SpaceClient.hasUpvoted('235593018332282884'); // false(?)
+SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121']); // A Store
+SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121'], { ids: true }); // An array containing only the users who have upvoted.
 ```
 
 </details>
@@ -194,27 +199,17 @@ Example.fetchUpvotes({ ids: true }); // Example varies
 <br>
 
 ```js
-// Edit a key-value pair in the instance.
 // options (?SpaceOptions) => The options for initiation.
-// options.token (?String) => The API token, required for some actions.
-// options.botID (?String) => The bot ID for self functions.
-// options.client (?discordjs.Client) => The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) => Whether or not to log POST actions.
-Example.edit(options);
-Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
+SpaceClient.edit(options);
+SpaceClient.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 ```
 
 </details>
 
-## Documentation
+## Full Documentation
 
 https://blu-shack.github.io/simple.space/
 
 ## Contributing
 
-- Go [here](https://github.com/iREDMe/simple.space/issues/new?template=ISSUE_TEMPLATE.md) to submit a bug.
-- Go [here](https://github.com/iREDMe/simple.space/issues/new?template=feature_request.md) to submit a feature request.
-
-### Want to Pull Request?
-
-Well, go ahead and make one already.
+- Find out [here](https://github.com/BLU-Shack/simple.space/blob/master/.github/CONTRIBUTING.md)!

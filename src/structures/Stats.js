@@ -4,21 +4,23 @@
  */
 class Stats {
     /**
-     * @constructor
-     * @param {Object} stats The plain stats object, fetched from the API.
+     * @param {object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {
+        Object.defineProperty(this, 'stats', { writable: true, enumerable: false });
+
         /**
          * The plain stats object itself.
-         * @type {Object}
+         * @type {object}
          */
         this.stats = stats;
 
         /**
          * All bot information.
-         * @property {Number} total The total number of bots that have been submitted to the site.
-         * @property {Number} approved The total number of approved bots.
-         * @property {Number} unapproved The total number of unapproved bots.
+         * @type {object}
+         * @property {number} total The total number of bots that have been submitted to the site.
+         * @property {number} approved The total number of approved bots.
+         * @property {number} unapproved The total number of unapproved bots.
          */
         this.bots = {
             total: stats.bots.total,
@@ -27,29 +29,30 @@ class Stats {
         };
 
         /**
-         * The total number of servers that had been submitted.
-         * @type {Number}
+         * The total number of guilds that had been submitted.
+         * @type {number}
          */
-        this.servers = stats.servers;
+        this.guilds = stats.servers;
 
         /**
          * Whether or not it was successful at fetching statistics.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.successful = stats.success;
 
         /**
          * The total number of users that had logged in.
-         * @type {Number}
+         * @type {number}
          */
         this.users = stats.users;
     }
 
     /**
-     * Fetch the total number of bots, servers, and users on the site.
-     * @type {Number}
+     * Fetch the total combined number of bots, servers, and users on the site.
+     * @readonly
+     * @type {number}
      */
-    get total() {
+    get combined() {
         return this.bots.total + this.servers + this.users;
     }
 }

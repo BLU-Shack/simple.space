@@ -1,7 +1,7 @@
 /* eslint-disable */
-const Package = require('../src/index.js');
-const Options = { token: 'TOKEN_HERE', botID: 'Bot_ID', client: 'none', log: false };
-const Client = new Package(Options);
+const Space = require('../src/index.js');
+const Options = { token: 'TOKEN_HERE', botID: '513219942418481162', client: null, log: false };
+const Client = new Space.Client(Options);
 
 /*
     Edit the function as needed.

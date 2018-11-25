@@ -1,26 +1,53 @@
+const ClientOptions = require('./ClientOptions.js').ClientOptions;
+
+/**
+ * Options when Posting.
+ * @class
+ */
 class PostOptions {
     /**
-     * @param {Object} options Options to override the preconfigured options.
-     * @param {Object} preset Preconfigured options.
+     * @param {object} options Options to override the preconfigured options.
+     * @param {ClientOptions} [preset=ClientOptions.default] Preset Client Options.
      */
-    constructor(options, preset) {
+    constructor(options, preset = ClientOptions.default) {
         /**
-         * The API token for posting.
-         * @type {String}
+         * The discord.js#Client object. Usable to not require the guildSize parameter.
+         * @type {*}
          */
-        this.token = options.token || preset.token;
+        this.client = options.client || preset.client;
 
         /**
          * The bot ID for posting.
-         * @type {String}
+         * @type {?string}
          */
         this.botID = options.botID || preset.botID;
+        if (!this.botID) throw new ReferenceError('options.botID must be defined.');
+        if (typeof this.botID !== 'string') throw new TypeError('options.botID must be a string.');
 
         /**
-         * The size number/array for posting.
-         * @type {Number|Array<Number>}
+         * The number/array of numbers (if shards) to be posted onto the site.
+         * @type {?number|number[]}
          */
-        this.guildSize = options.guildSize || (preset.client ? preset.client.guilds.size : 'Nothing');
+        this.guildSize = typeof options.guildSize !== 'undefined' ? options.guildSize : (this.client ? this.client.guilds.size : null);
+        if (this.guildSize === null) throw new ReferenceError('guildSize must be defined.');
+        if (typeof this.guildSize !== 'number' && !(this.guildSize instanceof Array)) throw new TypeError('options.guildSize must be either a number or an array of numbers.');
+
+        /**
+         * The API token for posting.
+         * @type {?string}
+         */
+        this.token = options.token || preset.token;
+        if (!this.token) throw new ReferenceError('options.token must be defined.');
+        if (typeof this.token !== 'string') throw new TypeError('options.token must be a string.');
+    }
+
+    /**
+     * The returned data.
+     * @readonly
+     * @type {string}
+     */
+    get data() {
+        return this.guildSize instanceof Array ? JSON.stringify({ shards: this.guildSize }) : JSON.stringify({ server_count: this.guildSize });
     }
 }
 

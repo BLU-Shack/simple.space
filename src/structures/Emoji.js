@@ -4,44 +4,45 @@ const Guild = require('./Guild.js').Guild;
 /**
  * Represents any emoji on botlist.space.
  * @class
- * @constructor
  * @extends {Base}
  */
 class Emoji extends Base {
     /**
-     * @param {Object} base The emoji object fetched from the API.
+     * @param {object} emoji The emoji object fetched from the API.
      */
-    constructor(base) {
-        super(base);
-
-        /**
-         * Whether or not the emoji is animated.
-         * @type {Boolean}
-         */
-        this.animated = base.animated;
+    constructor(emoji) {
+        super(emoji);
 
         /**
          * The plain emoji object itself.
-         * @type {Object}
+         * @readonly
+         * @type {object}
          */
-        this.emoji = base;
+        Object.defineProperty(this, 'emoji', { value: emoji });
+
+        /**
+         * Whether or not the emoji is animated.
+         * @type {boolean}
+         */
+        this.animated = emoji.animated;
 
         /**
          * The emoji's name.
-         * @type {String}
+         * @type {string}
          */
-        this.name = base.name;
+        this.name = emoji.name;
 
         /**
          * The emoji's image URL.
-         * @type {String}
+         * @type {string}
          */
-        this.imageURL = base.url;
+        this.imageURL = emoji.url;
     }
 
     /**
      * The plain guild object the emoji is in.
-     * @type {Object}
+     * @readonly
+     * @type {object}
      */
     get normalGuild() {
         return this.emoji.server;
@@ -49,15 +50,26 @@ class Emoji extends Base {
 
     /**
      * The guild the emoji is in.
+     * @readonly
      * @type {Guild}
      */
     get guild() {
-        return new Guild(this.emoji.server);
+        return new Guild(this.normalGuild);
+    }
+
+    /**
+     * Returns the raw text that turns into a Discord Readable Emoji when used correctly.
+     * @readonly
+     * @type {string}
+     */
+    get raw() {
+        return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;
     }
 
     /**
      * The emoji's page URL.
-     * @type {String}
+     * @readonly
+     * @type {string}
      */
     get url() {
         return `https://botlist.space/emoji/${this.id}`;
@@ -65,10 +77,11 @@ class Emoji extends Base {
 
     /**
      * Returns the text that forms a readable Discord emoji in discord messages.
-     * @returns {String}
+     * @returns {string} Returns just {@link Emoji#raw}
+     * @example channel.send(`Hey look there's an emoji ${emoji}`); // Varies depending on the emoji.
      */
     toString() {
-        return `<${this.animated ? 'a' : ''}:${this.name}:${this.id}>`;
+        return this.raw;
     }
 }
 

@@ -1,35 +1,44 @@
+const ClientOptions = require('./ClientOptions.js').ClientOptions;
+
 /**
  * The fetch options when fetching for a Bot/Guild/User on the site.
  * @class
  */
 class FetchOptions {
     /**
-     * @constructor
-     * @param {FetchOptions} [options={}] The selected object.
+     * @param {object} [options={}] The selected object.
+     * @param {ClientOptions} [preset=ClientOptions.default] Preset Client Options.
      */
-    constructor(options = {}) {
+    constructor(options = {}, preset = ClientOptions.default) {
+        /**
+         * Whether or not to log the output. Overrides this.options.log
+         * @type {boolean}
+         */
+        this.log = typeof options.log !== 'undefined' ? options.log : (preset.log || false);
+        if (typeof this.log !== 'boolean') throw new TypeError('options.log must be a boolean.');
+
         /**
          * Whether or not to only get a specific value from the object.
-         * @type {String|Boolean}
+         * @type {?string}
          */
-        this.specified = options.specified || false;
-        if (typeof this.specified !== 'string' && typeof this.specified !== 'boolean') throw new TypeError('options.specified must be a string.');
+        this.specified = typeof options.specified !== 'undefined' ? options.specified : null;
+        if (this.specified !== null && typeof this.specified !== 'string') throw new TypeError('options.specified must be a string.');
 
         /**
          * Whether or not to only return the plain object.
-         * @type {Boolean}
+         * @type {?boolean}
          */
-        this.normal = options.normal || false;
+        this.normal = typeof options.normal !== 'undefined' ? options.normal : false;
         if (typeof this.normal !== 'boolean') throw new TypeError('options.normal must be boolean.');
 
         /**
-         * Whether or not to return the stringified form of the object. This will override the specified and normal parameters to false.
-         * @type {Boolean}
+         * Whether or not to return the stringified form of the object. This will override the specified and normal parameters.
+         * @type {?boolean}
          */
-        this.stringify = options.stringify || false;
+        this.stringify = typeof options.stringify !== 'undefined' ? options.stringify : false;
         if (typeof this.stringify !== 'boolean') throw new TypeError('options.stringify must be boolean.');
         if (this.stringify) {
-            this.specified = false;
+            this.specified = null;
             this.normal = false;
         }
     }

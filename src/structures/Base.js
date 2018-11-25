@@ -1,16 +1,15 @@
 /**
  * The universal base for Bot/Emoji/Guild/User classes.
  * @class
- * @constructor
  */
 class Base {
     /**
-     * @param {Object} base A Bot/Emoji/Guild/User object fetched from the API.
+     * @param {object} base A Bot/Emoji/Guild/User object fetched from the API.
      */
     constructor(base) {
         /**
          * The Base's ID.
-         * @type {String}
+         * @type {string}
          */
         this.id = base.id;
     }

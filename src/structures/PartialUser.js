@@ -14,6 +14,7 @@ class PartialUser extends Base {
 
         /**
          * The plain user object itself.
+         * @name PartialUser#user
          * @readonly
          * @type {object}
          */

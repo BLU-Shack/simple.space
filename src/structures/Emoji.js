@@ -14,6 +14,7 @@ class Emoji extends Base {
 
         /**
          * The plain emoji object itself.
+         * @name Emoji#emoji
          * @readonly
          * @type {object}
          */

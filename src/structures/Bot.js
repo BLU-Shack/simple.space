@@ -15,6 +15,7 @@ class Bot extends Base {
 
         /**
          * The plain bot object itself.
+         * @name Client#bot
          * @readonly
          * @type {object}
          */

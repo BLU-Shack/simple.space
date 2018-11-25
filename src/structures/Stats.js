@@ -7,13 +7,13 @@ class Stats {
      * @param {object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {
-        Object.defineProperty(this, 'stats', { writable: true, enumerable: false });
-
         /**
          * The plain stats object itself.
+         * @name Stats#stats
+         * @readonly
          * @type {object}
          */
-        this.stats = stats;
+        Object.defineProperty(this, 'stats', { value: stats });
 
         /**
          * All bot information.

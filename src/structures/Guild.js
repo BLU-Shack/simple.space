@@ -14,6 +14,7 @@ class Guild extends Base {
 
         /**
          * The plain guild object itself.
+         * @name Guild#guild
          * @readonly
          * @type {object}
          */

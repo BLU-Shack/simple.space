@@ -1,4 +1,4 @@
-# A Pull Request Has Been Caught By A Community Member.
+# New Pull Request
 
 **PULL REQUEST INFO:** Place pull request info here.
 
@@ -10,6 +10,6 @@
     - [ ] Includes Minor Changes (includes variable changes, method parameters/properties renamed)
     - [ ] Includes Major Changes (includes method renames, change of structure names, a property switched to a method and vice versa)
     - [x] Includes Extreme Changes (includes the fact that this should be unchecked)
-- [ ] Includes changing README.md file.
+- [ ] Includes non-code changes (doc change, README edits...)
     - [ ] Includes Minor Changes (includes typo fixes, title renames, word replacement)
     - [ ] Includes Major Changes (includes everything not listed above)

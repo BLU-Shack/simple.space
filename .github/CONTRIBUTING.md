@@ -14,13 +14,13 @@
 ##### If you prefer coding in a Coding Environment...
 
 1. Fork the Repository.
-2. Click on the **Clone or Download** tab and **Download ZIP**
-3. Unzip the newly-downloaded Zip File.
-4. Go into the Folder.
-5. Open the Folder in your Coding Environment.
+2. Make a directory/folder somewhere.
+3. Copy either the ``HTTPS`` or ``SSH`` of your fork.
+4. Run ``git init`` => ``git remote add origin [CopiedThingHere]`` => ``git pull origin master``
+5. Open the Folder in your Coding Environment. (ensure you are not in the ``src/`` of the directory)
 6. Run ``npm install``
 7. Begin coding.
-8. When finished, push the changes, then go to the Pull Request tab.
+8. When finished, push the changes, and attempt to make a Pull Request.
 
 ##### If you prefer coding in Github...
 

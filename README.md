@@ -84,8 +84,9 @@ Client.on('cacheUpdateAll', (bots, emojis, guilds) => {
 
 **When a successful post is performed**
 ```js
-Client.on('post', (info) => {
-    console.log(`${info.code} ${info.message}`)
+Client.on('post', (info, count) => {
+    console.log(`${info.code} ${info.message}`);
+    console.log(`Successfully posted count ${count}!`)
 })
 ```
 

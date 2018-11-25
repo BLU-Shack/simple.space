@@ -1,7 +1,4 @@
-const FetchOptions = require('./FetchOptions').FetchOptions;
-const Guild = require('./Guild.js').Guild;
-const Bot = require('./Bot.js').Bot;
-const PartialUser = require('./PartialUser.js').PartialUser;
+const { Bot, FetchOptions, Guild, PartialUser } = require('./Classes.js').Classes;
 
 /**
  * Represents any user logged onto botlist.space.

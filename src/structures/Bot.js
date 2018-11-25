@@ -1,6 +1,4 @@
-const FetchOptions = require('./FetchOptions').FetchOptions;
-const Base = require('./Base').Base;
-const PartialUser = require('./PartialUser.js').PartialUser;
+const { FetchOptions, Base, PartialUser } = require('./Classes.js').Classes;
 const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**

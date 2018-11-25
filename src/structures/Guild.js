@@ -1,6 +1,4 @@
-const Base = require('./Base.js').Base;
-const FetchOptions = require('./FetchOptions.js').FetchOptions;
-const PartialUser = require('./PartialUser.js').PartialUser;
+const { Base, FetchOptions, PartialUser } = require('./Classes.js').Classes;
 
 /**
  * Represents any guild that has been submitted onto botlist.space.

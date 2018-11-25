@@ -139,8 +139,10 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const bots = await body.json();
                     if (bots.code) throw new FetchError(bots, 'Bots');
-                    this.bots = new Store(bots.map(bot => [bot.id, new Bot(bot)]));
-                    this.emit('cacheUpdateBots', this.bots);
+                    if (this.options.cache) {
+                        this.bots = new Store(bots.map(bot => [bot.id, new Bot(bot)]));
+                        this.emit('cacheUpdateBots', this.bots);
+                    }
                     const all = !normal ? bots.map(bot => new Bot(bot)) : bots;
                     const resolved = specified ? all.map(bot => bot[specified]) : stringify ? all.map(bot => bot.toString()) : all;
                     if (log) console.log(resolved);
@@ -163,8 +165,10 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const guilds = await body.json();
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
-                    this.guilds = new Store(guilds.map(guild => [guild.id, new Guild(guild)]));
-                    this.emit('cacheUpdateGuilds', this.guilds);
+                    if (this.options.cache) {
+                        this.guilds = new Store(guilds.map(guild => [guild.id, new Guild(guild)]));
+                        this.emit('cacheUpdateGuilds', this.guilds);
+                    }
                     const all = !normal ? guilds.map(guild => new Guild(guild)) : guilds;
                     const resolved = all.map(guild => stringify ? guild.toString() : specified ? guild[specified] : guild);
                     if (log) console.log(resolved);
@@ -187,8 +191,10 @@ class Client extends EventEmitter {
                 .then(async body => {
                     const emojis = await body.json();
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
-                    this.emojis = new Store(emojis.map(emoji => [emoji.id, new Emoji(emoji)]));
-                    this.emit('cacheUpdateEmojis', this.emojis);
+                    if (this.options.cache) {
+                        this.emojis = new Store(emojis.map(emoji => [emoji.id, new Emoji(emoji)]));
+                        this.emit('cacheUpdateEmojis', this.emojis);
+                    }
                     const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
                     const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
                     if (log) console.log(resolved);
@@ -218,8 +224,10 @@ class Client extends EventEmitter {
                 .then(async response => {
                     const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Bot');
-                    this.bots.set(body.id, new Bot(body));
-                    this.emit('cacheUpdateBots', this.bots);
+                    if (this.options.cache) {
+                        this.bots.set(body.id, new Bot(body));
+                        this.emit('cacheUpdateBots', this.bots);
+                    }
                     const bot = !normal ? new Bot(body) : body;
                     const resolved = stringify ? bot.toString() : specified ? bot[specified] : bot;
                     if (log) console.log(resolved);
@@ -245,8 +253,10 @@ class Client extends EventEmitter {
                 .then(async response => {
                     const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Emoji');
-                    this.emojis.set(body.id, new Emoji(body));
-                    this.emit('cacheUpdateEmojis', this.emojis);
+                    if (this.options.cache) {
+                        this.emojis.set(body.id, new Emoji(body));
+                        this.emit('cacheUpdateEmojis', this.emojis);
+                    }
                     const emoji = !normal ? new Emoji(body) : body;
                     const resolved = stringify ? emoji.toString() : specified ? emoji[specified] : emoji;
                     if (log) console.log(resolved);
@@ -272,8 +282,10 @@ class Client extends EventEmitter {
                 .then(async response => {
                     const body = await response.json();
                     if (body.code) throw new FetchError(body, 'Guild');
-                    this.guilds.set(body.id, new Guild(body));
-                    this.emit('cacheUpdateGuilds', this.guilds);
+                    if (this.options.cache) {
+                        this.guilds.set(body.id, new Guild(body));
+                        this.emit('cacheUpdateGuilds', this.guilds);
+                    }
                     const guild = !normal ? new Guild(body) : body;
                     const resolved = stringify ? guild.toString() : specified ? guild[specified] : guild;
                     if (log) console.log(resolved);
@@ -299,8 +311,10 @@ class Client extends EventEmitter {
                 .then(async response => {
                     const emojis = await response.json();
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
-                    for (const emoji of emojis) this.emojis.set(emoji.id, new Emoji(emoji));
-                    this.emit('cacheUpdateEmojis', this.emojis);
+                    if (this.options.cache) {
+                        for (const emoji of emojis) this.emojis.set(emoji.id, new Emoji(emoji));
+                        this.emit('cacheUpdateEmojis', this.emojis);
+                    }
                     const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
                     const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
                     if (log) console.log(resolved);
@@ -404,10 +418,10 @@ class Client extends EventEmitter {
             this.fetchUpvotes({ ids: true, normal: true, log: false, token: token, botID: botID })
                 .then(response => {
                     const res = userID instanceof Array
-                                ? ids
-                                ? userID.filter(id => response.includes(id))
-                                : new Store(userID.map(id => [id, response.includes(id)]))
-                                : response.includes(userID);
+                        ? ids
+                            ? userID.filter(id => response.includes(id))
+                            : new Store(userID.map(id => [id, response.includes(id)]))
+                        : response.includes(userID);
                     if (log) console.log(res);
                     resolve(res);
                 })

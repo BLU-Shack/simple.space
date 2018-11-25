@@ -94,21 +94,23 @@ Options.example(something, ?notNeeded);</code>
 <br>
 
 <code>js
-// First, you have to initialize the package. Obviously.
-const SimpleSpace = require('simple.space');
+// Require the package!
+const Space = require('simple.space');
 
-// options (?SpaceOptions) =&gt; The options for initiation.
-// options.token (?String) =&gt; The API token, required for some actions.
-// options.botID (?String) =&gt; The bot ID for self functions.
-// options.client (?discordjs.Client) =&gt; The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) =&gt; Whether or not to log FETCH actions.
-const Example = new SimpleSpace(?options = { token: false, botID: false, client: false, log: false}); // Example varies</code>
+// options (?ClientOptions) =&gt; The options for initiation.
+// options.token (?string) =&gt; The API token, required for some actions.
+// options.botID (?string) =&gt; The bot ID for self functions.
+// options.client (?discordjs.Client) =&gt; The client for initialization. Used for shortcut of postCount() without needing to supply a value.
+// options.log (?boolean) =&gt; Whether or not to log FETCH actions.
+// options.cacheUpdateTimer (?number) =&gt; The # of milliseconds to wait for each automatic cache update. Set to 0 to disable.
+// options.cache (?boolean) =&gt; Whether or not to enable caching.
+const SpaceClient = new Space.Client(?options = { token: false, botID: false, client: false, log: false, }); // Example varies</code>
 
 For future assumptions, let's say:
-1. <code>options.token</code> is invalid.
-2. <code>options.botID</code> is <code>'228537642583588864'</code> (id goes to the <a href="https://vexera.io">Vexera Bot</a>)
-3. <code>options.client</code> is invalid.
-4. <code>options.log</code> is <code>true</code>.
+1. <code>options.token</code> is <code>null</code>
+2. <code>options.botID</code> is <code>'228537642583588864'</code> (id =&gt; <a href="https://vexera.io">Vexera Bot</a>)
+3. <code>options.client</code> is <code>null</code>
+4. <code>options.log</code> is <code>true</code> because it can.
 
 </details>
 <br>
@@ -117,11 +119,10 @@ For future assumptions, let's say:
 <br>
 
 <code>js
-// Fetches the site statistics.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchStats(?options);
-Example.fetchStats(); // Example varies
-Example.fetchStats({ specified: 'total' }); // Example varies.</code>
+SpaceClient.fetchStats(?options);
+SpaceClient.fetchStats(); // Example varies
+SpaceClient.fetchStats({ specified: 'total' }); // Example varies.</code>
 
 </details>
 <br>
@@ -130,14 +131,10 @@ Example.fetchStats({ specified: 'total' }); // Example varies.</code>
 <br>
 
 <code>js
-// Post your guild count onto the site.
 // options (PostOptions) =&gt; Post Options.
-// options.guildSize (Number | Array&lt;Number&gt;) =&gt; The number/array of numbers to pass to the site.
-// options.token (?String) =&gt; The API token to use. Overrides this.options.token
-// options.botID (?String) =&gt; The Bot ID to use. Overrides this.options.botID
-Example.setGuilds(?options);
-Example.setGuilds({ guildSize: 69 }); // Don't bother.
-Example.setGuilds({ guildSize: 1337, token: 'OOF' }); // You failed.</code>
+SpaceClient.postCount(?options);
+SpaceClient.postCount({ guildSize: 69 }); // Don't bother.
+SpaceClient.postCount({ guildSize: 1337, token: 'OOF' }); // You failed.</code>
 
 </details>
 <br>
@@ -146,12 +143,11 @@ Example.setGuilds({ guildSize: 1337, token: 'OOF' }); // You failed.</code>
 <br>
 
 <code>js
-// Fetch a bot from the site.
-// botID (String) =&gt; The bot ID to fetch from the site.
+// botID (string) =&gt; The bot ID to fetch from the site.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchBot(botID, ?options);
-Example.fetchBot('228537642583588864'); // Example too large
-Example.fetchBot('228537642583588864', { specified: 'username' }); // Vexera</code>
+SpaceClient.fetchBot(botID, ?options);
+SpaceClient.fetchBot('228537642583588864'); // Example too large
+SpaceClient.fetchBot('228537642583588864', { specified: 'username' }); // Vexera</code>
 
 </details>
 <br>
@@ -160,11 +156,10 @@ Example.fetchBot('228537642583588864', { specified: 'username' }); // Vexera</co
 <br>
 
 <code>js
-// Fetches the bot by using the ID supplied during initialization.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchSelf(?options);
-Example.fetchSelf(); // Example too large
-Example.fetchSelf({ specified: 'username' }); // Vexera</code>
+SpaceClient.fetchSelf(?options);
+SpaceClient.fetchSelf(); // Example too large
+SpaceClient.fetchSelf({ specified: 'username' }); // Vexera</code>
 
 </details>
 <br>
@@ -173,12 +168,11 @@ Example.fetchSelf({ specified: 'username' }); // Vexera</code>
 <br>
 
 <code>js
-// Fetches a guild in the database.
-// guildID (String) =&gt; The guild ID to fetch.
+// guildID (string) =&gt; The guild ID to fetch.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchGuild(guildID, ?options);
-Example.fetchGuild('467868565073035284');
-Example.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU Shack</code>
+SpaceClient.fetchGuild(guildID, ?options);
+SpaceClient.fetchGuild('467868565073035284');
+SpaceClient.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU Shack</code>
 
 </details>
 <br>
@@ -187,11 +181,10 @@ Example.fetchGuild('467868565073035284', { specified: 'name' }); // iRED's BLU S
 <br>
 
 <code>js
-// Fetch all bots on the site.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchAllBots(?options);
-Example.fetchAllBots({ specified: 'prefix' }); // [ '!', '?', ... ]
-Example.fetchAllBots({ stringify: true }); // [ '&lt;@139823297389273&gt;', '&lt;@1337133713371337&gt;', ... ]</code>
+SpaceClient.fetchAllBots(?options);
+SpaceClient.fetchAllBots({ specified: 'prefix' }); // [ '!', '?', ... ]
+SpaceClient.fetchAllBots({ stringify: true }); // [ '&lt;@139823297389273&gt;', '&lt;@1337133713371337&gt;', ... ]</code>
 
 </details>
 <br>
@@ -200,11 +193,10 @@ Example.fetchAllBots({ stringify: true }); // [ '&lt;@139823297389273&gt;', '&lt
 <br>
 
 <code>js
-// Fetch all guilds on the site.
 // options (?FetchOptions) =&gt; Fetch Options.
-Example.fetchAllGuilds(?options);
-Example.fetchAllGuilds({ specified: 'id' }); // [ '293829083209323', '1337133713371337', ... ]
-Example.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]</code>
+SpaceClient.fetchAllGuilds(?options);
+SpaceClient.fetchAllGuilds({ specified: 'id' }); // [ '293829083209323', '1337133713371337', ... ]
+SpaceClient.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]</code>
 
 </details>
 <br>
@@ -213,12 +205,11 @@ Example.fetchAllGuilds({ stringify: true }); // [ 'iBLU' ]</code>
 <br>
 
 <code>js
-// Fetch a user that has logged onto the site.
-// userID (String) =&gt; The user ID to fetch.
+// userID (string) =&gt; The user ID to fetch.
 // options (?FetchOptions) Fetch Options.
-Example.fetchUser(userID, ?options);
-Example.fetchUser('235593018332282884'); // Example too large to show
-Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED</code>
+SpaceClient.fetchUser(userID, ?options);
+SpaceClient.fetchUser('235593018332282884'); // Example too large to show
+SpaceClient.fetchUser('235593018332282884', { specified: 'username' }); // iRED</code>
 
 </details>
 <br>
@@ -227,13 +218,24 @@ Example.fetchUser('235593018332282884', { specified: 'username' }); // iRED</cod
 <br>
 
 <code>js
-// Fetch a bot's upvotes in the past 24 hours.
 // options (?UpvoteFetchOptions) =&gt; Upvote Fetch Options.
-// options.ids (?Boolean) =&gt; Whether or not to only fetch the user IDs.
-// options.token (?String) =&gt; The API token to supply.
-Example.fetchUpvotes(?options);
-Example.fetchUpvotes(); // Example varies
-Example.fetchUpvotes({ ids: true }); // Example varies</code>
+SpaceClient.fetchUpvotes(?options);
+SpaceClient.fetchUpvotes(); // Example varies
+SpaceClient.fetchUpvotes({ ids: true }); // Example varies</code>
+
+</details>
+<br>
+<details>
+<summary>Check If User Upvoted Bot</summary>
+<br>
+
+<code>js
+// userID (string | string[]) =&gt; A user ID/array of user IDs to test against.
+// options (?UpvoteFetchOptions) =&gt; Upvote Fetch Options.
+SpaceClient.hasUpvoted(userID, ?options);
+SpaceClient.hasUpvoted('235593018332282884'); // false(?)
+SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121']); // A Store
+SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121'], { ids: true }); // An array containing only the users who have upvoted.</code>
 
 </details>
 <br>
@@ -242,23 +244,16 @@ Example.fetchUpvotes({ ids: true }); // Example varies</code>
 <br>
 
 <code>js
-// Edit a key-value pair in the instance.
 // options (?SpaceOptions) =&gt; The options for initiation.
-// options.token (?String) =&gt; The API token, required for some actions.
-// options.botID (?String) =&gt; The bot ID for self functions.
-// options.client (?discordjs.Client) =&gt; The client for initialization. Used for shortcut of setGuilds() without needing to supply a value.
-// options.log (?Boolean) =&gt; Whether or not to log POST actions.
-Example.edit(options);
-Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };</code>
+SpaceClient.edit(options);
+SpaceClient.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };</code>
 
 </details>
 
-<h2>Documentation</h2><p>https://blu-shack.github.io/simple.space/</p>
+<h2>Full Documentation</h2><p>https://blu-shack.github.io/simple.space/</p>
 <h2>Contributing</h2><ul>
-<li>Go <a href="https://github.com/iREDMe/simple.space/issues/new?template=ISSUE_TEMPLATE.md">here</a> to submit a bug.</li>
-<li>Go <a href="https://github.com/iREDMe/simple.space/issues/new?template=feature_request.md">here</a> to submit a feature request.</li>
-</ul>
-<h3>Want to Pull Request?</h3><p>Well, go ahead and make one already.</p></article>
+<li>Find out <a href="https://github.com/BLU-Shack/simple.space/blob/master/.github/CONTRIBUTING.md">here</a>!</li>
+</ul></article>
     </section>
 
 
@@ -271,7 +266,7 @@ Example.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };</code>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 24 2018 08:27:53 GMT-0800 (Pacific Standard Time) using the Toast theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 24 2018 16:42:13 GMT-0800 (Pacific Standard Time) using the Toast theme.
 </footer>
 
 <script>prettyPrint();</script>

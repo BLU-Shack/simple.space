@@ -1,6 +1,4 @@
-const FetchOptions = require('./FetchOptions').FetchOptions;
-const Base = require('./Base').Base;
-const PartialUser = require('./PartialUser.js').PartialUser;
+const { FetchOptions, Base, PartialUser } = require('./Classes.js').Classes;
 const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**
@@ -17,6 +15,7 @@ class Bot extends Base {
 
         /**
          * The plain bot object itself.
+         * @name Client#bot
          * @readonly
          * @type {object}
          */
@@ -181,8 +180,8 @@ class Bot extends Base {
      * @returns {PartialUser[]} An array of the bot's owners.
      * @example
      * Bot.owners({ specified: 'username' })
-     *  .then(owners => console.log(`The bot owners' usernames are ${owners}`))
-     *  .catch(console.log);
+     *     .then(owners => console.log(`The bot owners' usernames are ${owners}`))
+     *     .catch(console.log);
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

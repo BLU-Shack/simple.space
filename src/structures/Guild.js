@@ -1,6 +1,4 @@
-const Base = require('./Base.js').Base;
-const FetchOptions = require('./FetchOptions.js').FetchOptions;
-const PartialUser = require('./PartialUser.js').PartialUser;
+const { Base, FetchOptions, PartialUser } = require('./Classes.js').Classes;
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
@@ -16,6 +14,7 @@ class Guild extends Base {
 
         /**
          * The plain guild object itself.
+         * @name Guild#guild
          * @readonly
          * @type {object}
          */
@@ -119,8 +118,8 @@ class Guild extends Base {
      * @returns {PartialUser[]} An array of the guild's owners.
      * @example
      * Guild.owners({ specified: 'username' })
-     *  .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
-     *  .catch(console.log);
+     *     .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
+     *     .catch(console.log);
      */
     owners(options = {}) {
         if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');

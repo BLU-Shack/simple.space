@@ -44,11 +44,11 @@ class Store extends Map {
      * @returns {Store} The new Store containing the filtered contents.
      * @example
      * Client.fetchAllBots()
-     *  .then(bots => {
-     *   const onlyApproved = bots.filter(bot => bot.isApproved);
-     *   console.log(`${onlyApproved.size} bots are approved.`);
-     *  })
-     * .catch(console.error);
+     *     .then(bots => {
+     *         const onlyApproved = bots.filter(bot => bot.isApproved);
+     *         console.log(`${onlyApproved.size} bots are approved.`);
+     *     })
+     *     .catch(console.error);
      */
     filter(func, bind) {
         if (typeof func !== 'function') throw new TypeError('func must be a function.');

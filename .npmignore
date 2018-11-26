@@ -1,3 +1,5 @@
 examples-private/
 .github
 .vscode
+.eslintrc.json
+jsdoc.json

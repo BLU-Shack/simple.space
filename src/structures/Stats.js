@@ -7,13 +7,13 @@ class Stats {
      * @param {object} stats The plain stats object, fetched from the API.
      */
     constructor(stats) {
-        Object.defineProperty(this, 'stats', { writable: true, enumerable: false });
-
         /**
          * The plain stats object itself.
+         * @name Stats#stats
+         * @readonly
          * @type {object}
          */
-        this.stats = stats;
+        Object.defineProperty(this, 'stats', { value: stats });
 
         /**
          * All bot information.
@@ -48,12 +48,12 @@ class Stats {
     }
 
     /**
-     * Fetch the total combined number of bots, servers, and users on the site.
+     * Fetch the total combined number of bots, guilds, and users on the site.
      * @readonly
      * @type {number}
      */
     get combined() {
-        return this.bots.total + this.servers + this.users;
+        return this.bots.total + this.guilds + this.users;
     }
 }
 

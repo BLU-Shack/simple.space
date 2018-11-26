@@ -2,21 +2,8 @@ const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
-const Classes = require('./structures/Classes.js').Classes;
-const ClientOptions = Classes.ClientOptions;
-const FetchOptions = Classes.FetchOptions;
-const PostOptions = Classes.PostOptions;
-const UpvoteFetchOptions = Classes.UpvoteFetchOptions;
+const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 
-const Bot = Classes.Bot;
-const Emoji = Classes.Emoji;
-const Guild = Classes.Guild;
-const UpvoteUser = Classes.UpvoteUser;
-const User = Classes.User;
-
-const FetchError = Classes.FetchError;
-const Stats = Classes.Stats;
-const Store = Classes.Store;
 const endpoint = 'https://botlist.space/api';
 
 /**
@@ -211,8 +198,8 @@ class Client extends EventEmitter {
      * @returns {Promise<Bot>} Returns the bot contents/specified item.
      * @example
      * Client.fetchBot('463803888072523797', { specified: 'username' })
-     *  .then(username => console.log(username))
-     *  .catch(console.log);
+     *     .then(username => console.log(username))
+     *     .catch(console.log);
      */
     fetchBot(botID, options = {}) {
         if (!botID) throw new ReferenceError('botID must be present.');
@@ -451,7 +438,7 @@ class Client extends EventEmitter {
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code !== 200) throw new FetchError(body, 'Bot');
-                    this.emit('post', body);
+                    this.emit('post', body, options.guildSize);
                     resolve(body);
                 })
                 .catch(reject);
@@ -515,7 +502,6 @@ Client.prototype.setGuilds = util.deprecate(Client.prototype.setGuilds, 'Client#
  * Emitted when a post is performed.
  *
  * @event Client#post
- * @type {object}
- * @property {number} code
- * @property {string} message
+ * @param {object} info
+ * @param {number|number[]} guildSize
  */

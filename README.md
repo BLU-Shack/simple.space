@@ -56,6 +56,39 @@ For future assumptions, let's say:
 2. ``options.botID`` is ``'228537642583588864'`` (id => [Vexera Bot](https://vexera.io))
 3. ``options.client`` is ``null``
 4. ``options.log`` is ``true`` because it can.
+5. ``options.cacheUpdateTimer`` is its default, ``180000``
+6. ``options.cache`` is true.
+
+</details>
+<br>
+<details>
+<summary>Utilize Cache and Events</summary>
+
+When Events were planned out, cache was somehow shoved in. Events and Cache then combined to give events a more general purpose.
+
+**When Cache is loaded for the first time:**
+```js
+SpaceClient.on('ready', (bots) => {
+    console.log(bots.get('BotID').username) // Varies
+});
+```
+
+**When Cache is updated**
+```js
+Client.on('cacheUpdateAll', (bots, emojis, guilds) => {
+    const [animated, notAnimated] = emojis.split(emoji => emoji.animated); // Animated? I think not
+    console.log(`${animated.size} emojis are animated, while ${notAnimated.size} are not animated.`); // As of 2018-11-25: 254 emojis are animated, while 922 are not animated.
+});
+```
+**Note:** There is also ``cacheUpdateBots``, ``cacheUpdateEmojis``, and ``cacheUpdateGuilds``
+
+**When a successful post is performed**
+```js
+Client.on('post', (info, count) => {
+    console.log(`${info.code} ${info.message}`);
+    console.log(`Successfully posted count ${count}!`)
+})
+```
 
 </details>
 <br>

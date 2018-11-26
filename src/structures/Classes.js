@@ -15,5 +15,5 @@ exports.Classes = {
 
     get FetchError() { return require('./FetchError.js').FetchError; },
     get Stats() { return require('./Stats.js').Stats; },
-    get Store() { return require('./Store.js').Store; }
+    get Store() { return require('@ired_me/red-store'); }
 };

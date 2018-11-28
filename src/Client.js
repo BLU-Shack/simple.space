@@ -53,6 +53,12 @@ class Client extends EventEmitter {
          */
         this.readyAt = null;
 
+        /**
+         * The Timeout when the next cache update occurs.
+         * @type {?NodeJS.Timer}
+         */
+        this.nextCacheUpdate = null;
+
         this.once('ready', () => this.readyAt = new Date());
     }
 
@@ -68,11 +74,13 @@ class Client extends EventEmitter {
     /**
      * Runs the automatic cache if this.options.cache is set to true.
      * @private
+     * @param {boolean} [pass=false] Whether or not to ignore \`\`this.options.cache\`\` and run anyway.
      * @returns {Promise<object>} Updated/normal data i gues.
      * @fires Client#cacheUpdate
      */
-    async _runCache() {
-        if (this.options.cache) {
+    async _runCache(pass = false) {
+        if (typeof pass !== 'boolean') throw new TypeError('pass must be boolean.');
+        if (this.options.cache || pass) {
             await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
             if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
             this.emit('cacheUpdateAll', this.bots, this.emojis, this.guilds);
@@ -109,8 +117,16 @@ class Client extends EventEmitter {
         if (typeof Options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
         if (typeof Options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
         if (Options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
-        this.options = Options;
 
+        if (!Options.cache) {
+            clearTimeout(this.nextCacheUpdate);
+            this.nextCacheUpdate = null;
+        } else if (Options.cache && !this.options.cache) {
+            this._runCache(true)
+            .catch(console.error);
+        }
+
+        this.options = Options;
         return this.options;
     }
 

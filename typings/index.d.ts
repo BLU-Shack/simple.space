@@ -183,7 +183,7 @@ declare module 'simple.space' {
         public toString(): string;
     }
 
-    /** Options when posting Guild Count. */
+    /** Options that are passed when posting the guild count. */
     export class PostOptions {
         constructor(options: object, preset?: ClientOptions);
         public client?: any;
@@ -193,7 +193,7 @@ declare module 'simple.space' {
         public readonly data: string;
     }
 
-    /** The site statistics. */
+    /** Represents the site's statistics information. */
     export class Stats {
         constructor(stats: object);
         private stats: object;

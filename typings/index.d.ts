@@ -19,9 +19,11 @@ declare module 'simple.space' {
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;
         public guilds: Store<string, Guild>;
+        public nextCacheUpdate?: NodeJS.Timer;
         public options: ClientOptions;
         public readyAt?: Date;
         public readonly readyTimestamp?: number;
+
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
         public fetchAllBots(options?: FetchOptions<BotSVs>): Promise<Bot[]>;
         public fetchAllEmojis(options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;

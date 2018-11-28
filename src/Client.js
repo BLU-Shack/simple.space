@@ -108,6 +108,7 @@ class Client extends EventEmitter {
         if (typeof Options.log !== 'boolean') throw new TypeError('options.log must be boolean.');
         if (typeof Options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
         if (typeof Options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
+        if (Options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
         this.options = Options;
 
         return this.options;

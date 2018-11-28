@@ -83,7 +83,7 @@ class Client extends EventEmitter {
         if (typeof pass !== 'boolean') throw new TypeError('pass must be boolean.');
         if (this.options.cache || pass) {
             await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
-            if (this.options.cacheUpdateTimer > 0) setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
+            if (this.options.cacheUpdateTimer > 0) this.nextCacheUpdate = setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
             this.emit('cacheUpdateAll', this.bots, this.emojis, this.guilds);
 
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };

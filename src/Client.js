@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
-const isObject = require('./util/isObject.js');
+const { isObject, check } = require('./util/index.js');
 
 const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 
@@ -109,15 +109,9 @@ class Client extends EventEmitter {
      * @example console.log(Client.edit({ log: false }).options); // { log: false, ... }
      */
     edit(options = ClientOptions.default, preset = false) {
-        if (!options) throw new ReferenceError('options must be defined.');
         if (!isObject(options)) throw new TypeError('options must be an object.');
         const Options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
-        if (Options.token && typeof Options.token !== 'string') throw new TypeError('options.token must be a string.');
-        if (Options.botID && typeof Options.botID !== 'string') throw new TypeError('options.botID must be a string.');
-        if (typeof Options.log !== 'boolean') throw new TypeError('options.log must be boolean.');
-        if (typeof Options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
-        if (typeof Options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
-        if (Options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
+        check.edit(Options);
 
         if (!Options.cache) {
             clearTimeout(this.nextCacheUpdate);

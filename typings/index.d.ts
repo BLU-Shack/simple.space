@@ -210,7 +210,9 @@ declare module 'simple.space' {
     }
 
     /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-     * with additional utility methods. */
+     * with additional utility methods. Its module can
+     * be found [here](https://www.npmjs.com/package/@ired_me/red-store)
+    */
     export class Store<K, V> extends Map<K, V> {
         public array(): V[];
         public clone(): Store<K, V>;
@@ -220,6 +222,7 @@ declare module 'simple.space' {
         public keyArray(): K[];
         public lastIndexOf(key: K, fromIndex?: number): number;
         public map<T>(func: (v: V, k: K, s: Store<K, V>) => T, bind?: any): T[];
+        public flat(strength?: number): Store<K, V>;
         public random(): V;
         public randomKey(): K;
         public randomPair(): (K | V)[];

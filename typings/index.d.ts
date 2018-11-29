@@ -15,6 +15,7 @@ declare module 'simple.space' {
         private static isObject(obj: any): boolean;
         private _runCache(): Promise<object>;
 
+        public static events: string[];
         public static endpoint: string;
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;

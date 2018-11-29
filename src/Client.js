@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
-const { isObject, check } = require('./util/');
+const { isObject, check, events: Events } = require('./util/');
 
 const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 
@@ -45,7 +45,7 @@ class Client extends EventEmitter {
 
         this.edit(options, true); // Note from the Developer: Do Not Touch.
         this._runCache(this.options.cache)
-            .then(({ bots, emojis, guilds }) => this.emit('ready', bots, emojis, guilds))
+            .then(({ bots, emojis, guilds }) => this.emit(Events.ready, bots, emojis, guilds))
             .catch(console.error);
 
         /**
@@ -60,7 +60,16 @@ class Client extends EventEmitter {
          */
         this.nextCacheUpdate = null;
 
-        this.once('ready', () => this.readyAt = new Date());
+        this.once(Events.ready, () => this.readyAt = new Date());
+    }
+
+    /**
+     * All of the events that are emitted, in an array of strings.
+     * @readonly
+     * @type {string[]}
+     */
+    static get events() {
+        return Object.getOwnPropertyNames(Events);
     }
 
     /**
@@ -84,7 +93,7 @@ class Client extends EventEmitter {
         if (this.options.cache || pass) {
             await Promise.all([this.fetchAllBots({ log: false }), this.fetchAllEmojis({ log: false }), this.fetchAllGuilds({ log: false })]);
             if (this.options.cacheUpdateTimer > 0) this.nextCacheUpdate = setTimeout(() => { this._runCache(); }, this.options.cacheUpdateTimer);
-            this.emit('cacheUpdateAll', this.bots, this.emojis, this.guilds);
+            this.emit(Events.cacheUpdateAll, this.bots, this.emojis, this.guilds);
 
             return { bots: this.bots, emojis: this.emojis, guilds: this.guilds };
         } else {
@@ -140,7 +149,7 @@ class Client extends EventEmitter {
                     if (bots.code) throw new FetchError(bots, 'Bots');
                     if (this.options.cache) {
                         this.bots = new Store(bots.map(bot => [bot.id, new Bot(bot)]));
-                        this.emit('cacheUpdateBots', this.bots);
+                        this.emit(Events.cacheUpdateBots, this.bots);
                     }
                     const all = !normal ? bots.map(bot => new Bot(bot)) : bots;
                     const resolved = specified ? all.map(bot => bot[specified]) : stringify ? all.map(bot => bot.toString()) : all;
@@ -166,7 +175,7 @@ class Client extends EventEmitter {
                     if (guilds.code) throw new FetchError(guilds, 'Guilds');
                     if (this.options.cache) {
                         this.guilds = new Store(guilds.map(guild => [guild.id, new Guild(guild)]));
-                        this.emit('cacheUpdateGuilds', this.guilds);
+                        this.emit(Events.cacheUpdateGuilds, this.guilds);
                     }
                     const all = !normal ? guilds.map(guild => new Guild(guild)) : guilds;
                     const resolved = all.map(guild => stringify ? guild.toString() : specified ? guild[specified] : guild);
@@ -192,7 +201,7 @@ class Client extends EventEmitter {
                     if (emojis.code) throw new FetchError(emojis, 'Emojis');
                     if (this.options.cache) {
                         this.emojis = new Store(emojis.map(emoji => [emoji.id, new Emoji(emoji)]));
-                        this.emit('cacheUpdateEmojis', this.emojis);
+                        this.emit(Events.cacheUpdateEmojis, this.emojis);
                     }
                     const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
                     const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
@@ -225,7 +234,7 @@ class Client extends EventEmitter {
                     if (body.code) throw new FetchError(body, 'Bot');
                     if (this.options.cache) {
                         this.bots.set(body.id, new Bot(body));
-                        this.emit('cacheUpdateBots', this.bots);
+                        this.emit(Events.cacheUpdateBots, this.bots);
                     }
                     const bot = !normal ? new Bot(body) : body;
                     const resolved = stringify ? bot.toString() : specified ? bot[specified] : bot;
@@ -254,7 +263,7 @@ class Client extends EventEmitter {
                     if (body.code) throw new FetchError(body, 'Emoji');
                     if (this.options.cache) {
                         this.emojis.set(body.id, new Emoji(body));
-                        this.emit('cacheUpdateEmojis', this.emojis);
+                        this.emit(Events.cacheUpdateEmojis, this.emojis);
                     }
                     const emoji = !normal ? new Emoji(body) : body;
                     const resolved = stringify ? emoji.toString() : specified ? emoji[specified] : emoji;
@@ -283,7 +292,7 @@ class Client extends EventEmitter {
                     if (body.code) throw new FetchError(body, 'Guild');
                     if (this.options.cache) {
                         this.guilds.set(body.id, new Guild(body));
-                        this.emit('cacheUpdateGuilds', this.guilds);
+                        this.emit(Events.cacheUpdateGuilds, this.guilds);
                     }
                     const guild = !normal ? new Guild(body) : body;
                     const resolved = stringify ? guild.toString() : specified ? guild[specified] : guild;
@@ -312,7 +321,7 @@ class Client extends EventEmitter {
                     if (emojis.code) throw new FetchError(emojis, 'Guild');
                     if (this.options.cache) {
                         for (const emoji of emojis) this.emojis.set(emoji.id, new Emoji(emoji));
-                        this.emit('cacheUpdateEmojis', this.emojis);
+                        this.emit(Events.cacheUpdateEmojis, this.emojis);
                     }
                     const all = !normal ? emojis.map(emoji => new Emoji(emoji)) : emojis;
                     const resolved = all.map(emoji => stringify ? emoji.toString() : specified ? emoji[specified] : emoji);
@@ -450,7 +459,7 @@ class Client extends EventEmitter {
                 .then(async resolved => {
                     const body = await resolved.json();
                     if (body.code !== 200) throw new FetchError(body, 'Bot');
-                    this.emit('post', body, options.guildSize);
+                    this.emit(Events.post, body, options.guildSize);
                     resolve(body);
                 })
                 .catch(reject);

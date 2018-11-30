@@ -119,8 +119,7 @@ class Client extends EventEmitter {
      */
     edit(options = ClientOptions.default, preset = false) {
         if (!isObject(options)) throw new TypeError('options must be an object.');
-        const Options = new ClientOptions(options, preset ? ClientOptions.default : this.options);
-        check.edit(Options);
+        const Options = check.edit(new ClientOptions(options, preset ? ClientOptions.default : this.options));
 
         if (!Options.cache) {
             clearTimeout(this.nextCacheUpdate);

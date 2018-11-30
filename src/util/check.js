@@ -10,7 +10,7 @@ class Check {
 		if (typeof options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
 		if (typeof options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
 		if (options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
-		return false;
+		return options;
 	}
 }
 

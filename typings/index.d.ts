@@ -213,26 +213,12 @@ declare module 'simple.space' {
     }
 
     /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-     * with additional utility methods. Its module can
-     * be found [here](https://www.npmjs.com/package/@ired_me/red-store)
+     * with additional utility methods. Its module can be found
+     * [here](https://www.npmjs.com/package/@ired_me/red-store)
     */
-    export class Store<K, V> extends Map<K, V> {
-        public array(): V[];
-        public clone(): Store<K, V>;
-        public concat(...stores: Store<K, V>[]): Store<K, V>;
-        public filter(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): Store<K, V>;
-        public indexOf(key: K, fromIndex?: number): number;
-        public keyArray(): K[];
-        public lastIndexOf(key: K, fromIndex?: number): number;
-        public map<T>(func: (v: V, k: K, s: Store<K, V>) => T, bind?: any): T[];
-        public flat(strength?: number): Store<K, V>;
-        public random(): V;
-        public randomKey(): K;
-        public randomPair(): (K | V)[];
-        public split(func: (v: V, k: K, s: Store<K, V>) => boolean, bind?: any): [Store<K, V>, Store<K, V>];
-    }
+    export import Store = require('@ired_me/red-store');
 
-    /** Fetch Options but for Upvotes. */
+    /** Fetch Options but for when fetching Upvotes. */
     export class UpvoteFetchOptions<T> extends FetchOptions<T> {
         constructor(options?: object, client?: ClientOptions);
         public ids?: boolean;

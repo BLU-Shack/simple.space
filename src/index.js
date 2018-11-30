@@ -1,9 +1,11 @@
 const Classes = require('./structures/Classes.js').Classes;
 const Client = require('./Client.js');
+const Webhook = require('./Webhook.js');
 
 module.exports = {
     // The Client and Version
     get Client() { return Client; },
+    get Webhook() { return Webhook; },
     get version() { return require('../package.json').version; },
 
     // The Main Classes

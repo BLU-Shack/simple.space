@@ -1,7 +1,7 @@
 const WebhookOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
 const express = require('express')();
-const { isObject, check, events } = require('./util/');
+const { isObject, check, events, stream } = require('./util/');
 
 /**
  * Creates a watchable webhook.
@@ -72,15 +72,15 @@ class Webhook extends EventEmitter {
 				res.writeHead(code);
 				res.end();
 			};
+			this.emit(events.debug, req.headers);
 
 			if (req.method !== 'POST') return close(405);
 			else if (req.headers['content-type'] !== 'application/json') return close(415);
 			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403);
-			this.emit(events.debug, 'Pass');
 
 			try {
-				this.emit('pootis', req);
-				res.send('Not done yet!');
+				const contents = JSON.parse(await stream(req));
+				this.emit('pootis', contents);
 			} catch (error) {
 				//
 			}

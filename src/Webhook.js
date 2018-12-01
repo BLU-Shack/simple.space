@@ -5,7 +5,7 @@ const app = express();
 const { isObject, check, stream, webhookEvents: Events } = require('./util/');
 
 /**
- * Creates a watchable webhook.
+ * Creates a Webhook.
  * @class
  * @extends {EventEmitter}
  */

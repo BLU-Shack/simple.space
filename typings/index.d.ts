@@ -305,7 +305,15 @@ declare module 'simple.space' {
     type UpvoteInfo = {
         bot: string,
         timestamp: number,
-        user: User
+        user: LesserUser
+    }
+
+    type LesserUser = {
+        avatar: string,
+        disciminator: string,
+        id: string,
+        short_description: string | boolean,
+        username: string
     }
     //#endregion
 }

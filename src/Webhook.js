@@ -22,7 +22,7 @@ class Webhook extends EventEmitter {
 		this.options = this.edit(options, true);
 
 		/**
-		 * Whether or not the Webhook is actively listening.
+		 * Whether or not the Webhook is active.
 		 * @type {boolean}
 		 */
 		this.active = true;

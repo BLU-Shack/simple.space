@@ -1,6 +1,7 @@
 const WebhookOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
-const express = require('express')();
+const express = require('express');
+const app = express();
 const { isObject, check, stream, webhookEvents: Events } = require('./util/');
 
 /**
@@ -14,6 +15,18 @@ class Webhook extends EventEmitter {
 	 */
 	constructor(options = {}) {
 		super();
+		/**
+		 * The express application used for the Webhook.
+		 * @type {Express}
+		 */
+		this.app = app;
+
+		/**
+		 * All previously used ports.
+		 * @private
+		 * @type {number[]}
+		 */
+		this.ports = [];
 
 		/**
 		 * The Webhook Options.
@@ -26,14 +39,6 @@ class Webhook extends EventEmitter {
 		 * @type {boolean}
 		 */
 		this.active = true;
-
-		/**
-		 * The express application used for the Webhook.
-		 * @type {express}
-		 */
-		this.app = express;
-
-		this.handle();
 	}
 
 	/**
@@ -50,18 +55,20 @@ class Webhook extends EventEmitter {
 	 */
 	get handler() {
 		return async (req, res) => {
-			const close = (code) => {
+			const close = (code, message) => {
 				res.sendStatus(code);
+				this.emit(Events.error, message);
 			};
 
 			if (!this.active) return close(412);
-			else if (req.method !== 'POST') return close(405);
-			else if (req.headers['content-type'] !== 'application/json') return close(415);
-			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403);
+			else if (req.method !== 'POST') return close(405, 'Method Not Allowed');
+			else if (req.headers['content-type'] !== 'application/json') return close(415, 'Unsupported Media Type');
+			else if (req.headers['user-agent'] !== 'botlist.space Webhooks (https://botlist.space)') return close(403, 'Invalid User Agent');
+			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403, 'Forbidden');
 
 			try {
 				const contents = JSON.parse(await stream(req));
-				this.emit(Events.upvote, contents);
+				this.emit(Events.upvote, contents, req.headers);
 				res.status(200).send('OK');
 			} catch (error) {
 				this.emit(Events.error, error);
@@ -79,15 +86,20 @@ class Webhook extends EventEmitter {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const Options = check.webhookEdit(options);
 		this.options = Object.assign(preset ? WebhookOptions : this.options, Options);
+
+		this.handle();
 		return this.options;
 	}
 
 	/**
-	 * Starts handling Mimicked from Discord Bot List's webhook method.
+	 * Starts handling the webhook.
+	 * Does not run if the new port is the same as the old port.
 	 * @returns {boolean}
 	 */
 	handle() {
+		if (this.ports.some(port => this.options.port === port)) return;
 		this.app.post(this.options.path, this.handler).listen(this.options.port);
+		this.ports.push(this.options.port);
 		return true;
 	}
 

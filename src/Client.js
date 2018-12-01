@@ -66,7 +66,7 @@ class Client extends EventEmitter {
     /**
      * All of the events that are emitted, in an array of strings.
      * @readonly
-     * @type {string[]}
+     * @type {ClientEvent[]}
      */
     static get events() {
         return Object.getOwnPropertyNames(Events);

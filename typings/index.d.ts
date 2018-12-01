@@ -16,7 +16,7 @@ declare module 'simple.space' {
         private static isObject(obj: any): boolean;
         private _runCache(): Promise<object>;
 
-        public static events: string[];
+        public static events: ClientEvent[];
         public static endpoint: string;
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;
@@ -65,6 +65,7 @@ declare module 'simple.space' {
 
         public app: Express;
         public active: boolean;
+        public events: WebhookEvent[];
         public options: WebhookOptions;
         public edit(options?: WebhookOptions, preset?: boolean): WebhookOptions;
         public handle(): boolean;
@@ -315,5 +316,9 @@ declare module 'simple.space' {
         short_description: string | boolean,
         username: string
     }
+
+    type ClientEvent = 'ready' | 'post' | 'cacheUpdateAll' | 'cacheUpdateBots' | 'cacheUpdateEmojis' | 'cacheUpdateGuilds';
+
+    type WebhookEvent = 'upvote' | 'error';
     //#endregion
 }

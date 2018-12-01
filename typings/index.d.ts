@@ -57,7 +57,8 @@ declare module 'simple.space' {
         public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
         public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
     }
-
+    
+    /** Introduces a simplified way of detecting upvotes. */
     export class Webhook {
         constructor(options?: WebhookOptions);
         private handler: Function;

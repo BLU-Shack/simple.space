@@ -61,7 +61,7 @@ declare module 'simple.space' {
     /** A simplified way for watching over your bot/guild's upvotes. */
     export class Webhook {
         constructor(options?: WebhookOptions);
-        private handler: Function;
+        private handler: () => Promise<void>
 
         public app: Express;
         public active: boolean;

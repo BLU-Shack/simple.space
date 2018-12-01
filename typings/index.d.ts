@@ -57,7 +57,7 @@ declare module 'simple.space' {
         public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
         public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
     }
-    
+
     /** Introduces a simplified way of detecting upvotes. */
     export class Webhook {
         constructor(options?: WebhookOptions);
@@ -73,11 +73,11 @@ declare module 'simple.space' {
         public open(): Webhook;
 
         public on(event: string, listener: Function): this;
-        public on(event: 'upvote', listener: (contents: UpvoteInfo) => void): this;
+        public on(event: 'upvote', listener: (contents: UpvoteInfo, headers: Headers) => void): this;
         public on(event: 'error', listener: (error: Error) => void): this;
 
         public once(event: string, listener: Function): this;
-        public once(event: 'upvote', listener: (contents: UpvoteInfo) => void): this;
+        public once(event: 'upvote', listener: (contents: UpvoteInfo, headers: Headers) => void): this;
         public once(event: 'error', listener: (error: Error) => void): this;
     }
 
@@ -321,5 +321,15 @@ declare module 'simple.space' {
     type ClientEvent = 'ready' | 'post' | 'cacheUpdateAll' | 'cacheUpdateBots' | 'cacheUpdateEmojis' | 'cacheUpdateGuilds';
 
     type WebhookEvent = 'upvote' | 'error';
+
+    type Headers = {
+        authorization: string,
+        host: string,
+        'content-type': string,
+        'user-agent': string,
+        'content-length': string,
+        'accept-encoding': string,
+        'x-forwarded-for': string
+    }
     //#endregion
 }

@@ -63,6 +63,7 @@ For future assumptions, let's say:
 <br>
 <details>
 <summary>Utilize Cache and Events</summary>
+<br>
 
 When Events were planned out, cache was somehow shoved in. Events and Cache then combined to give events a more general purpose.
 
@@ -88,6 +89,29 @@ Client.on('post', (info, count) => {
     console.log(`${info.code} ${info.message}`);
     console.log(`Successfully posted count ${count}!`)
 })
+```
+
+</details>
+<br>
+<details>
+<summary>Initializing a Webhook</summary>
+<br>
+
+Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed for those who do not know how to work with webhooks.
+
+```js
+// options.port (?number) => The port to listen for.
+// options.path (?string) => The path/endpoint to watch for POSTs.
+// options.token (?string) => The token to validate an upvote.
+const Webhook = new Space.Webhook({ port: 1234, path: '/', token: null });
+
+// Deactivate/reactivate the webhook.
+Webhook.close().open();
+
+// The upvote event.
+Webhook.on('upvote', (body, headers) => {
+    // Do something with the body and/or headers.
+});
 ```
 
 </details>

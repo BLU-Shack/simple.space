@@ -62,8 +62,8 @@ class Webhook extends EventEmitter {
 			};
 
 			if (!this.active) return close(412);
-			else if (req.method !== 'POST') return close(405, 'Method Not Allowed');
-			else if (req.headers['content-type'] !== 'application/json') return close(415, 'Unsupported Media Type');
+			else if (req.method !== 'POST') return close(405, 'Only POST Method is supported');
+			else if (req.headers['content-type'] !== 'application/json') return close(415, 'Media Type must be application/json');
 			else if (req.headers['user-agent'] !== 'botlist.space Webhooks (https://botlist.space)') return close(403, 'Invalid User Agent');
 			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403, 'Forbidden');
 

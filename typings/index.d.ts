@@ -6,6 +6,7 @@
 
 declare module 'simple.space' {
     import { EventEmitter } from 'events';
+    import { Express } from 'express';
     export const version: string;
 
     //#region Classes
@@ -55,6 +56,27 @@ declare module 'simple.space' {
         public once(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
         public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
         public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
+    }
+
+    export class Webhook {
+        constructor(options?: WebhookOptions);
+        private handler: Function;
+
+        public app: Express;
+        public active: boolean;
+        public options: WebhookOptions;
+        public edit(options?: WebhookOptions, preset?: boolean): WebhookOptions;
+        public handle(): boolean;
+        public close(): Webhook;
+        public open(): Webhook;
+
+        public on(event: string, listener: Function): this;
+        public on(event: 'upvote', listener: (contents: UpvoteInfo) => void): this;
+        public on(event: 'error', listener: (error: Error) => void): this;
+
+        public once(event: string, listener: Function): this;
+        public once(event: 'upvote', listener: (contents: UpvoteInfo) => void): this;
+        public once(event: 'error', listener: (error: Error) => void): this;
     }
 
     /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */
@@ -272,5 +294,17 @@ declare module 'simple.space' {
     type StatsSVs = 'bots' | 'guilds' | 'successful' |
         'users' | 'total' | 'approved' |
         'unapproved' | 'combined';
+
+    type WebhookOptions = {
+        port?: number,
+        path?: string,
+        token?: string
+    }
+
+    type UpvoteInfo = {
+        bot: string,
+        timestamp: number,
+        user: User
+    }
     //#endregion
 }

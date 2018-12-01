@@ -50,6 +50,7 @@ class Webhook extends EventEmitter {
 	}
 
 	/**
+	 * The handler used for watching stuff.
 	 * Mimicked from [Discord Bot List's handler](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181).
 	 * @type {Function}
 	 */

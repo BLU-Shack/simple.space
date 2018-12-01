@@ -58,7 +58,7 @@ declare module 'simple.space' {
         public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
     }
 
-    /** Introduces a simplified way of detecting upvotes. */
+    /** A simplified way for watching over your bot/guild's upvotes. */
     export class Webhook {
         constructor(options?: WebhookOptions);
         private handler: Function;

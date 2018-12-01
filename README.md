@@ -102,6 +102,8 @@ Client.on('post', (info, count) => {
 
 Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed for those who do not know how to work with webhooks.
 
+Some code is mimicked from Discord Bot List's official package.
+
 ```js
 // options.port (?number) => The port to listen for.
 // options.path (?string) => The path/endpoint to watch for POSTs.

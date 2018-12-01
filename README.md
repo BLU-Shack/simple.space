@@ -18,6 +18,7 @@ To install, use ``npm i simple.space``; But you already know that, right?
 |Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
 |Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|
 |Uses ``node-fetch`` instead of ``snekfetch``|No Code Example Here, Mate|
+|Webhook Usage|``new Space.Webhook()`` (See Example #3)|
 
 ## Examples
 
@@ -37,6 +38,8 @@ Options.example(something, ?notNeeded);
 <summary>Initialize The Package</summary>
 <br>
 
+Initializing the package is how things work. ;P
+
 ```js
 // Require the package!
 const Space = require('simple.space');
@@ -48,7 +51,7 @@ const Space = require('simple.space');
 // options.log (?boolean) => Whether or not to log FETCH actions.
 // options.cacheUpdateTimer (?number) => The # of milliseconds to wait for each automatic cache update. Set to 0 to disable.
 // options.cache (?boolean) => Whether or not to enable caching.
-const SpaceClient = new Space.Client(?options = { token: false, botID: false, client: false, log: false, }); // Example varies
+const SpaceClient = new Space.Client(?options = { token: null, botID: null, client: null, log: false, cacheUpdateTimer: 180000, cache: false }); // Example varies
 ```
 
 For future assumptions, let's say:
@@ -133,10 +136,12 @@ SpaceClient.fetchStats({ specified: 'total' }); // Example varies.
 <summary>Post Guild Count to the Site</summary>
 <br>
 
+
+
 ```js
 // options (PostOptions) => Post Options.
 SpaceClient.postCount(?options);
-SpaceClient.postCount({ guildSize: 69 }); // Don't bother.
+SpaceClient.postCount(69); // Don't bother trying to run this if you have no token.
 SpaceClient.postCount({ guildSize: 1337, token: 'OOF' }); // You failed.
 ```
 
@@ -159,6 +164,8 @@ SpaceClient.fetchBot('228537642583588864', { specified: 'username' }); // Vexera
 <details>
 <summary>Fetch a Bot using the ID from initialization</summary>
 <br>
+
+Mirror for ``Space.fetchBot(this.options.botID, options)``
 
 ```js
 // options (?FetchOptions) => Fetch Options.
@@ -240,6 +247,8 @@ SpaceClient.fetchUpvotes({ ids: true }); // Example varies
 <summary>Check If User Upvoted Bot</summary>
 <br>
 
+(A copy and paste from the site): If you are using upvote data for specific time-sensitive features (such as in-bot rewards), then you may consider using Webhooks for upvote events instead.
+
 ```js
 // userID (string | string[]) => A user ID/array of user IDs to test against.
 // options (?UpvoteFetchOptions) => Upvote Fetch Options.
@@ -248,6 +257,8 @@ SpaceClient.hasUpvoted('235593018332282884'); // false(?)
 SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121']); // A Store
 SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121'], { ids: true }); // An array containing only the users who have upvoted.
 ```
+
+You can use this package's Webhook class for easy usage. See Example #3.
 
 </details>
 <br>

@@ -304,7 +304,8 @@ declare module 'simple.space' {
     }
 
     type UpvoteInfo = {
-        bot: string,
+        bot?: string,
+        server?: string
         timestamp: number,
         user: LesserUser
     }

@@ -1,7 +1,7 @@
 const WebhookOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
 const express = require('express')();
-const { isObject, check, events, stream } = require('./util/');
+const { isObject, check, stream, webhookEvents: Events } = require('./util/');
 
 /**
  * Creates a watchable webhook.
@@ -38,13 +38,26 @@ class Webhook extends EventEmitter {
 
 	/**
 	 * Mimicked from [Discord Bot List's handler](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181).
+	 * @type {Function}
 	 */
 	get handler() {
-		/**
-		 * @param {express} req
-		 */
-		return () => {
-			//
+		return async (req, res) => {
+			const close = (code) => {
+				res.sendStatus(code);
+			};
+
+			if (!this.active) return close(412);
+			else if (req.method !== 'POST') return close(405);
+			else if (req.headers['content-type'] !== 'application/json') return close(415);
+			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403);
+
+			try {
+				const contents = JSON.parse(await stream(req));
+				this.emit(Events.upvote, contents);
+				res.status(200).send('OK');
+			} catch (error) {
+				this.emit(Events.error, error);
+			}
 		};
 	}
 
@@ -62,29 +75,30 @@ class Webhook extends EventEmitter {
 	}
 
 	/**
-	 * Mimicked from Discord Bot List's webhook method.
+	 * Starts handling Mimicked from Discord Bot List's webhook method.
+	 * @returns {boolean}
 	 */
 	handle() {
-		this.app.listen(this.options.port);
+		this.app.post(this.options.path, this.handler).listen(this.options.port);
+		return true;
+	}
 
-		this.app.post(this.options.path, async (req, res) => {
-			const close = (code) => {
-				res.writeHead(code);
-				res.end();
-			};
-			this.emit(events.debug, req.headers);
+	/**
+	 * Deactivates the webhook.
+	 * @returns {Webhook}
+	 */
+	close() {
+		this.active = false;
+		return this;
+	}
 
-			if (req.method !== 'POST') return close(405);
-			else if (req.headers['content-type'] !== 'application/json') return close(415);
-			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403);
-
-			try {
-				const contents = JSON.parse(await stream(req));
-				this.emit('pootis', contents);
-			} catch (error) {
-				//
-			}
-		});
+	/**
+	 * Reactivates the webhook.
+	 * @returns {Webhook}
+	 */
+	open() {
+		this.active = true;
+		return this;
 	}
 }
 

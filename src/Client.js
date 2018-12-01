@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
-const { isObject, check, events: Events } = require('./util/');
+const { isObject, check, clientEvents: Events } = require('./util/');
 
 const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 

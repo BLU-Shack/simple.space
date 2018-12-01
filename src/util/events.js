@@ -1,9 +1,13 @@
-module.exports = {
+exports.ClientEvents = {
 	post: 'post',
 	ready: 'ready',
-	debug: 'debug',
 	cacheUpdateAll: 'cacheUpdateAll',
 	cacheUpdateBots: 'cacheUpdateBots',
 	cacheUpdateEmojis: 'cacheUpdateEmojis',
 	cacheUpdateGuilds: 'cacheUpdateGuilds',
+};
+
+exports.WebhookEvents = {
+	upvote: 'upvote',
+	error: 'error'
 };

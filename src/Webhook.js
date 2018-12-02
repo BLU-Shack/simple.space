@@ -43,6 +43,7 @@ class Webhook extends EventEmitter {
 
 	/**
 	 * An array of all the webhook's events.
+	 * @readonly
 	 * @type {WebhookEvent[]}
 	 */
 	get events() {
@@ -52,6 +53,7 @@ class Webhook extends EventEmitter {
 	/**
 	 * The handler used for watching stuff.
 	 * Mimicked from [Discord Bot List's handler](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181).
+	 * @readonly
 	 * @type {Function}
 	 */
 	get handler() {

@@ -100,7 +100,7 @@ Client.on('post', (info, count) => {
 <summary>Initializing a Webhook</summary>
 <br>
 
-Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed for those who do not know how to work with webhooks.
+Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed to simplify the usage of webhooks.
 
 Some code is referenced from [dbl-api](https://www.npmjs.com/package/dbl-api)'s [source](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181) [code](https://github.com/xDimGG/dbl-api/blob/master/src/Util.js#L2)
 

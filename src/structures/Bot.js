@@ -185,15 +185,12 @@ class Bot extends Base {
      */
 	owners(options = {}) {
 		if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-		const Options = new FetchOptions(options);
+		const { normal, specified, log, stringify } = new FetchOptions(options);
 
-		if (Options.normal) {
-			return Options.specified ? this.bot.owners.map(owner => owner[Options.specified]) : this.bot.owners;
-		} else {
-			const Owners = Options.stringify ? this.bot.owners.map(owner => new PartialUser(owner).toString()) : this.bot.owners.map(owner => new PartialUser(owner));
-			const resolved = Options.specified ? Owners.map(owner => owner[Options.specified]) : Owners;
-			return resolved;
-		}
+		const all = !normal ? this.bot.owners.map(bot => new PartialUser(bot)) : this.bot.owners;
+		const resolved = all.map(user => specified ? user[specified] || (user.links ? user.links[specified] : undefined) : stringify ? user.toString() : user);
+		if (log) console.log(resolved);
+		return resolved;
 	}
 
 	/**

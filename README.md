@@ -102,7 +102,7 @@ Client.on('post', (info, count) => {
 
 Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed for those who do not know how to work with webhooks.
 
-Some code is mimicked from Discord Bot List's official package.
+Some code is referenced from [dbl-api](https://www.npmjs.com/package/dbl-api)'s [source](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181) [code](https://github.com/xDimGG/dbl-api/blob/master/src/Util.js#L2)
 
 ```js
 // options.port (?number) => The port to listen for.
@@ -276,7 +276,7 @@ SpaceClient.edit({ token: 'API_TOKEN' }); // { 'token': 'API_TOKEN', ... };
 
 </details>
 
-## Full Documentation
+## Full JSDoc Documentation
 
 https://blu-shack.github.io/simple.space/
 

@@ -418,9 +418,9 @@ class Client extends EventEmitter {
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options. Some properties are ignored.
      * @returns {Promise<boolean|Store>} Whether or not the user has upvoted your bot.
      * @example // Note that we will assume that 10382972873823723 did upvote, and 235593018332282884 did not.
-     * @example async () => await SpaceClient.hasUpvoted('235593018332282884'); // false
-     * @example async () => await SpaceClient.hasUpvoted([ '235593018332282884', '10382972873823723 ']); // A Store
-     * @example async () => await SpaceClient.hasUpvoted([ '235593018332282884', '10382972873823723 ']), { ids: true }); // [ '10382972873823723' ]
+     * @example SpaceClient.hasUpvoted('235593018332282884', { log: true }); // false
+     * @example SpaceClient.hasUpvoted([ '235593018332282884', '10382972873823723 '] { log: true }); // A Store
+     * @example SpaceClient.hasUpvoted([ '235593018332282884', '10382972873823723 ']), { ids: true, log: true }); // [ '10382972873823723' ]
      */
 	hasUpvoted(userID, options = {}) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');

@@ -61,12 +61,13 @@ declare module 'simple.space' {
     /** A simplified way for watching over your bot/guild's upvotes. */
     export class Webhook {
         constructor(options?: WebhookOptions);
-        private handler: () => Promise<void>
+        private readonly handler: () => Promise<void>
 
         public app: Express;
         public active: boolean;
-        public events: WebhookEvent[];
         public options: WebhookOptions;
+        public readonly events: WebhookEvent[];
+
         public edit(options?: WebhookOptions, preset?: boolean): WebhookOptions;
         public handle(): boolean;
         public close(): Webhook;
@@ -114,6 +115,7 @@ declare module 'simple.space' {
         public readonly tag: string;
         public readonly url: string;
         public readonly vanityURL?: string;
+
         public owners(options?: FetchOptions<UserSVs>): PartialUser[];
         public toString(): string;
     }
@@ -150,6 +152,7 @@ declare module 'simple.space' {
         public readonly guild: Guild;
         public readonly raw: string;
         public readonly url: string;
+
         public toString(): string;
     }
 
@@ -158,12 +161,14 @@ declare module 'simple.space' {
         constructor(error: object, name: string);
         public message: string;
         public name: string;
+
         public toString(): string;
     }
 
     /** Options when Fetching. */
     export class FetchOptions<T> {
         constructor(options?: object, preset?: ClientOptions);
+
         public log?: boolean;
         public specified?: T;
         public normal?: boolean;
@@ -189,6 +194,7 @@ declare module 'simple.space' {
         public vanity?: string;
         public readonly url: string;
         public readonly vanityURL?: string;
+
         public owners(options?: FetchOptions<UserSVs>): PartialUser[];
     }
 
@@ -202,17 +208,19 @@ declare module 'simple.space' {
         public githubUsername?: string;
         public gitlabUsername?: string;
         public shortDescription?: string;
+        public username: string;
         public readonly githubURL?: string;
         public readonly gitlabURL?: string;
         public readonly tag: string;
         public readonly url: string;
-        public username: string;
+
         public toString(): string;
     }
 
     /** Options that are passed when posting the guild count. */
     export class PostOptions {
         constructor(options: object, preset?: ClientOptions);
+
         public client?: any;
         public botID?: string;
         public guildSize?: number | number[];
@@ -245,6 +253,7 @@ declare module 'simple.space' {
     /** Fetch Options but for when fetching Upvotes. */
     export class UpvoteFetchOptions<T> extends FetchOptions<T> {
         constructor(options?: object, client?: ClientOptions);
+
         public ids?: boolean;
         public token?: string;
         public botID?: string;
@@ -253,6 +262,7 @@ declare module 'simple.space' {
     /** Represents a user with full information on the site. */
     export class User extends PartialUser {
         constructor(user: object);
+
         public bots(options?: FetchOptions<BotSVs>): Bot[];
         public guilds(options?: FetchOptions<GuildSVs>): Guild[];
     }
@@ -260,6 +270,7 @@ declare module 'simple.space' {
     /** Represents a user fetched through checking a Bot's upvotes. */
     export class UpvoteUser {
         constructor(body: object);
+
         public timestamp: number;
         public user: PartialUser;
     }

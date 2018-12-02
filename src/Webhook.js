@@ -15,8 +15,10 @@ class Webhook extends EventEmitter {
 	 */
 	constructor(options = {}) {
 		super();
+
 		/**
 		 * The express application used for the Webhook.
+		 * @private
 		 * @type {Express}
 		 */
 		this.app = app;
@@ -63,7 +65,7 @@ class Webhook extends EventEmitter {
 				this.emit(Events.error, message);
 			};
 
-			if (!this.active) return close(412);
+			if (!this.active) return close(412, 'Deactivated');
 			else if (req.method !== 'POST') return close(405, 'Only POST Method is supported');
 			else if (req.headers['content-type'] !== 'application/json') return close(415, 'Media Type must be application/json');
 			else if (req.headers['user-agent'] !== 'botlist.space Webhooks (https://botlist.space)') return close(403, 'Invalid User Agent');

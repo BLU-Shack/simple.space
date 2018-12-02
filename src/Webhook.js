@@ -1,4 +1,4 @@
-const WebhookOptions = require('./structures/options/WebhookOptions.js');
+const DefaultOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
 const express = require('express');
 const app = express();
@@ -83,14 +83,13 @@ class Webhook extends EventEmitter {
 
 	/**
 	 * Edits the Webhook Options.
-	 * @param {WebhookOptions} [options=WebhookOptions]
+	 * @param {WebhookOptions} [options={}]
 	 * @param {boolean} [preset=false]
 	 * @returns {WebhookOptions}
 	 */
-	edit(options = WebhookOptions, preset = false) {
+	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const Options = check.webhookEdit(options);
-		this.options = Object.assign(preset ? WebhookOptions : this.options, Options);
+		this.options = check.webhookEdit(Object.assign(preset ? DefaultOptions : this.options, options));
 
 		this.handle();
 		return this.options;

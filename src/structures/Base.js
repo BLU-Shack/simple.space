@@ -3,16 +3,16 @@
  * @class
  */
 class Base {
-    /**
+	/**
      * @param {object} base A Bot/Emoji/Guild/User object fetched from the API.
      */
-    constructor(base) {
-        /**
+	constructor(base) {
+		/**
          * The Base's ID.
          * @type {string}
          */
-        this.id = base.id;
-    }
+		this.id = base.id;
+	}
 }
 
 exports.Base = Base;

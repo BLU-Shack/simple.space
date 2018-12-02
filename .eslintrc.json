@@ -87,6 +87,10 @@
         "space-infix-ops": "error",
         "space-unary-ops": "error",
         "spaced-comment": "error",
+        "indent": [
+            "error",
+            "tab"
+        ],
         "yoda": "error"
     }
 }

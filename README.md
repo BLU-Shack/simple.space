@@ -138,8 +138,6 @@ SpaceClient.fetchStats({ specified: 'total' }); // Example varies.
 <summary>Post Guild Count to the Site</summary>
 <br>
 
-
-
 ```js
 // options (PostOptions) => Post Options.
 SpaceClient.postCount(?options);

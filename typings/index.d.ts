@@ -79,7 +79,7 @@ declare module 'simple.space' {
 
         public once(event: string, listener: Function): this;
         public once(event: 'upvote', listener: (contents: WebhookInfo, headers: Headers) => void): this;
-        public once(event: 'error', listener: (error: string) => void): this;
+        public once(event: 'error', listener: (error: Error | string) => void): this;
     }
 
     /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */

@@ -43,19 +43,19 @@ declare module 'simple.space' {
         public setGuilds(options?: PostOptions): Promise<object>;
         public postCount(options?: number | PostOptions): Promise<object>;
 
-        public on(event: string, listener: Function): this;
         public on(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public on(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public on(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
         public on(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-        public on(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
+		public on(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
+		public on(event: string, listener: Function): this;
 
-        public once(event: string, listener: Function): this;
         public once(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
         public once(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
         public once(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
         public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-        public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
+		public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
+		public once(event: string, listener: Function): this;
     }
 
     /** A simplified way for watching over your bot/guild's upvotes. */
@@ -73,13 +73,13 @@ declare module 'simple.space' {
         public close(): Webhook;
         public open(): Webhook;
 
-        public on(event: string, listener: Function): this;
         public on(event: 'upvote', listener: (contents: WebhookInfo, headers: Headers) => void): this;
-        public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: 'error', listener: (error: Error) => void): this;
+		public on(event: string, listener: Function): this;
 
-        public once(event: string, listener: Function): this;
         public once(event: 'upvote', listener: (contents: WebhookInfo, headers: Headers) => void): this;
-        public once(event: 'error', listener: (error: Error | string) => void): this;
+		public once(event: 'error', listener: (error: Error | string) => void): this;
+		public once(event: string, listener: Function): this;
     }
 
     /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */

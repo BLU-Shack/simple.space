@@ -323,7 +323,7 @@ declare module 'simple.space' {
 
     type LesserUser = {
         avatar: string,
-        disciminator: string,
+        discriminator: string,
         id: string,
         short_description: string | boolean,
         username: string

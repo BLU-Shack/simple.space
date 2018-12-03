@@ -274,7 +274,8 @@ declare module 'simple.space' {
         public timestamp: number;
         public user: PartialUser;
 	}
-	
+
+	/** The Webhook Info, used when emitting a webhook POST. */
 	export class WebhookInfo {
 		constructor(info: any);
 		public recipientID: string;
@@ -282,6 +283,7 @@ declare module 'simple.space' {
 		public user: WebhookUser
 	}
 
+	/** Represents a user through a webhook POST. */
 	export class WebhookUser {
 		constructor(user: object);
 

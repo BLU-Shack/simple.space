@@ -17,6 +17,7 @@ module.exports = {
 	// The Extension Classes
 	get PartialUser() { return Classes.PartialUser; },
 	get UpvoteUser() { return Classes.UpvoteUser; },
+	get WebhookUser() { return Classes.WebhookUser; },
 	get Base() { return Classes.Base; },
 
 	// The Options for Fetch/Post/Init
@@ -27,6 +28,7 @@ module.exports = {
 
 	// Misc Classes
 	get FetchError() { return Classes.FetchError; },
+	get WebhookInfo() { return Classes.WebhookInfo; },
 	get Stats() { return Classes.Stats; },
 	get Store() { return Classes.Store; }
 };

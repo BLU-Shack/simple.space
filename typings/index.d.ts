@@ -74,11 +74,11 @@ declare module 'simple.space' {
         public open(): Webhook;
 
         public on(event: string, listener: Function): this;
-        public on(event: 'upvote', listener: (contents: UpvoteInfo, headers: Headers) => void): this;
+        public on(event: 'upvote', listener: (contents: WebhookInfo, headers: Headers) => void): this;
         public on(event: 'error', listener: (error: Error) => void): this;
 
         public once(event: string, listener: Function): this;
-        public once(event: 'upvote', listener: (contents: UpvoteInfo, headers: Headers) => void): this;
+        public once(event: 'upvote', listener: (contents: WebhookInfo, headers: Headers) => void): this;
         public once(event: 'error', listener: (error: Error) => void): this;
     }
 
@@ -273,7 +273,24 @@ declare module 'simple.space' {
 
         public timestamp: number;
         public user: PartialUser;
-    }
+	}
+	
+	export class WebhookInfo {
+		constructor(info: any);
+		public recipientID: string;
+		public timestamp: number
+		public user: WebhookUser
+	}
+
+	export class WebhookUser {
+		constructor(user: object);
+
+		public avatar: string;
+		public discriminator: string;
+		public id: string;
+		public short_description: string | boolean;
+		public username: string;
+	}
     //#endregion
 
     //#region Typedefs
@@ -312,21 +329,6 @@ declare module 'simple.space' {
         port?: number,
         path?: string,
         token?: string
-    }
-
-    type UpvoteInfo = {
-        bot?: string,
-        server?: string
-        timestamp: number,
-        user: LesserUser
-    }
-
-    type LesserUser = {
-        avatar: string,
-        discriminator: string,
-        id: string,
-        short_description: string | boolean,
-        username: string
     }
 
     type ClientEvent = 'ready' | 'post' | 'cacheUpdateAll' | 'cacheUpdateBots' | 'cacheUpdateEmojis' | 'cacheUpdateGuilds';

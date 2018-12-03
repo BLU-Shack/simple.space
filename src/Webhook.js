@@ -2,6 +2,7 @@ const DefaultOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
 const express = require('express');
 const app = express();
+const { WebhookInfo } = require('./structures/Classes.js').Classes; // eslint-disable-line no-unused-vars
 const { isObject, check, stream, webhookEvents: Events } = require('./util/');
 
 /**
@@ -73,7 +74,7 @@ class Webhook extends EventEmitter {
 
 			try {
 				const contents = JSON.parse(await stream(req));
-				this.emit(Events.upvote, contents, req.headers);
+				this.emit(Events.upvote, new WebhookInfo(contents), req.headers);
 				res.status(200).send('OK');
 			} catch (error) {
 				this.emit(Events.error, error);
@@ -127,3 +128,17 @@ class Webhook extends EventEmitter {
 }
 
 module.exports = Webhook;
+
+/**
+ * @typedef {object} UpvoteInfo The
+ * @property {string} [bot] The bot ID. Will instead be the guild ID if upvote comes from a guild.
+ * @property {string} [guild] The guild ID. Will instead be the bot ID if upvote comes from a bot.
+ * @property {number} timestamp The timestamp in which the upvote was registered.
+ * @property {LesserUser} user The user who upvoted the bot/guild.
+ */
+
+/**
+ * Emitted when a user upvotes the bot/guild.
+ * @event Webhook#upvote
+ * @param {}
+ */

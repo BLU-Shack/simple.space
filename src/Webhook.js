@@ -73,7 +73,7 @@ class Webhook extends EventEmitter {
 			else if (this.options.token && req.headers['authorization'] !== this.options.token) return close(403, 'Forbidden');
 
 			try {
-				const contents = JSON.parse(await stream(req));
+				const contents = await stream(req);
 				this.emit(Events.upvote, new WebhookInfo(contents), req.headers);
 				res.status(200).send('OK');
 			} catch (error) {

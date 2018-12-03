@@ -11,6 +11,6 @@ module.exports = (request, limit = 1048576) => {
 		});
 
 		request.once('error', reject);
-		request.once('end', () => resolve(data));
+		request.once('end', () => resolve(JSON.parse(data)));
 	});
 };

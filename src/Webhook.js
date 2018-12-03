@@ -134,11 +134,18 @@ module.exports = Webhook;
  * @property {string} [bot] The bot ID. Will instead be the guild ID if upvote comes from a guild.
  * @property {string} [guild] The guild ID. Will instead be the bot ID if upvote comes from a bot.
  * @property {number} timestamp The timestamp in which the upvote was registered.
- * @property {LesserUser} user The user who upvoted the bot/guild.
+ * @property {WebhookUser} user The user who upvoted the bot/guild.
  */
 
 /**
  * Emitted when a user upvotes the bot/guild.
  * @event Webhook#upvote
- * @param {}
+ * @param {UpvoteInfo} contents The contents.
+ * @param {object} headers The headers.
+ */
+
+/**
+ * Emitted when an error occurs.
+ * @event Webhook#error
+ * @param {string} message The error message.
  */

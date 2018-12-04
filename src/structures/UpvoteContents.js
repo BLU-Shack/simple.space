@@ -3,7 +3,7 @@ const PartialUser = require('./PartialUser.js').PartialUser;
 /**
  * A class that is used for fetching user upvotes.
  */
-class UpvoteUser {
+class UpvoteContents {
 	/**
      * @param {object} body The user contents.
      */
@@ -22,4 +22,4 @@ class UpvoteUser {
 	}
 }
 
-exports.UpvoteUser = UpvoteUser;
+exports.UpvoteContents = UpvoteContents;

@@ -3,7 +3,7 @@ const Fetch = require('node-fetch');
 const util = require('util'); // eslint-disable-line no-unused-vars
 const { isObject, check, clientEvents: Events } = require('./util/');
 
-const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteUser, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
+const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions, Bot, Emoji, Guild, UpvoteContents, User, FetchError, Stats, Store } = require('./structures/Classes.js').Classes;
 
 const endpoint = 'https://botlist.space/api';
 
@@ -365,7 +365,7 @@ class Client extends EventEmitter {
 	/**
      * Fetch users in the last 24 hours who have upvoted your bot.
      * @param {UpvoteFetchOptions} [options={}] Upvote Fetch Options.
-     * @returns {Promise<UpvoteUser[]|string[]>} The array of the user objects/user IDs.
+     * @returns {Promise<UpvoteContents[]|string[]>} The array of the user objects/user IDs.
      * @example Client.fetchUpvotes({ ids: true, log: true }); // { ... }
      */
 	fetchUpvotes(options = {}) {
@@ -378,7 +378,7 @@ class Client extends EventEmitter {
 				.then(async response => {
 					const body = await response.json();
 					if (body.code) throw new FetchError(body, 'Bot');
-					const upvotes = body.map(contents => !ids ? !normal ? new UpvoteUser(contents) : contents : contents);
+					const upvotes = body.map(contents => !ids ? !normal ? new UpvoteContents(contents) : contents : contents);
 					const resolved = upvotes.map(contents => stringify ? (!ids ? contents.user.toString() : `<@${contents}>`) : specified ? contents[specified] || contents.user[specified] || (contents.user.links ? contents.user.links[specified] : undefined) : contents);
 					if (log) console.log(resolved);
 					resolve(resolved);

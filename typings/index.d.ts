@@ -36,7 +36,7 @@ declare module 'simple.space' {
         public fetchGuildEmojis(guildID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
         public fetchSelf(options?: FetchOptions<BotSVs>): Promise<Bot>;
         public fetchStats(options?: FetchOptions<StatsSVs>): Promise<Stats>;
-        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteUser[] | string[]>;
+        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteContents[] | string[]>;
         public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
         public hasUpvoted(userID: string[], options?: UpvoteFetchOptions<any>): Promise<Store<string, boolean> | string[]>;
         public hasUpvoted(userID: string, options?: UpvoteFetchOptions<any>): Promise<boolean>;
@@ -267,8 +267,8 @@ declare module 'simple.space' {
         public guilds(options?: FetchOptions<GuildSVs>): Guild[];
     }
 
-    /** Represents a user fetched through checking a Bot's upvotes. */
-    export class UpvoteUser {
+    /** Represents upvote contents fetched through checking a Bot's upvotes. */
+    export class UpvoteContents {
         constructor(body: object);
 
         public timestamp: number;

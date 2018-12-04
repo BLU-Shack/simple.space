@@ -1,7 +1,8 @@
 const PartialUser = require('./PartialUser.js').PartialUser;
 
 /**
- * A class that is used for fetching user upvotes.
+ * Represents the contents of a user who has upvoted a bot/guild.
+ * @class
  */
 class UpvoteContents {
 	/**

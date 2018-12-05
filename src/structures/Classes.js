@@ -8,10 +8,10 @@ exports.Classes = {
 	get Guild() { return require('./Guild.js').Guild; },
 	get User() { return require('./User.js').User; },
 
-	get ClientOptions() { return require('./options/ClientOptions.js').ClientOptions; },
-	get FetchOptions() { return require('./options/FetchOptions.js').FetchOptions; },
-	get PostOptions() { return require('./options/PostOptions.js').PostOptions; },
-	get UpvoteFetchOptions() { return require('./options/UpvoteFetchOptions.js').UpvoteFetchOptions; },
+	get ClientOptions() { return require('../options/ClientOptions.js').ClientOptions; },
+	get FetchOptions() { return require('../options/FetchOptions.js').FetchOptions; },
+	get PostOptions() { return require('../options/PostOptions.js').PostOptions; },
+	get UpvoteFetchOptions() { return require('../options/UpvoteFetchOptions.js').UpvoteFetchOptions; },
 
 	get FetchError() { return require('./FetchError.js').FetchError; },
 	get Stats() { return require('./Stats.js').Stats; },

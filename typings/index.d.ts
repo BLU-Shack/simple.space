@@ -290,8 +290,11 @@ declare module 'simple.space' {
 		public avatar: string;
 		public discriminator: string;
 		public id: string;
-		public short_description: string | boolean;
+		public shortDescription: string | boolean;
 		public username: string;
+		public readonly tag: string;
+
+		public toString(): string;
 	}
     //#endregion
 
@@ -345,6 +348,6 @@ declare module 'simple.space' {
         'content-length': string,
         'accept-encoding': string,
         'x-forwarded-for': string
-    }
+	}
     //#endregion
 }

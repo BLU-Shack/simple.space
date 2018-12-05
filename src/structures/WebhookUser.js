@@ -49,10 +49,20 @@ class WebhookUser {
 
 	/**
 	 * The user's tag.
+	 * @readonly
 	 * @type {string}
 	 */
 	get tag() {
 		return this.user.tag;
+	}
+
+	/**
+	 * Returns the text-that-transforms-into-a-Discord-Mention.
+	 * @returns {string}
+	 * @example console.log(`${webhookUser} is not cool.`); // <@235593018332282884> is not cool.
+	 */
+	toString() {
+		return `<@${this.id}>`;
 	}
 }
 

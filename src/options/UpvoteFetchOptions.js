@@ -1,4 +1,4 @@
-const { ClientOptions, FetchOptions } = require('../Classes.js').Classes;
+const { ClientOptions, FetchOptions } = require('./index.js');
 
 /**
  * Fetch Options when fetching a bot's upvotes.

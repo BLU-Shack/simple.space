@@ -1,4 +1,5 @@
 const Classes = require('./structures/Classes.js').Classes;
+const Options = require('./options/');
 const Client = require('./Client.js');
 const Webhook = require('./Webhook.js');
 
@@ -20,11 +21,12 @@ module.exports = {
 	get WebhookUser() { return Classes.WebhookUser; },
 	get Base() { return Classes.Base; },
 
-	// The Options for Fetch/Post/Init
-	get ClientOptions() { return Classes.ClientOptions; },
-	get FetchOptions() { return Classes.FetchOptions; },
-	get PostOptions() { return Classes.PostOptions; },
-	get UpvoteFetchOptions() { return Classes.UpvoteFetchOptions; },
+	// All Options.
+	get ClientOptions() { return Options.ClientOptions; },
+	get FetchOptions() { return Options.FetchOptions; },
+	get PostOptions() { return Options.PostOptions; },
+	get UpvoteFetchOptions() { return Options.UpvoteFetchOptions; },
+	get WebhookOptions() { return Options.WebhookOptions; },
 
 	// Misc Classes
 	get FetchError() { return Classes.FetchError; },

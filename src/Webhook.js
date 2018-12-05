@@ -1,8 +1,8 @@
-const DefaultOptions = require('./structures/options/WebhookOptions.js');
 const EventEmitter = require('events');
 const express = require('express');
 const app = express();
 const { WebhookInfo } = require('./structures/Classes.js').Classes; // eslint-disable-line no-unused-vars
+const { WebhookOptions: DefaultOptions } = require('./options/');
 const { isObject, check, stream, webhookEvents: Events } = require('./util/');
 
 /**
@@ -74,7 +74,7 @@ class Webhook extends EventEmitter {
 
 			try {
 				const contents = await stream(req);
-				this.emit(Events.upvote, new WebhookInfo(contents), req.headers);
+				this.emit(Events.upvote, !this.options.normal ? new WebhookInfo(contents) : contents, req.headers);
 				res.status(200).send('OK');
 			} catch (error) {
 				this.emit(Events.error, error);

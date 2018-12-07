@@ -18,7 +18,6 @@ To install, use ``npm i simple.space``; But you already know that, right?
 |Uses ``fetchThing()`` instead of ``getThing()``|``Client.fetchBot('botID')``|
 |Includes FetchOptions|``Client.fetchGuild('guildID', { specified: 'name' })``|
 |Uses ``node-fetch`` instead of ``snekfetch``|No Code Example Here, Mate|
-|Webhook Usage|``new Space.Webhook()`` (See Example #3)|
 
 ## Examples
 
@@ -92,31 +91,6 @@ Client.on('post', (info, count) => {
     console.log(`${info.code} ${info.message}`);
     console.log(`Successfully posted count ${count}!`)
 })
-```
-
-</details>
-<br>
-<details>
-<summary>Initializing a Webhook</summary>
-<br>
-
-Bots and Guilds listed on the site have an "Upvote URL" parameter where the site POSTs data to the endpoint URL given to the site. This was designed to simplify the usage of webhooks.
-
-Some code is referenced from [dbl-api](https://www.npmjs.com/package/dbl-api)'s [source](https://github.com/xDimGG/dbl-api/blob/master/src/Client.js#L181) [code](https://github.com/xDimGG/dbl-api/blob/master/src/Util.js#L2)
-
-```js
-// options.port (?number) => The port to listen for.
-// options.path (?string) => The path/endpoint to watch for POSTs.
-// options.token (?string) => The bot/guild's API token to validate an upvote.
-const Webhook = new Space.Webhook({ port: 1234, path: '/', token: null });
-
-// Deactivate/reactivate the webhook.
-Webhook.close().open();
-
-// The upvote event.
-Webhook.on('upvote', (body, headers) => {
-    // Do something with the body and/or headers.
-});
 ```
 
 </details>
@@ -247,7 +221,7 @@ SpaceClient.fetchUpvotes({ ids: true }); // Example varies
 <summary>Check If User Upvoted Bot</summary>
 <br>
 
-(A copy and paste from the site): If you are using upvote data for specific time-sensitive features (such as in-bot rewards), then you may consider using Webhooks for upvote events instead.
+(A copy and paste from the site): If you are using upvote data for specific time-sensitive features (such as in-bot rewards), then you may consider using [Webhooks](https://github.com/BLU-Shack/webhook.space) for upvote events instead.
 
 ```js
 // userID (string | string[]) => A user ID/array of user IDs to test against.
@@ -257,8 +231,6 @@ SpaceClient.hasUpvoted('235593018332282884'); // false(?)
 SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121']); // A Store
 SpaceClient.hasUpvoted(['235593018332282884', '267445058268037121'], { ids: true }); // An array containing only the users who have upvoted.
 ```
-
-You can use this package's Webhook class for easy usage. See Example #3.
 
 </details>
 <br>

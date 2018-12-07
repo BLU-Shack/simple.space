@@ -12,14 +12,6 @@ class Check {
 		if (options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
 		return options;
 	}
-
-	static webhookEdit(options) {
-		if (options.port && typeof options.port !== 'number') throw new TypeError('options.port must be a number.');
-		if (options.path && typeof options.path !== 'string') throw new TypeError('options.path must be a string.');
-		if (!options.path.startsWith('/')) throw new SyntaxError('options.path must start with \'/\' ');
-		if (options.token && typeof options.token !== 'string') throw new TypeError('options.token must be a string.');
-		return options;
-	}
 }
 
 module.exports = Check;

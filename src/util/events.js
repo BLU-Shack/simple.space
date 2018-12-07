@@ -10,12 +10,3 @@ exports.ClientEvents = {
 	cacheUpdateEmojis: 'cacheUpdateEmojis',
 	cacheUpdateGuilds: 'cacheUpdateGuilds',
 };
-
-/**
- * @typedef {string} WebhookEvent
- * All events that the Webhook uses.
- */
-exports.WebhookEvents = {
-	upvote: 'upvote',
-	error: 'error'
-};

@@ -1,4 +1,4 @@
-const PartialUser = require('./PartialUser.js').PartialUser;
+const PartialUser = require('./User.js');
 
 /**
  * Represents the contents of a user who has upvoted a bot/guild.
@@ -23,4 +23,4 @@ class UpvoteContents {
 	}
 }
 
-exports.UpvoteContents = UpvoteContents;
+module.exports = UpvoteContents;

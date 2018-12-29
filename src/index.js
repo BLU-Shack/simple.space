@@ -1,5 +1,5 @@
-const Classes = require('./structures/Classes.js').Classes;
-const Options = require('./options/');
+const Classes = require('./structures/');
+const Options = require('./structures/options/');
 const Client = require('./Client.js');
 
 module.exports = {
@@ -14,8 +14,6 @@ module.exports = {
 	get User() { return Classes.User; },
 
 	// The Extension Classes
-	get PartialUser() { return Classes.PartialUser; },
-	get UpvoteUser() { return Classes.UpvoteUser; },
 	get Base() { return Classes.Base; },
 
 	// All Options.

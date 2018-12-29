@@ -4,12 +4,13 @@ class Check {
 	}
 
 	static edit(options) {
-		if (options.token && typeof options.token !== 'string') throw new TypeError('options.token must be a string.');
-		if (options.botID && typeof options.botID !== 'string') throw new TypeError('options.botID must be a string.');
-		if (typeof options.log !== 'boolean') throw new TypeError('options.log must be boolean.');
+		if (!options.userToken && !options.botToken) throw new ReferenceError('Either a user/bot API token must be provided.');
+		if (typeof options.userToken !== 'string' && !options.botToken) throw new TypeError('options.userToken must be a string.');
+		if (typeof options.botToken !== 'string' && !options.userToken) throw new TypeError('options.botToken must be a string.');
 		if (typeof options.cache !== 'boolean') throw new TypeError('options.cache must be boolean.');
-		if (typeof options.cacheUpdateTimer !== 'number') throw new TypeError('options.cacheUpdateTimer must be a number.');
-		if (options.cacheUpdateTimer < 500) throw new RangeError('options.cacheUpdateTimer must be greater than 500 milliseconds.');
+		if (typeof options.autoCache !== 'boolean') throw new TypeError('options.autoCache must be boolean.');
+		if (typeof options.autoCacheInterval !== 'number') throw new TypeError('options.autoCacheInterval must be a number.');
+		if (options.autoCacheInterval <= 30000) throw new RangeError('options.autoCacheInterval must be greater than 30000 milliseconds');
 		return options;
 	}
 }

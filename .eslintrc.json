@@ -19,7 +19,8 @@
             "error",
             "property"
         ],
-        "handle-callback-err": "off",
+		"handle-callback-err": "off",
+		"max-len": ["error", 140],
         "max-nested-callbacks": [
             "error",
             {

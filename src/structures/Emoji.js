@@ -1,4 +1,4 @@
-const { Base, Guild } = require('./Classes.js').Classes;
+const { Base, Guild } = require('.');
 
 /**
  * Represents any emoji on botlist.space.
@@ -85,4 +85,4 @@ class Emoji extends Base {
 	}
 }
 
-exports.Emoji = Emoji;
+module.exports = Emoji;

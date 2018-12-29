@@ -1,5 +1,4 @@
-const { Base, PartialUser } = require('./Classes.js').Classes;
-const { FetchOptions } = require('../options/');
+const { Base } = require('.');
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
@@ -114,25 +113,6 @@ class Guild extends Base {
 	}
 
 	/**
-     * Get the guild's owners.
-     * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {PartialUser[]} An array of the guild's owners.
-     * @example
-     * Guild.owners({ specified: 'username' })
-     *     .then(owners => console.log(`The guild owners' usernames are: ${owners}`))
-     *     .catch(console.log);
-     */
-	owners(options = {}) {
-		if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-		const { normal, specified, log, stringify } = new FetchOptions(options);
-
-		const all = !normal ? this.guild.owners.map(bot => new PartialUser(bot)) : this.guild.owners;
-		const resolved = all.map(user => specified ? user[specified] || (user.links ? user.links[specified] : undefined) : stringify ? user.toString() : user);
-		if (log) console.log(resolved);
-		return resolved;
-	}
-
-	/**
      * Returns a string containing the guild name.
      * @returns {string} The guild name.
      * @example console.log(`Hey look a guild with a name ${guild}!`); // Hey look a guild with a name Hell's Door!
@@ -142,4 +122,4 @@ class Guild extends Base {
 	}
 }
 
-exports.Guild = Guild;
+module.exports = Guild;

@@ -4,15 +4,17 @@
  */
 class Base {
 	/**
-     * @param {object} base A Bot/Emoji/Guild/User object fetched from the API.
+     * @param {object} obj A Bot/Emoji/Guild/User object fetched from the API.
      */
-	constructor(base) {
+	constructor(obj) {
 		/**
          * The Base's ID.
          * @type {string}
          */
-		this.id = base.id;
+		this.id = obj.id;
+
+		Object.defineProperty(this, 'raw', { value: obj });
 	}
 }
 
-exports.Base = Base;
+module.exports = Base;

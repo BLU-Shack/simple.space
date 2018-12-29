@@ -5,13 +5,14 @@
  */
 class FetchError extends Error {
 	/**
-     * @param {object} error The error body.
-     * @param {string} name The item not found.
+     * @param {string} message The message.
+	 * @param {string} code The code.
+     * @param {string} [name='?'] The item not found.
      */
-	constructor(message, code) {
+	constructor(message, code, name = '?') {
 		super(message);
 		Object.defineProperty(this, 'name', { value: 'FetchError' });
-		this.message = `${code} ${message}`;
+		this.message = `${code} ${code !== 404 ? message : name + ' Not Found'}`;
 		if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
 	}
 

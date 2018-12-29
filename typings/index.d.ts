@@ -12,121 +12,67 @@ declare module 'simple.space' {
     //#region Classes
     /** The Client for interacting with botlist.space */
     export class Client extends EventEmitter {
-        constructor(options?: ClientOptions);
-        private static isObject(obj: any): boolean;
-        private _runCache(): Promise<object>;
+		constructor(options?: ClientOptions);
 
-        public static events: ClientEvent[];
         public static endpoint: string;
         public bots: Store<string, Bot>;
         public emojis: Store<string, Emoji>;
-        public guilds: Store<string, Guild>;
-        public nextCacheUpdate?: NodeJS.Timer;
+		public guilds: Store<string, Guild>;
+		public users: Store<string, User>;
+        public nextCache?: NodeJS.Timer;
         public options: ClientOptions;
-        public readyAt?: Date;
-        public readonly readyTimestamp?: number;
 
         public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
-        public fetchAllBots(options?: FetchOptions<BotSVs>): Promise<Bot[]>;
-        public fetchAllEmojis(options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
-        public fetchAllGuilds(options?: FetchOptions<GuildSVs>): Promise<Guild[]>;
-        public fetchBot(botID: string, options?: FetchOptions<BotSVs>): Promise<Bot>;
-        public fetchEmoji(emojiID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji>;
-        public fetchGuild(guildID: string, options?: FetchOptions<GuildSVs>): Promise<Guild>;
-        public fetchGuildEmojis(guildID: string, options?: FetchOptions<EmojiSVs>): Promise<Emoji[]>;
-        public fetchSelf(options?: FetchOptions<BotSVs>): Promise<Bot>;
-        public fetchStats(options?: FetchOptions<StatsSVs>): Promise<Stats>;
-        public fetchUpvotes(options?: UpvoteFetchOptions<UpvoteUserSVs>): Promise<UpvoteContents[] | string[]>;
-        public fetchUser(userID: string, options?: FetchOptions<UserSVs>): Promise<User>;
-        public hasUpvoted(userID: string[], options?: UpvoteFetchOptions<any>): Promise<Store<string, boolean> | string[]>;
-        public hasUpvoted(userID: string, options?: UpvoteFetchOptions<any>): Promise<boolean>;
-        public setGuilds(options?: PostOptions): Promise<object>;
-        public postCount(options?: number | PostOptions): Promise<object>;
-
-        public on(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
-        public on(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
-        public on(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
-        public on(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-		public on(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
-		public on(event: string, listener: Function): this;
-
-        public once(event: 'cacheUpdateBots', listener: (data: Store<string, Bot>) => void): this;
-        public once(event: 'cacheUpdateEmojis', listener: (data: Store<string, Emoji>) => void): this;
-        public once(event: 'cacheUpdateGuilds', listener: (data: Store<string, Guild>) => void): this;
-        public once(event: 'ready' | 'cacheUpdateAll', listener: (bots: Store<string, Bot>, emojis: Store<string, Emoji>, guilds: Store<string, Guild>) => void): this;
-		public once(event: 'post', listener: (info: { code: number, message: string }, guildSize: number | number[]) => void): this;
-		public once(event: string, listener: Function): this;
+        public fetchAllBots(options?: FetchOptions): Promise<Bot[]>;
+        public fetchBot(botID: string, options?: FetchOptions): Promise<Bot>;
+        public fetchStats(options?: FetchOptions): Promise<Stats>;
     }
 
     /** The universal base for Bot, Emoji, Guild, and PartialUser classes. */
     export class Base {
         constructor(base: object);
-        public id: string;
+		public id: string;
+		public readonly raw: object;
     }
 
     /** Represents a Bot on the site. */
     export class Bot extends Base {
-        constructor(bot: object);
-        private readonly bot: object;
+		constructor(bot: object);
 
-        public avatar: string;
-        public discriminator: string;
-        public fullDescription?: string;
-        public guildSize?: number;
-        public inviteURL: string;
-        public isApproved: boolean;
-        public isChildFriendly: boolean;
-        public isFeatured: boolean;
-        public library: string;
-        public prefix: string;
-        public shards?: number[];
-        public shortDescription: string;
-        public supportCode?: string;
-        public timestamp: number;
-        public user: string;
-        public vanity?: string;
-        public readonly inviteNoPerms: string;
-        public readonly serverCount?: number;
-        public readonly supportURL?: string;
-        public readonly tag: string;
-        public readonly url: string;
-        public readonly vanityURL?: string;
+		public approved: boolean;
+		public avatar: string;
+		public childFriendlyAvatar: boolean;
+		public createdAt: number;
+		public discriminator: string;
+		public fullDescription: string;
+		public invite: string;
+		public inviteCount: number;
+		public inviteNoPerms: string;
+		public prefix: string;
+		public serverCount?: number;
+		public supportCode?: string;
+		public updatedAt: number;
+		public upvotes: number;
+		public username: string;
+		public vanity?: string;
+		public readonly owners: User[];
+		public readonly shards: number[];
+		public readonly supportURL?: string;
+		public readonly tag: string;
+		public readonly tags: string[];
 
-        public owners(options?: FetchOptions<UserSVs>): PartialUser[];
-        public toString(): string;
-    }
-
-    /** Options passed when initializing the Client. */
-    export class ClientOptions {
-        constructor(newObj: object, oldObj?: object);
-        private readonly default: {
-            cache: false,
-            cacheUpdateTimer: 180000,
-            client: null,
-            botID: null,
-            token: null,
-            log: false
-        }
-
-        public cache?: boolean;
-        public cacheUpdateTimer?: number;
-        public token?: string;
-        public botID?: string;
-        public client?: any;
-        public log?: boolean;
+		public toString(): string;
     }
 
     /** Represents an Emoji on the site. */
     export class Emoji extends Base {
         constructor(emoji: object);
-        private readonly emoji: object;
 
         public animated: boolean;
         public name: string;
         public imageURL: string;
         public readonly normalGuild: object;
         public readonly guild: Guild;
-        public readonly raw: string;
         public readonly url: string;
 
         public toString(): string;
@@ -134,27 +80,17 @@ declare module 'simple.space' {
 
     /** When an error is caught while fetching, this is thrown. */
     export class FetchError extends Error {
-        constructor(error: object, name: string);
-        public message: string;
-        public name: string;
+		constructor(message: string, code: string, name?: string);
 
-        public toString(): string;
-    }
+		public message: string;
+		public readonly name: 'FetchError';
 
-    /** Options when Fetching. */
-    export class FetchOptions<T> {
-        constructor(options?: object, preset?: ClientOptions);
-
-        public log?: boolean;
-        public specified?: T;
-        public normal?: boolean;
-        public stringify?: boolean;
-    }
+		public toString(): string;
+	}
 
     /** Represents a Guild on the site. */
     export class Guild extends Base {
         constructor(guild: object);
-        private readonly guild: object;
 
         public compliance: boolean;
         public fullDescription?: string;
@@ -170,14 +106,11 @@ declare module 'simple.space' {
         public vanity?: string;
         public readonly url: string;
         public readonly vanityURL?: string;
-
-        public owners(options?: FetchOptions<UserSVs>): PartialUser[];
     }
 
     /** Represents a user on the site with limited information. */
     export class PartialUser extends Base {
         constructor(partialUser: object);
-        private readonly user: object;
 
         public avatar: string;
         public discriminator: string;
@@ -207,40 +140,27 @@ declare module 'simple.space' {
     /** Represents the site's statistics information. */
     export class Stats {
         constructor(stats: object);
-        private stats: object;
+        private raw: object;
 
-        public bots: {
-            total: number,
-            approved: number,
-            unapproved: number
-        }
-        public guilds: number;
-        public successful: boolean;
-        public users: number;
-        public readonly combined: number;
-    }
-
-    /** A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-     * with additional utility methods. Its module can be found
-     * [here](https://www.npmjs.com/package/@ired_me/red-store)
-    */
-    export import Store = require('@ired_me/red-store');
-
-    /** Fetch Options but for when fetching Upvotes. */
-    export class UpvoteFetchOptions<T> extends FetchOptions<T> {
-        constructor(options?: object, client?: ClientOptions);
-
-        public ids?: boolean;
-        public token?: string;
-        public botID?: string;
+		public totalBots: number;
+		public approvedBots: number;
+		public unapprovedBots: number;
+		public users: number;
+		public readonly combinedTotal: number;
     }
 
     /** Represents a user with full information on the site. */
-    export class User extends PartialUser {
+    export class User {
         constructor(user: object);
 
-        public bots(options?: FetchOptions<BotSVs>): Bot[];
-        public guilds(options?: FetchOptions<GuildSVs>): Guild[];
+		public avatar: string;
+		public description: string;
+		public discriminator: string;
+		public username: string;
+		public readonly bots: Bot[];
+		public readonly tag: string;
+
+		public toString(): string;
     }
 
     /** Represents upvote contents fetched through checking a Bot's upvotes. */
@@ -251,40 +171,33 @@ declare module 'simple.space' {
         public user: PartialUser;
 	}
 
-    //#endregion
+	//#endregion
+	
+	//#region Options
+
+	interface ClientOptions {
+		autoCache?: boolean,
+		autoCacheInterval?: number,
+		cache?: boolean,
+		botID?: string,
+		botToken?: string,
+		userToken?: string,
+	}
+
+	interface FetchOptions {
+		cache?: boolean,
+		mapify?: boolean
+	}
+
+	/** Fetch Options but for when fetching Upvotes. */
+	interface UpvoteFetchOptions extends FetchOptions {
+		ids?: boolean;
+		token?: string;
+		botID?: string;
+	}
+	//#endregion
 
     //#region Typedefs
-    type BotSVs = 'id' | 'bot' | 'avatar' |
-        'discriminator' | 'fullDescription' | 'guildSize' |
-        'inviteURL' | 'isApproved' | 'isChildFriendly' |
-        'isFeatured' | 'library' | 'prefix' |
-        'shards' | 'shortDescription' | 'supportCode' |
-        'timestamp' | 'username' | 'vanity' |
-        'serverCount' | 'inviteNoPerms' | 'supportURL' |
-        'tag' | 'url' | 'vanityURL';
 
-    type EmojiSVs = 'id' | 'emoji' | 'animated' |
-        'name' | 'imageURL' | 'normalGuild' |
-        'guild' | 'raw' | 'url';
-
-    type GuildSVs = 'id' | 'guild' | 'compliance' |
-        'fullDescription' | 'icon' | 'isChildFriendly' |
-        'isFeatured' | 'isPremium' | 'isPublic' |
-        'memberCount' | 'name' | 'shortDescription' |
-        'timestamp' | 'vanity' | 'url' |
-        'vanityURL';
-
-    type UserSVs = 'id' | 'user' | 'avatar' |
-        'discriminator' | 'githubUsername' | 'gitlabUsername' |
-        'shortDescription' | 'username' | 'githubURL' |
-        'gitlabURL' | 'tag' | 'url';
-
-    type UpvoteUserSVs = UserSVs | 'timestamp';
-
-    type StatsSVs = 'bots' | 'guilds' | 'successful' |
-        'users' | 'total' | 'approved' |
-        'unapproved' | 'combined';
-
-    type ClientEvent = 'ready' | 'post' | 'cacheUpdateAll' | 'cacheUpdateBots' | 'cacheUpdateEmojis' | 'cacheUpdateGuilds';
     //#endregion
 }

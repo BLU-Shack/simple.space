@@ -38,6 +38,7 @@ class Bot extends Base {
 	}
 
 	get supportURL() {
+		if (!this.supportCode) return null;
 		return `https://discord.gg/${this.supportCode}`;
 	}
 

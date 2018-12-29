@@ -1,5 +1,4 @@
 const Classes = require('./structures/');
-const Options = require('./structures/options/');
 const Client = require('./Client.js');
 
 module.exports = {
@@ -15,12 +14,6 @@ module.exports = {
 
 	// The Extension Classes
 	get Base() { return Classes.Base; },
-
-	// All Options.
-	get ClientOptions() { return Options.ClientOptions; },
-	get FetchOptions() { return Options.FetchOptions; },
-	get PostOptions() { return Options.PostOptions; },
-	get UpvoteFetchOptions() { return Options.UpvoteFetchOptions; },
 
 	// Misc Classes
 	get FetchError() { return Classes.FetchError; },

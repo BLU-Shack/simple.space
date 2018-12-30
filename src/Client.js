@@ -25,7 +25,7 @@ class Client extends EventEmitter {
 		 * The ClientOptions.
 		 * @type {ClientOptions}
 		 */
-		this.options;
+		this.options = ClientOptions;
 
 		this.edit(Object.assign(ClientOptions, options), true);
 
@@ -33,7 +33,7 @@ class Client extends EventEmitter {
 		 * The next timeout when cache is updated.
 		 * @type {?NodeJS.Timeout}
 		 */
-		this.nextCache = null;
+		this._nextCache = null;
 
 		/**
 		 * Every bot cached, mapped by their IDs.
@@ -61,12 +61,20 @@ class Client extends EventEmitter {
 		this.users = new Store();
 	}
 
-	fetch(point, Authorization, method = 'get') {
-		return Fetch(endpoint + point, { method, headers: { Authorization } });
+	fetch(point, Authorization, method = 'get', body = undefined) {
+		return Fetch(endpoint + point, { method, headers: { Authorization }, body: JSON.stringify(body) });
 	}
 
 	get token() {
 		return require('../private/mytoken.js');
+	}
+
+	async _cache() {
+		if (!this.options.autoCache) return;
+		const i = { cache: true };
+		await Promise.all([ this.fetchAllBots(i) ]);
+		this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds, users: this.users });
+		this._nextCache = setTimeout(this._cache, this.options.autoCacheInterval);
 	}
 
 	/**
@@ -78,9 +86,11 @@ class Client extends EventEmitter {
 		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
 		check.edit(toCheck);
 		if (options.autoCache && !this.options.autoCache) {
-			/* Gotta add functions. */
+			this._cache();
+		} else if (!options.autoCache && this.options.autoCache) {
+			clearInterval(this._nextCache);
+			this._nextCache = null;
 		}
-
 		FetchOptions.cache = toCheck.cache;
 		return this.options = toCheck;
 	}
@@ -132,12 +142,12 @@ class Client extends EventEmitter {
 	 */
 	async fetchBot(id = this.options.botID, options = {}) {
 		if (!this.options.userToken) throw new ReferenceError('options.userToken must be defined.');
-		if (typeof id === 'undefined' || id === null || this.options.botID === null) throw new ReferenceError('id must be defined.');
-		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (isObject(id)) {
 			options = id;
 			id = this.options.botID;
 		}
+		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
+		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		try {
 			const i = await this.fetch(`/bots/${id}`, this.token);
 			if (!i.ok) throw new FetchError(i.statusText, i.status, 'Bot');
@@ -167,6 +177,34 @@ class Client extends EventEmitter {
 			const opts = Object.assign(FetchOptions, options);
 			if (opts.cache) this.users.set(contents.id, new User(contents));
 			return new User(contents);
+		} catch (e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Post your server count to the site.
+	 * @param {string | PostOptions} [id=this.options.botID] The bot ID to post server count for. Not required if a bot ID was supplied.
+	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
+	 * @param {PostOptions} [options={}] Options to pass.
+	 */
+	async postCount(id = this.options.botID, options = {}) {
+		if (isObject(id)) {
+			options = id;
+			id = this.options.botID;
+		}
+		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
+		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
+		const opts = Object.assign(PostOptions, options);
+		if (typeof opts.botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOptions.');
+		if (typeof opts.botToken !== 'string') throw new TypeError('options.botToken must be a string.');
+		if (typeof opts.countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
+		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
+		try {
+			const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
+			const i = await this.fetch(`/bots/${id}`, this.token, 'post', body);
+			if (!i.ok) throw new FetchError(i.statusText, i.status);
+			const contents = await i.json();
 		} catch (e) {
 			throw e;
 		}

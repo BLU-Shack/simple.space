@@ -1,13 +1,15 @@
-class Stats {
+const Base = require('./Base.js');
+
+class Stats extends Base {
 	constructor(obj) {
-		Object.defineProperty(this, 'raw', { value: obj });
+		super(obj);
 		this.totalBots = obj.total_bots;
 		this.approvedBots = obj.approved_bots;
 		this.unapprovedBots = obj.unapproved_bots;
 		this.users = obj.users;
 	}
 
-	get combinedTotal() {
+	get overall() {
 		return this.totalBots + this.users;
 	}
 }

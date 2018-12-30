@@ -20,7 +20,7 @@
             "property"
         ],
 		"handle-callback-err": "off",
-		"max-len": ["error", 140],
+		"max-len": ["error", 150],
         "max-nested-callbacks": [
             "error",
             {

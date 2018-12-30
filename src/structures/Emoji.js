@@ -2,7 +2,6 @@ const { Base, Guild } = require('.');
 
 /**
  * Represents any emoji on botlist.space.
- * @class
  * @extends {Base}
  */
 class Emoji extends Base {

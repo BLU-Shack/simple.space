@@ -14,12 +14,18 @@ class User extends Base {
 		this.avatar = obj.avatar;
 		this.description = obj.short_description;
 		this.discriminator = obj.discriminator;
+		this.id = obj.id;
 		this.username = obj.username;
 
 		Object.defineProperty(this, 'bots', { get: () => {
+			if (!obj.bots) return null;
 			const Bot = require('./Bot.js');
 			return obj.bots.map(u => new Bot(u));
 		}, enumerable: true });
+	}
+
+	get page() {
+		return `https://botlist.space/user/${this.id}`;
 	}
 
 	get tag() {

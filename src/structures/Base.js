@@ -1,6 +1,5 @@
 /**
- * The universal base for Bot/Emoji/Guild/User classes.
- * @class
+ * The universal base for all classes.
  */
 class Base {
 	/**
@@ -8,12 +7,12 @@ class Base {
      */
 	constructor(obj) {
 		/**
-         * The Base's ID.
-         * @type {string}
-         */
-		this.id = obj.id;
-
-		Object.defineProperty(this, 'raw', { value: obj });
+		 * The raw object used to create the class and gave class values.
+		 * @readonly
+		 * @type {object}
+		 * @name Base#raw
+		 */
+		Object.defineProperty(this, 'raw', { get: () => obj, enumerable: true });
 	}
 }
 

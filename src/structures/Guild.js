@@ -2,7 +2,6 @@ const { Base } = require('.');
 
 /**
  * Represents any guild that has been submitted onto botlist.space.
- * @class
  * @extends {Base}
  */
 class Guild extends Base {

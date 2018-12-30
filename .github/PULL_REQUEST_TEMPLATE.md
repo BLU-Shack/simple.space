@@ -1,15 +1,12 @@
-# New Pull Request
+**I confirm that I have thoroughly tested the code changes and have updated typings accordingly.**
 
-**PULL REQUEST INFO:** Place pull request info here.
-
-**How does it improve the package's usability?** Place package usability here. Or, if it is not a code change, remove this line.
-
-**Reasoning?** Place reasoning behind it. If ONLY JUST a README.md minor change, put "Typo Fixes", "Title Rename", and/or "Word Replacement"
-
-- [ ] Includes changing Library Code.
-    - [ ] Includes Minor Changes (includes variable changes, method parameters/properties renamed)
-    - [ ] Includes Major Changes (includes method renames, change of structure names, a property switched to a method and vice versa)
-    - [x] Includes Extreme Changes (includes the fact that this should be unchecked)
-- [ ] Includes non-code changes (doc change, README edits...)
-    - [ ] Includes Minor Changes (includes typo fixes, title renames, word replacement)
-    - [ ] Includes Major Changes (includes everything not listed above)
+- [ ] Includes Documentary Changes
+	- [ ] Changes JSDoc
+	- [ ] Changes the README file.
+- [ ] Includes code changes.
+	- [ ] New features.
+		- Feature: <!-- Information Here. -->
+		- Existing Changed Functionality: <!-- Leave empty if none -->
+	- [ ] Fixes a bug.
+		- Bug: <!-- Bug info here. -->
+		- [ ] Issue Reference: <!-- This can be a number (ex. #100) or a URL; Leave blank if none. -->

@@ -15,24 +15,28 @@ declare module 'simple.space' {
 	export class Client extends EventEmitter {
 		constructor(options?: ClientOptions);
 
-		public static endpoint: string;
-		public _nextCache?: NodeJS.Timer;
+		public endpoint: string;
+		public _nextCache?: NodeJS.Timeout;
 		public bots: Store<string, Bot>;
-		public emojis: Store<string, Emoji>;
-		public guilds: Store<string, Guild>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
-		public fetchAllBots(options?: FetchOptions): Promise<Bot[] | Store<string, Bot>>;
+		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBot(id?: string | FetchOptions, options?: FetchOptions): Promise<Bot>;
+		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
+		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[]>
+		public postCount(id?: string | PostOptions, options?: PostOptions): object;
+		private _cache(): Promise<void>;
+		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
+		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 
-		public on(event: 'cacheUpdate', listener: (cache: UpdatedCache) => void): this;
-		public once(event: 'cacheUpdate', listener: (cache: UpdatedCache) => void): this;
-		public addListener(event: 'cacheUpdate', listener: (cache: UpdatedCache) => void): this;
-		public removeListener(event: 'cacheUpdate', listener: (cache: UpdatedCache) => void): this;
+		public on(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public once(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public addListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public removeListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
 	}
 
 	/** The universal base for all classes. */
@@ -53,11 +57,9 @@ declare module 'simple.space' {
 		public fullDescription: string;
 		public id: string;
 		public invite: string;
-		public inviteCount: number;
 		public inviteNoPerms: string;
 		public prefix: string;
 		public updatedAt: number;
-		public upvotes: number;
 		public username: string;
 		public serverCount?: number;
 		public supportCode?: string;
@@ -65,7 +67,10 @@ declare module 'simple.space' {
 		public readonly tag: string;
 		public readonly tags: string[];
 		public readonly page: string;
+		public readonly views: number[];
 		public readonly owners?: User[];
+		public readonly owner?: User;
+		public readonly secondaryOwners?: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
 		public readonly vanityURL?: string;
@@ -73,49 +78,26 @@ declare module 'simple.space' {
 		public toString(): string;
 	}
 
-	/** Represents an Emoji on the site. */
-	export class Emoji extends Base {
-		constructor(emoji: object);
-
-		public animated: boolean;
-		public name: string;
-		public imageURL: string;
-		public readonly normalGuild: object;
-		public readonly guild: Guild;
-		public readonly url: string;
-
-		public toString(): string;
-	}
-
 	/** When an error is caught while fetching, this is thrown. */
 	export class FetchError extends Error {
-		constructor(message: string, code: string, name?: string);
-
-		public message: string;
+		constructor(i: Response);
 		public readonly name: 'FetchError';
-
 		public toString(): string;
 	}
 
 	/** Represents a Guild on the site. */
 	export class Guild extends Base {
 		constructor(guild: object);
+	}
 
-		public compliance: boolean;
-		public icon: string;
-		public isChildFriendly: boolean;
-		public isFeatured: boolean;
-		public isPremium: boolean;
-		public isPublic: boolean;
-		public memberCount: number;
-		public name: string;
-		public shortDescription: string;
-		public timestamp: number;
-		public fullDescription?: string;
-		public vanity?: string;
-
-		public readonly url: string;
-		public readonly vanityURL?: string;
+	/** A 429 Ratelimit Class. */
+	export class Ratelimit extends Error {
+		constructor(headers: Headers);
+		public headers: Headers;
+		public readonly limit: number;
+		public readonly retryAfter: number;
+		public readonly name: 'Ratelimit'
+		public toString(): string;
 	}
 
 	/** Represents the site's statistics information. */
@@ -127,71 +109,73 @@ declare module 'simple.space' {
 		public approvedBots: number;
 		public unapprovedBots: number;
 		public users: number;
+		public tags: number
 
-		public readonly combinedTotal: number;
+		public readonly botUserTotal: number;
 	}
 
 	/** Represents a user with full information on the site. */
-	export class User {
+	export class User extends Base {
 		constructor(user: object);
 
 		public avatar: string;
 		public description: string;
 		public discriminator: string;
+		public id: string;
 		public username: string;
 
 		public readonly page: string;
 		public readonly tag: string;
-		public readonly bots?: Bot[];
 
 		public toString(): string;
 	}
 
-	/** Represents upvote contents fetched through checking a Bot's upvotes. */
-	export class UpvoteContents {
-		constructor(body: object);
+	export class Upvote extends Base {
+		constructor(obj: object);
 
-		public timestamp: number;
 		public user: User;
+		public timestamp: number;
+
+		public toString(): string;
 	}
 
 	//#endregion
 
 	//#region Options
 
-	type ClientOptions = {
+	export type ClientOptions = {
 		autoCache?: boolean;
 		autoCacheInterval?: number;
-		cache?: boolean;
 		botID?: string;
 		botToken?: string;
+		cache?: boolean;
 		userToken?: string;
+		version?: number;
 	}
 
-	type FetchOptions = {
+	export type FetchOptions = {
 		cache?: boolean;
+		raw?: boolean;
+		version?: number;
+	}
+
+	export type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
+		page?: number;
 	}
 
-	type UpvoteFetchOptions = FetchOptions & {
-		ids?: boolean;
-		token?: string;
-		botID?: string;
-	}
-
-	type PostOptions = {
+	export type PostOptions = {
 		botToken?: string;
-		countOrShards: number | number[]
+		countOrShards: number | number[];
+		version?: number;
 	}
 
 	//#endregion
 
 	//#region Typedefs
 
-	interface UpdatedCache {
+	interface UpdateCache {
 		bots: Store<string, Bot>;
-		emojis: Store<string, Emoji>;
-		guilds: Store<string, Guild>;
 		users: Store<string, User>;
 	}
 

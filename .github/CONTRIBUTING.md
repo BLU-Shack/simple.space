@@ -2,6 +2,8 @@
 
 ###### BETA Contribution List. Will change randomly.
 
+Note: Please read up on the botlist.space documentary [here](https://botlistspace.gitbook.io/api/) before submitting an issue/PR.
+
 ### Issues
 
 1. Go to the **Issues** tab, then **New Issue**
@@ -23,7 +25,7 @@
 8. Be sure that you update typings accordingly.
 9. When finished, push the changes, and attempt to make a Pull Request.
 
-**Bonus:** You can create a `private/` folder in the directory, then create `test.js` in that folder. You can then run `npm run dev`!
+**Bonus:** You can create a `private/` folder in the directory (automatically .gitignore'd), then create `test.js` in that folder. You can then run the command `npm run dev`!
 
 ##### If you prefer coding in Github...
 

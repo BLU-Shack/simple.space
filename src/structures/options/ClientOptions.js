@@ -6,6 +6,7 @@
  * @property {boolean} [cache=false] Whether or not to cache bots, guilds, emojis, or users on fetch.
  * @property {boolean} [autoCache=false] Whether or not to automatically cache all bots.
  * @property {number} [autoCacheInterval=60000] The number of milliseconds to wait for each auto cache interval.
+ * @property {number} [version=1] The default version of the API to use when fetching and posting.
  */
 
 module.exports = {
@@ -14,5 +15,6 @@ module.exports = {
 	userToken: null,
 	cache: false,
 	autoCache: false,
-	autoCacheInterval: 60000
+	autoCacheInterval: 60000,
+	version: 1
 };

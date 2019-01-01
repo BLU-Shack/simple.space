@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 const EventEmitter = require('events');
-const Fetch = require('node-fetch').default;
+const Fetch = require('node-fetch').default; // Literally only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
 const { isObject, check, clientEvents: Events } = require('./util/');
 
-const Store = require('@ired_me/red-store');
-const { Bot, Emoji, Guild, UpvoteContents, User, FetchError, Stats } = require('./structures/');
-const { ClientOptions, FetchOptions, PostOptions, UpvoteFetchOptions } = require('./structures/options/');
+const ok = /2\d\d/;
 
-const endpoint = 'https://beta.botlist.space/api';
+const Store = require('@ired_me/red-store');
+const { Bot, Guild, User, Upvote, Stats,
+	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,
+	Ratelimit, FetchError, } = require('./structures/');
 
 /**
  * Main client class for interacting to botlist.space
@@ -42,18 +43,6 @@ class Client extends EventEmitter {
 		this.bots = new Store();
 
 		/**
-		 * Every emoji cached, mapped by their IDs.
-		 * @type {Store<string, Emoji>}
-		 */
-		this.emojis = new Store();
-
-		/**
-		 * Every guild cached, mapped by their IDs.
-		 * @type {Store<string, Guild>}
-		 */
-		this.guilds = new Store();
-
-		/**
 		 * Every user cached, mapped by their IDs.
 		 * **This store does not automatically cache like the others, and only caches upon a user fetch.**
 		 * @type {Store<string, User>}
@@ -61,125 +50,184 @@ class Client extends EventEmitter {
 		this.users = new Store();
 	}
 
-	fetch(point, Authorization, method = 'get', body = undefined) {
-		return Fetch(endpoint + point, { method, headers: { Authorization }, body: JSON.stringify(body) });
+	async get(point, Authorization, version, ...headers) {
+		const i = await Fetch(this.endpoint + version + point + headers.join(''), { headers: { Authorization } });
+		if (i.status === 429) throw new Ratelimit(i.headers);
+		const contents = await i.json();
+		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
+		return contents;
 	}
 
-	get token() {
-		return require('../private/mytoken.js');
+	post(point, Authorization, version, body) {
+		return Fetch(this.endpoint + version + point, {
+			method: 'post',
+			headers: { Authorization, 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+	}
+
+	/**
+	 * The endpoint to use for interaction with botlist.space.
+	 * The version number is missing; Fulfilled only when fetching/posting.
+	 * @type {string}
+	 */
+	get endpoint() {
+		return 'https://api.botlist.space/v';
 	}
 
 	async _cache() {
 		if (!this.options.autoCache) return;
 		const i = { cache: true };
-		await Promise.all([ this.fetchAllBots(i) ]);
-		this.emit('cacheUpdate', { bots: this.bots, emojis: this.emojis, guilds: this.guilds, users: this.users });
+		await this.fetchAllBots(i);
+		this.emit(Events.cacheUpdate, { bots: this.bots });
 		this._nextCache = setTimeout(this._cache, this.options.autoCacheInterval);
 	}
 
 	/**
 	 * Edit the options of the Client.
 	 * @param {ClientOptions} [options={}] The options to change.
-	 * @param {boolean} [preset=false]
+	 * @param {boolean} [preset=false] If true, uses the default ClientOptions as a target copy. Otherwise, {@link Client#options} is used.
 	 */
 	edit(options = {}, preset = false) {
+		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
 		check.edit(toCheck);
-		if (options.autoCache && !this.options.autoCache) {
+
+		if ((toCheck.autoCacheInterval !== this.options.autoCacheInterval) && toCheck._nextCache) {
+			clearInterval(this._nextCache);
 			this._cache();
-		} else if (!options.autoCache && this.options.autoCache) {
+		} else if (toCheck.autoCache && !this.options.autoCache) {
+			this._cache();
+		} else if (!toCheck.autoCache && this.options.autoCache) {
 			clearInterval(this._nextCache);
 			this._nextCache = null;
 		}
-		FetchOptions.cache = toCheck.cache;
+
+		// Give some properties of the ClientOptions
+		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
+		FetchOptions.version = MultiFetchOptions.version = PostOptions.version = toCheck.version;
+		FetchOptions.userToken = MultiFetchOptions.userToken = PostOptions.userToken = toCheck.userToken;
+		FetchOptions.botToken = MultiFetchOptions.botToken = PostOptions.botToken = toCheck.botToken;
+
 		return this.options = toCheck;
 	}
 
 	/**
 	 * Fetch the site statistics.
-	 * @param {FetchOptions} options Options to pass. (Ignores cache)
-	 * @returns {Stats} The statistics.
+	 * @param {FetchOptions} [options={}] Options to pass. (Ignores cache)
+	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		if (!this.options.userToken) throw new ReferenceError('options.userToken must be defined.');
-		try {
-			const i = await this.fetch('/stats', this.token);
-			if (!i.ok) throw new FetchError(i.statusText, i.status);
-			const contents = await i.json();
-			const opts = Object.assign(FetchOptions, options);
-			return new Stats(contents);
-		} catch (e) {
-			throw e;
-		}
+		const { raw, version, userToken } = Object.assign(FetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get('/statistics', userToken, version);
+		return raw ? contents : new Stats(contents);
 	}
 
 	/**
 	 * Fetch all bots listed on the site.
-	 * @param {FetchOptions} [options={}] Options to pass.
-	 * @returns {Bot[] | Store<string, Bot>}
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchAllBots(options = {}) {
-		if (!this.options.userToken) throw new ReferenceError('options.userToken must be defined.');
-		try {
-			const i = await this.fetch('/bots', this.token);
-			if (!i.ok) throw new FetchError(i.statusText, i.status);
-			const contents = await i.json();
-			const opts = Object.assign(FetchOptions, options);
-			if (opts.cache) this.bots = new Store(contents.map(bot => [bot.id, new Bot(bot)]));
-			if (opts.mapify) return new Store(contents.map(bot => [bot.id, bot]));
-			else return contents.map(bot => new Bot(bot));
-		} catch (e) {
-			throw e;
-		}
+		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		if (typeof page !== 'number') throw new TypeError('page must be a number.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
+		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
+		if (mapify) return cache ? this.bots : new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
+		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
 	}
 
 	/**
 	 * Fetch a bot listed on the site.
 	 * @param {string | FetchOptions} [id=this.options.botID] The ID of the bot to fetch. Not required if this.options.botID is set.
-	 * This can also be FetchOptions IF this.options.botID is defined and you are planned to use that.
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
 	 * @param {FetchOptions} [options={}] Options to pass.
-	 * @returns {Bot} A bot object.
+	 * @returns {Promise<Bot>} A bot object.
 	 */
 	async fetchBot(id = this.options.botID, options = {}) {
-		if (!this.options.userToken) throw new ReferenceError('options.userToken must be defined.');
 		if (isObject(id)) {
 			options = id;
 			id = this.options.botID;
 		}
+		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
-		try {
-			const i = await this.fetch(`/bots/${id}`, this.token);
-			if (!i.ok) throw new FetchError(i.statusText, i.status, 'Bot');
-			const contents = await i.json();
-			const opts = Object.assign(FetchOptions, options);
-			if (opts.cache) this.bots.set(contents.id, new Bot(contents));
-			return new Bot(contents);
-		} catch (e) {
-			throw e;
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get(`/bots/${id}`, userToken, version);
+		if (cache) this.bots.set(contents.id, new Bot(contents));
+		return raw ? contents : new Bot(contents);
+	}
+
+	/**
+	 * Fetch a bot's upvotes from the past 24 hours.
+	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @returns {Promise<Upvote[]>} An array of upvotes.s
+	 */
+	async fetchUpvotes(id = this.options.botID, options = {}) {
+		if (isObject(id)) {
+			options = id;
+			id = this.options.botID;
 		}
+		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOptions, options);
+		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
+
+		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
+		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get(`/bots/${id}/upvotes`, botToken, version, `?page=${page}`);
+		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
+		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)]));
+		else return raw ? contents : contents.upvotes.map(c => new User(c.user));
 	}
 
 	/**
 	 * Fetch a user logged onto the site.
 	 * @param {string} id The user ID to fetch from the API.
 	 * @param {FetchOptions} [options={}] Options to pass.
-	 * @returns {User} A user object.
+	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
-		if (!this.options.userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
-		try {
-			const i = await this.fetch(`/users/${id}`, this.token);
-			if (!i.ok) throw new FetchError(i.statusText, i.status, 'User');
-			const contents = await i.json();
-			const opts = Object.assign(FetchOptions, options);
-			if (opts.cache) this.users.set(contents.id, new User(contents));
-			return new User(contents);
-		} catch (e) {
-			throw e;
-		}
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get(`/users/${id}`, userToken, version);
+		if (cache) this.users.set(contents.id, new User(contents));
+		return raw ? contents : new User(contents);
+	}
+
+	/**
+	 * Fetches all bots that a user owns.
+	 * @param {string} id A user ID to fetch bots from.
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @returns {Promise<Bot[]>}
+	 */
+	async fetchBotsOfUser(id, options = {}) {
+		const { cache, raw, version, mapify, userToken, page } = Object.assign(MultiFetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
+		if (typeof id !== 'string') throw new TypeError('id must be a string.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get(`/users/${id}/bots`, userToken, version, `?page=${page}`);
+
+		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
+		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
+		else return raw ? contents : contents.bots.map(b => new Bot(b));
 	}
 
 	/**
@@ -187,6 +235,7 @@ class Client extends EventEmitter {
 	 * @param {string | PostOptions} [id=this.options.botID] The bot ID to post server count for. Not required if a bot ID was supplied.
 	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
 	 * @param {PostOptions} [options={}] Options to pass.
+	 * @returns {object} An object.
 	 */
 	async postCount(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
@@ -195,76 +244,21 @@ class Client extends EventEmitter {
 		}
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
-		const opts = Object.assign(PostOptions, options);
-		if (typeof opts.botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOptions.');
-		if (typeof opts.botToken !== 'string') throw new TypeError('options.botToken must be a string.');
-		if (typeof opts.countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
-		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
-		try {
-			const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
-			const i = await this.fetch(`/bots/${id}`, this.token, 'post', body);
-			if (!i.ok) throw new FetchError(i.statusText, i.status);
-			const contents = await i.json();
-		} catch (e) {
-			throw e;
-		}
-	}
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+		const { version, botToken, countOrShards } = Object.assign(PostOptions, options);
 
-	/**
-     * The endpoint URL, used to interact with the site.
-     * @readonly
-     * @type {string}
-     */
-	static get endpoint() {
-		return endpoint;
+		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOptions.');
+		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');
+		if (typeof countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
+		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
+
+		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
+		const i = await this.post(`/bots/${id}`, botToken, version, body);
+		if (i.status === 429) throw new Ratelimit(i.headers);
+		const contents = await i.json();
+		if (contents.code) throw new FetchError(i, contents.message);
+		return contents;
 	}
 }
 
 module.exports = Client;
-
-/**
- * Emitted when cache is ready/cache was never run but it still returned something.
- *
- * @event Client#ready
- * @param {Store} bots
- * @param {Store} emojis
- * @param {Store} guilds
- */
-
-/**
- * Emitted when all cache is updated.
- *
- * @event Client#cacheUpdateAll
- * @param {Store} bots
- * @param {Store} emojis
- * @param {Store} guilds
- */
-
-/**
- * Emitted when cache is updated.
- *
- * @event Client#cacheUpdateBots
- * @type {Store}
- */
-
-/**
- * Emitted when cache is updated.
- *
- * @event Client#cacheUpdateGuilds
- * @type {Store}
- */
-
-/**
- * Emitted when cache is updated.
- *
- * @event Client#cacheUpdateEmojis
- * @type {Store}
- */
-
-/**
- * Emitted when a post is performed.
- *
- * @event Client#post
- * @param {object} info
- * @param {number|number[]} guildSize
- */

@@ -4,13 +4,11 @@
  */
 class FetchError extends Error {
 	/**
-     * @param {string} message The message.
-	 * @param {string} code The code.
+     * @param {Response} i
      */
-	constructor(message, code) {
-		super(message);
+	constructor(i, message) {
+		super(`${i.status} ${message}`);
 		Object.defineProperty(this, 'name', { value: 'FetchError' });
-		this.message = `${code} ${message}`;
 		if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
 	}
 

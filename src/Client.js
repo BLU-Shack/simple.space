@@ -73,6 +73,7 @@ class Client extends EventEmitter {
 	/**
 	 * The endpoint to use for interaction with botlist.space.
 	 * The version number is missing; Fulfilled only when fetching/posting.
+	 * @readonly
 	 * @type {string}
 	 */
 	get endpoint() {

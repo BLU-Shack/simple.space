@@ -42,7 +42,8 @@ class User extends Base {
 
 	/**
 	 * The user's page on the site.
-	 * @readonly @type {string}
+	 * @readonly
+	 * @type {string}
 	 */
 	get page() {
 		return `https://botlist.space/user/${this.id}`;
@@ -50,7 +51,8 @@ class User extends Base {
 
 	/**
 	 * The user's Discord Tag.
-	 * @readonly @type {string}
+	 * @readonly
+	 * @type {string}
 	 */
 	get tag() {
 		return `${this.username}#${this.id}`;

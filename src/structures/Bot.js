@@ -172,7 +172,7 @@ class Bot extends Base {
 	 * @type {string}
 	 */
 	get tag() {
-		return `${this.username}#${this.tag}`;
+		return `${this.username}#${this.discriminator}`;
 	}
 
 	/**

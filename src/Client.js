@@ -6,6 +6,10 @@ const { isObject, check, clientEvents: Events } = require('./util/');
 
 const ok = /2\d\d/;
 
+/**
+ * @external Store
+ * @see {@link https://github.com/iREDMe/red-store}
+ */
 const Store = require('@ired_me/red-store');
 const { Bot, Guild, User, Upvote, Stats,
 	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,

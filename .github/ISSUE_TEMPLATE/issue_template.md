@@ -1,12 +1,12 @@
 ---
 name: There's a Bug on my Lawn!
-about: YOU FOUND A BUG!
+about: Don't worry, we have an exterminator coming.
 
 ---
 
-# An Issue In The Code Had Been Caught By A Community Member.
+**Bug Information:**
 
-**BUG:** Place your information on this line here.
+**Intended Behavior:**
 
 (NOTE: If you see text in parentheses, delete them.)
 
@@ -17,20 +17,11 @@ about: YOU FOUND A BUG!
     * Extra Information?
 3. Step Number ...
 4. etc.
-5. LMAO
+5. Well...
 
-```js
-// If needed, place sample code here. Otherwise, delete this block.
-```
+**My Code:** <!-- https://hasteb.in (Include error 3 lines below the code file.) -->
 
-```js
-// ERROR:
-// Place ERROR OUTPUT above
-```
+- [ ] Breaking bug, makes package unusable at times.
+- [ ] Only sometimes it executes perfectly, other times it throws an error.
 
-- [ ] Major (must be fixed)
-- [ ] Very Stupid Bug, Developer (So I can raise my insecurity.)
-    - [ ] Undoubtly very obvious and should have been caught. (Only check if above is checked.)
-- [x] If you're paying attention to the check boxes, uncheck this box.
-
-You are also able to create a pull request to push changes, if you're sufficient enough. (FUTURE: Perks if pull request rather than issue)
+You are also able to create a pull request to push changes, if you're sufficient enough.

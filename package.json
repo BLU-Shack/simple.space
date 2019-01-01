@@ -1,11 +1,11 @@
 {
 	"name": "simple.space",
-	"version": "2.3.2",
+	"version": "3.0.0",
 	"description": "A simplified alternative for botlist.space",
 	"main": "src/index.js",
 	"types": "typings/index.d.ts",
 	"dependencies": {
-		"@ired_me/red-store": "^1.1.0",
+		"@ired_me/red-store": "^1.2.0",
 		"node-fetch": "^2.3.0"
 	},
 	"devDependencies": {
@@ -14,8 +14,7 @@
 	},
 	"scripts": {
 		"test": "node examples/test.js",
-		"dev": "node examples-private/test.js",
-		"webhook": "node examples-private/webhook.js",
+		"dev": "node private/test.js",
 		"docs": "jsdoc src/ README.md -c ./jsdoc.json"
 	},
 	"keywords": [

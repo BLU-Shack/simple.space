@@ -1,13 +1,11 @@
 ---
-name: I WANT A FEATURE!
-about: Simple(tm)
+name: I Want A Feature!
+about: Don't worry, we got it for ya!
 
 ---
 
-# I want something to be implemented!
+**Feature Request:** <!-- Info -->
 
-**Feature Request:** Place Request Here
+**How Does It Improve The Overall Usability?:** <!-- How it improves package -->
 
-**How Does It Improve The Overall Usability?:** Place How It Improves Package
-
-- [ ] I know how **Basic JS** (the jist of it) works.
+- [ ] I know how **Basic JS** (the jist of it) works, and its limits/capabilities.

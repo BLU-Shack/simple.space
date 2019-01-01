@@ -5,7 +5,7 @@
         "es6": true
     },
     "parserOptions": {
-        "ecmaVersion": 2017
+        "ecmaVersion": 2018
     },
     "rules": {
         "comma-spacing": "error",
@@ -19,7 +19,8 @@
             "error",
             "property"
         ],
-        "handle-callback-err": "off",
+		"handle-callback-err": "off",
+		"max-len": ["error", 150],
         "max-nested-callbacks": [
             "error",
             {

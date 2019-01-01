@@ -1,12 +1,6 @@
 /**
- * @typedef {string} ClientEvent
- * All events that the main Client uses.
+ * @typedef {string} ClientEvent An event that the Client can emit.
  */
-exports.ClientEvents = {
-	post: 'post',
-	ready: 'ready',
-	cacheUpdateAll: 'cacheUpdateAll',
-	cacheUpdateBots: 'cacheUpdateBots',
-	cacheUpdateEmojis: 'cacheUpdateEmojis',
-	cacheUpdateGuilds: 'cacheUpdateGuilds',
+module.exports = {
+	cacheUpdate: 'cacheUpdate'
 };

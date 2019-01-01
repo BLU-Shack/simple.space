@@ -1,56 +1,70 @@
-const { Bot, Guild, PartialUser } = require('./Classes.js').Classes;
-const { FetchOptions } = require('../options/');
+const Base = require('./Base.js');
 
 /**
  * Represents any user logged onto botlist.space.
  * @class
- * @extends {PartialUser}
+ * @extends {Base}
  */
-class User extends PartialUser {
-	/**
-     * @param {object} user The plain user object from the API.
-     */
-	constructor(user) {
-		super(user);
+class User extends Base {
+	constructor(obj) {
+		super(obj);
+
+		/**
+		 * The user's avatar URL.
+		 * @type {string}
+		 */
+		this.avatar = obj.avatar;
+
+		/**
+		 * The user's description on the site.
+		 * @type {?string}
+		 */
+		this.description = obj.short_description;
+
+		/**
+		 * The user's 4 digits.
+		 * @type {string}
+		 */
+		this.discriminator = obj.discriminator;
+
+		/**
+		 * The user's Discord ID.
+		 * @type {string}
+		 */
+		this.id = obj.id;
+
+		/**
+		 * The user's Discord username.
+		 * @type {string}
+		 */
+		this.username = obj.username;
 	}
 
 	/**
-     * Fetches all bots that the user owns.
-     * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Bot[]} An array of bots.
-     * @example
-     * User.bots({ specified: 'username' })
-     *     .then(bots => console.log(`${User.tag}'s bots are: ${bots}`))
-     *     .catch(console.log);
-     */
-	bots(options = {}) {
-		if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-		const { normal, specified, log, stringify } = new FetchOptions(options);
-
-		const all = !normal ? this.user.bots.map(bot => new Bot(bot)) : this.user.bots;
-		const resolved = all.map(bot => specified ? bot[specified] : stringify ? bot.toString() : bot);
-		if (log) console.log(resolved);
-		return resolved;
+	 * The user's page on the site.
+	 * @readonly
+	 * @type {string}
+	 */
+	get page() {
+		return `https://botlist.space/user/${this.id}`;
 	}
 
 	/**
-     * Fetches all guilds that the user owns.
-     * @param {FetchOptions} [options={}] Fetch options.
-     * @returns {Guild[]} An array of guilds.
-     * @example
-     * User.guilds({ specified: 'name' })
-     *     .then(guilds => console.log(`${User.tag}'s servers are: ${guilds}`))
-     *     .catch(console.log);
-     */
-	guilds(options = {}) {
-		if (options !== Object(options) || options instanceof Array) throw new TypeError('options must be an object.');
-		const { normal, specified, log, stringify } = new FetchOptions(options);
+	 * The user's Discord Tag.
+	 * @readonly
+	 * @type {string}
+	 */
+	get tag() {
+		return `${this.username}#${this.id}`;
+	}
 
-		const all = !normal ? this.user.servers.map(guild => new Guild(guild)) : this.user.servers;
-		const resolved = all.map(guild => specified ? guild[specified] : stringify ? guild.toString() : guild);
-		if (log) console.log(resolved);
-		return resolved;
+	/**
+	 * Returns text that Discord recognizes as a user mention.
+	 * @type {string}
+	 */
+	toString() {
+		return `<@${this.id}>`;
 	}
 }
 
-exports.User = User;
+module.exports = User;

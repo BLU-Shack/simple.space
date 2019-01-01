@@ -54,13 +54,14 @@ declare module 'simple.space' {
 		public childFriendlyAvatar: boolean;
 		public createdAt: number;
 		public discriminator: string;
-		public fullDescription: string;
 		public id: string;
 		public invite: string;
 		public inviteNoPerms: string;
 		public prefix: string;
+		public shortDescription: string;
 		public updatedAt: number;
 		public username: string;
+		public fullDescription?: string;
 		public serverCount?: number;
 		public supportCode?: string;
 		public vanity?: string;
@@ -92,11 +93,12 @@ declare module 'simple.space' {
 
 	/** A 429 Ratelimit Class. */
 	export class Ratelimit extends Error {
-		constructor(headers: Headers);
-		public headers: Headers;
+		constructor(headers: Headers, endpoint: string);
+		public readonly headers: Headers;
 		public readonly limit: number;
 		public readonly retryAfter: number;
-		public readonly name: 'Ratelimit'
+		public readonly name: 'Ratelimit';
+		public readonly message: message;
 		public toString(): string;
 	}
 

@@ -1,4 +1,4 @@
-examples-private/
+private/
 .github
 .vscode
 .eslintrc.json

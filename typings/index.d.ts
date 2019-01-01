@@ -34,9 +34,13 @@ declare module 'simple.space' {
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 
 		public on(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public on(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 		public once(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public once(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 		public addListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public addListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 		public removeListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public removeListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 	}
 
 	/** The universal base for all classes. */
@@ -98,7 +102,7 @@ declare module 'simple.space' {
 		public readonly limit: number;
 		public readonly retryAfter: number;
 		public readonly name: 'Ratelimit';
-		public readonly message: message;
+		public readonly message: string;
 		public toString(): string;
 	}
 

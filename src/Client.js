@@ -52,7 +52,7 @@ class Client extends EventEmitter {
 
 	async get(point, Authorization, version, ...headers) {
 		const i = await Fetch(this.endpoint + version + point + headers.join(''), { headers: { Authorization } });
-		if (i.status === 429) throw new Ratelimit(i.headers);
+		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
 		return contents;
@@ -245,6 +245,9 @@ class Client extends EventEmitter {
 	async postCount(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
 			options = id;
+			id = this.options.botID;
+		} else if (typeof id === 'number' || Array.isArray(id)) {
+			options.countOrShards = id;
 			id = this.options.botID;
 		}
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');

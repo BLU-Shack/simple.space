@@ -1,17 +1,24 @@
 class Ratelimit extends Error {
 	/**
 	 * @param {Headers} headers
+	 * @param {string} endpoint
 	 */
-	constructor(headers) {
+	constructor(headers, endpoint) {
 		super();
 		Error.captureStackTrace(this, Ratelimit);
 
+		// It has to be in here, otherwise the error output emits an object >:(
 		Object.defineProperties(this, {
-			name: { value: 'Ratelimit' },
+			name: {
+				value: 'Ratelimit',
+			},
+			headers: {
+				value: headers,
+			},
+			message: {
+				value: `Endpoint /v${endpoint} Ratelimited, ${this.limit} times per ${this.retryAfter} second${this.retryAfter === 1 ? '' : 's'}`,
+			}
 		});
-
-		this.message = `${this.limit} time${this.limit === 1 ? '' : 's'} every ${this.retryAfter} second${this.retryAfter === '1' ? '' : 's'}`;
-		this.headers = headers;
 	}
 
 	get limit() {
@@ -23,7 +30,7 @@ class Ratelimit extends Error {
 	}
 
 	toString() {
-		return this.message;
+		return this.messages.split(' ')[1];
 	}
 }
 

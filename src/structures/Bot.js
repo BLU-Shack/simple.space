@@ -82,6 +82,12 @@ class Bot extends Base {
 		this.serverCount = obj.server_count;
 
 		/**
+		 * The bot's short description on the site.
+		 * @type {string}
+		 */
+		this.shortDescription = obj.short_description;
+
+		/**
 		 * The bot's support server invite code.
 		 * @type {?string}
 		 */

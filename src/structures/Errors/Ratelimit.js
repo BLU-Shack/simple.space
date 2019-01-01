@@ -1,3 +1,8 @@
+/**
+ * @external Headers
+ * @see {@link https://github.com/bitinn/node-fetch/blob/master/src/headers.js}
+ */
+
 class Ratelimit extends Error {
 	/**
 	 * @param {Headers} headers

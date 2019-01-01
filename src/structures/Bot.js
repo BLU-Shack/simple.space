@@ -114,7 +114,8 @@ class Bot extends Base {
 
 	/**
 	 * The main owner of the bot.
-	 * @readonly @type {?User}
+	 * @readonly
+	 * @type {?User}
 	 */
 	get owner() {
 		if (!this.owners) return null;
@@ -123,7 +124,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's page on the site.
-	 * @readonly @type {string}
+	 * @readonly
+	 * @type {string}
 	 */
 	get page() {
 		return `https://botlist.space/bot/${this.id}`;
@@ -131,7 +133,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's secondary owners.
-	 * @readonly @type {?User[]}
+	 * @readonly
+	 * @type {?User[]}
 	 */
 	get secondaryOwners() {
 		if (!this.owners) return null;
@@ -140,7 +143,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's shards.
-	 * @readonly @type {?number[]}
+	 * @readonly
+	 * @type {?number[]}
 	 */
 	get shards() {
 		return this.raw.shards;
@@ -148,7 +152,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's support server invite URL.
-	 * @readonly @type {?string}
+	 * @readonly
+	 * @type {?string}
 	 */
 	get supportURL() {
 		if (!this.supportCode) return null;
@@ -157,7 +162,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's Discord Tag.
-	 * @readonly @type {string}
+	 * @readonly
+	 * @type {string}
 	 */
 	get tag() {
 		return `${this.username}#${this.tag}`;
@@ -165,7 +171,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's tags (flairs) on the site.
-	 * @readonly @type {string[]}
+	 * @readonly
+	 * @type {string[]}
 	 */
 	get tags() {
 		return this.raw.tags;
@@ -173,7 +180,8 @@ class Bot extends Base {
 
 	/**
 	 * The bot's vanity URL on the site.
-	 * @readonly @type {?string}
+	 * @readonly
+	 * @type {?string}
 	 */
 	get vanityURL() {
 		if (!this.vanity) return null;

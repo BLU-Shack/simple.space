@@ -6,6 +6,10 @@ const { isObject, check, clientEvents: Events } = require('./util/');
 
 const ok = /2\d\d/;
 
+/**
+ * @external Store
+ * @see {@link https://github.com/iREDMe/red-store}
+ */
 const Store = require('@ired_me/red-store');
 const { Bot, Guild, User, Upvote, Stats,
 	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,
@@ -62,7 +66,7 @@ class Client extends EventEmitter {
 		const i = await Fetch(this.endpoint + version + point, {
 			method: 'post',
 			headers: { Authorization, 'Content-Type': 'application/json' },
-			body: JSON.stringify(body)
+			body: JSON.stringify(body),
 		});
 		if (i.status === 429) throw new Ratelimit(i);
 		const contents = await i.json();
@@ -173,7 +177,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Fetch a bot's upvotes from the past 24 hours.
+	 * Fetch a bot's upvotes from the past month.
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
@@ -229,7 +233,6 @@ class Client extends EventEmitter {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get(`/users/${id}/bots`, userToken, version, `?page=${page}`);
-
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
 		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
 		else return raw ? contents : contents.bots.map(b => new Bot(b));
@@ -262,8 +265,21 @@ class Client extends EventEmitter {
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
 		const contents = await this.post(`/bots/${id}`, botToken, version, body);
+		this.emit(Events.post, options.countOrShards);
 		return contents;
 	}
 }
 
 module.exports = Client;
+
+/**
+ * Emitted when cache is automatically updated.
+ * @event Client#cacheUpdate
+ * @param {Store<string, Bot>} bots The Bots' cache.
+ */
+
+/**
+ * Emitted when a successful POST is performed.
+ * @event Client#post
+ * @param {number | number[]} countOrShards The number/array of numbers used to POST.
+ */

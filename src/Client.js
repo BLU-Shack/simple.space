@@ -58,12 +58,16 @@ class Client extends EventEmitter {
 		return contents;
 	}
 
-	post(point, Authorization, version, body) {
-		return Fetch(this.endpoint + version + point, {
+	async post(point, Authorization, version, body) {
+		const i = await Fetch(this.endpoint + version + point, {
 			method: 'post',
 			headers: { Authorization, 'Content-Type': 'application/json' },
 			body: JSON.stringify(body)
 		});
+		if (i.status === 429) throw new Ratelimit(i);
+		const contents = await i.json();
+		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
+		return contents;
 	}
 
 	/**
@@ -253,10 +257,7 @@ class Client extends EventEmitter {
 		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
-		const i = await this.post(`/bots/${id}`, botToken, version, body);
-		if (i.status === 429) throw new Ratelimit(i.headers);
-		const contents = await i.json();
-		if (contents.code) throw new FetchError(i, contents.message);
+		const contents = await this.post(`/bots/${id}`, botToken, version, body);
 		return contents;
 	}
 }

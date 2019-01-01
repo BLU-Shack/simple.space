@@ -55,7 +55,7 @@ class User extends Base {
 	 * @type {string}
 	 */
 	get tag() {
-		return `${this.username}#${this.id}`;
+		return `${this.username}#${this.discriminator}`;
 	}
 
 	/**

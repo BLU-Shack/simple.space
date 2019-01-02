@@ -180,7 +180,7 @@ class Client extends EventEmitter {
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
-	 * @returns {Promise<Upvote[]>} An array of upvotes.s
+	 * @returns {Promise<Upvote[] | Store<string, Upvote>>} An array of upvotes.s
 	 */
 	async fetchUpvotes(id = this.options.botID, options = {}) {
 		if (isObject(id)) {

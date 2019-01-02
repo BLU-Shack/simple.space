@@ -68,6 +68,7 @@ declare module 'simple.space' {
 		public serverCount?: number;
 		public supportCode?: string;
 		public vanity?: string;
+
 		public readonly tag: string;
 		public readonly tags: string[];
 		public readonly page: string;
@@ -85,18 +86,22 @@ declare module 'simple.space' {
 	/** When an error is caught while fetching, this is thrown. */
 	export class FetchError extends Error {
 		constructor(i: Response);
+
 		public readonly name: 'FetchError';
+
 		public toString(): string;
 	}
 
 	/** A 429 Ratelimit Class. */
 	export class Ratelimit extends Error {
 		constructor(headers: Headers, endpoint: string);
+
 		public readonly headers: Headers;
 		public readonly limit: number;
 		public readonly retryAfter: number;
 		public readonly name: 'Ratelimit';
 		public readonly message: string;
+
 		public toString(): string;
 	}
 
@@ -109,7 +114,7 @@ declare module 'simple.space' {
 		public approvedBots: number;
 		public unapprovedBots: number;
 		public users: number;
-		public tags: number
+		public tags: number;
 
 		public readonly botUserTotal: number;
 	}
@@ -157,6 +162,8 @@ declare module 'simple.space' {
 		cache?: boolean;
 		raw?: boolean;
 		version?: number;
+		botToken?: string;
+		userToken?: string;
 	}
 
 	export type MultiFetchOptions = FetchOptions & {

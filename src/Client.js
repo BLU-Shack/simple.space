@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const EventEmitter = require('events');
 const Fetch = require('node-fetch').default; // Literally only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
@@ -11,7 +10,7 @@ const ok = /2\d\d/;
  * @see {@link https://github.com/iREDMe/red-store}
  */
 const Store = require('@ired_me/red-store');
-const { Bot, Guild, User, Upvote, Stats,
+const { Bot, User, Upvote, Stats,
 	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,
 	Ratelimit, FetchError, } = require('./structures/');
 
@@ -196,9 +195,9 @@ class Client extends EventEmitter {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get(`/bots/${id}/upvotes`, botToken, version, `?page=${page}`);
-		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
-		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)]));
-		else return raw ? contents : contents.upvotes.map(c => new User(c.user));
+		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)])));
+		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)]));
+		else return raw ? contents : contents.upvotes.map(c => new Upvote(c));
 	}
 
 	/**

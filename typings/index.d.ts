@@ -26,7 +26,7 @@ declare module 'simple.space' {
 		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
-		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[]>
+		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>
 		public postCount(id?: string | PostOptions, options?: PostOptions): object;
 		private _cache(): Promise<void>;
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
@@ -87,11 +87,6 @@ declare module 'simple.space' {
 		constructor(i: Response);
 		public readonly name: 'FetchError';
 		public toString(): string;
-	}
-
-	/** Represents a Guild on the site. */
-	export class Guild extends Base {
-		constructor(guild: object);
 	}
 
 	/** A 429 Ratelimit Class. */

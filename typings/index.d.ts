@@ -6,7 +6,6 @@
 
 declare module 'simple.space' {
 	import { EventEmitter } from 'events';
-	import { Express } from 'express';
 	import Store from '@ired_me/red-store';
 	export const version: string;
 

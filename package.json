@@ -9,7 +9,6 @@
 		"node-fetch": "^2.3.0"
 	},
 	"devDependencies": {
-		"@types/express": "^4.16.0",
 		"toast-jsdoc": "^1.0.2"
 	},
 	"scripts": {

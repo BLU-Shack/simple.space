@@ -147,7 +147,7 @@ class Client extends EventEmitter {
 
 		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
-		if (mapify) return cache ? this.bots : new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
+		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
 	}
 
@@ -195,7 +195,7 @@ class Client extends EventEmitter {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get(`/bots/${id}/upvotes`, botToken, version, `?page=${page}`);
-		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)])));
+		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
 		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)]));
 		else return raw ? contents : contents.upvotes.map(c => new Upvote(c));
 	}

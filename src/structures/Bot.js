@@ -46,7 +46,7 @@ class Bot extends Base {
 		this.discriminator = obj.discriminator;
 
 		/**
-		 * The bot's full description on the site.
+		 * The bot's full description on botlist.space.
 		 * @type {?string}
 		 */
 		this.fullDescription = obj.full_description;
@@ -82,7 +82,7 @@ class Bot extends Base {
 		this.serverCount = obj.server_count;
 
 		/**
-		 * The bot's short description on the site.
+		 * The bot's short description on botlist.space.
 		 * @type {string}
 		 */
 		this.shortDescription = obj.short_description;
@@ -94,10 +94,10 @@ class Bot extends Base {
 		this.supportCode = obj.links.support;
 
 		/**
-		 * The timestamp of the bot's latest change on the site.
+		 * The timestamp of the bot's latest change on botlist.space.
 		 * @type {number}
 		 */
-		this.updatedAt = obj.updated_at;
+		this.lastUpdateTimestamp = obj.updated_at;
 
 		/**
 		 * The bot's Discord username.
@@ -109,11 +109,11 @@ class Bot extends Base {
 		 * The bot's vanity.
 		 * @type {?string}
 		 */
-		this.vanity = obj.vanity;
+		this.vanityCode = obj.vanity;
 
 		/**
 		 * The owners of the bot.
-		 * @type {?User[]}
+		 * @type {User[]}
 		 */
 		this.owners = obj.owners.map(i => new User(i));
 	}
@@ -121,7 +121,7 @@ class Bot extends Base {
 	/**
 	 * The main owner of the bot.
 	 * @readonly
-	 * @type {?User}
+	 * @type {User}
 	 */
 	get owner() {
 		if (!this.owners) return null;
@@ -129,7 +129,7 @@ class Bot extends Base {
 	}
 
 	/**
-	 * The bot's page on the site.
+	 * The bot's page on botlist.space.
 	 * @readonly
 	 * @type {string}
 	 */
@@ -140,7 +140,7 @@ class Bot extends Base {
 	/**
 	 * The bot's secondary owners.
 	 * @readonly
-	 * @type {?User[]}
+	 * @type {User[]}
 	 */
 	get secondaryOwners() {
 		if (!this.owners) return null;
@@ -176,7 +176,7 @@ class Bot extends Base {
 	}
 
 	/**
-	 * The bot's tags (flairs) on the site.
+	 * The bot's tags (flairs) on botlist.space.
 	 * @readonly
 	 * @type {string[]}
 	 */
@@ -185,7 +185,7 @@ class Bot extends Base {
 	}
 
 	/**
-	 * The bot's vanity URL on the site.
+	 * The bot's vanity URL on botlist.space.
 	 * @readonly
 	 * @type {?string}
 	 */

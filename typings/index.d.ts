@@ -32,13 +32,13 @@ declare module 'simple.space' {
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 
-		public on(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public on(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
 		public on(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public once(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public once(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
 		public once(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public addListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public addListener(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
 		public addListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public removeListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
+		public removeListener(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
 		public removeListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 	}
 
@@ -73,9 +73,9 @@ declare module 'simple.space' {
 		public readonly tags: string[];
 		public readonly page: string;
 		public readonly views: number[];
-		public readonly owners?: User[];
-		public readonly owner?: User;
-		public readonly secondaryOwners?: User[];
+		public readonly owner: User;
+		public readonly owners: User[];
+		public readonly secondaryOwners: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
 		public readonly vanityURL?: string;
@@ -175,15 +175,6 @@ declare module 'simple.space' {
 		botToken?: string;
 		countOrShards: number | number[];
 		version?: number;
-	}
-
-	//#endregion
-
-	//#region Typedefs
-
-	interface UpdateCache {
-		bots: Store<string, Bot>;
-		users: Store<string, User>;
 	}
 
 	//#endregion

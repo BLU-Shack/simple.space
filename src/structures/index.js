@@ -1,4 +1,4 @@
-const { ClientOptions, FetchOptions, MultiFetchOptions, PostOptions } = require('./options/');
+const { ClientOptions, FetchOptions, MultiFetchOptions, PostOptions, } = require('./options.js');
 
 module.exports = {
 	get Base() { return require('./Base.js'); },
@@ -11,5 +11,8 @@ module.exports = {
 	get Ratelimit() { return require('./Errors/Ratelimit.js'); },
 	get Stats() { return require('./Stats.js'); },
 
-	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions
+	ClientOptions,
+	FetchOptions,
+	MultiFetchOptions,
+	PostOptions
 };

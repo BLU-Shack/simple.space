@@ -58,7 +58,7 @@ class Client extends EventEmitter {
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
-		return contents;
+		else return contents;
 	}
 
 	async post(point, Authorization, version, body) {
@@ -70,7 +70,7 @@ class Client extends EventEmitter {
 		if (i.status === 429) throw new Ratelimit(i);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
-		return contents;
+		else return contents;
 	}
 
 	/**
@@ -85,9 +85,8 @@ class Client extends EventEmitter {
 
 	async _cache() {
 		if (!this.options.autoCache) return;
-		const i = { cache: true };
-		await this.fetchAllBots(i);
-		this.emit(Events.cacheUpdate, { bots: this.bots });
+		await this.fetchAllBots({ cache: true });
+		this.emit(Events.cacheUpdate, this.bots);
 		this._nextCache = setTimeout(this._cache, this.options.autoCacheInterval);
 	}
 
@@ -121,7 +120,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Fetch the site statistics.
+	 * Fetch botlist.space statistics.
 	 * @param {FetchOptions} [options={}] Options to pass. (Ignores cache)
 	 * @returns {Promise<Stats>} The statistics.
 	 */
@@ -135,7 +134,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Fetch all bots listed on the site.
+	 * Fetch all bots listed on botlist.space.
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
@@ -152,7 +151,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Fetch a bot listed on the site.
+	 * Fetch a bot listed on botlist.space.
 	 * @param {string | FetchOptions} [id=this.options.botID] The ID of the bot to fetch. Not required if this.options.botID is set.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
 	 * @param {FetchOptions} [options={}] Options to pass.
@@ -201,7 +200,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Fetch a user logged onto the site.
+	 * Fetch a user logged onto botlist.space.
 	 * @param {string} id The user ID to fetch from the API.
 	 * @param {FetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<User>} A user object.
@@ -238,7 +237,7 @@ class Client extends EventEmitter {
 	}
 
 	/**
-	 * Post your server count to the site.
+	 * Post your server count to botlist.space.
 	 * @param {string | PostOptions} [id=this.options.botID] The bot ID to post server count for. Not required if a bot ID was supplied.
 	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
 	 * @param {PostOptions} [options={}] Options to pass.

@@ -137,8 +137,26 @@ class Client extends EventEmitter {
 	 * Fetch all bots listed on botlist.space.
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
+	 * @deprecated Use {@link Client#fetchBots} instead.
 	 */
 	async fetchAllBots(options = {}) {
+		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
+		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		if (typeof page !== 'number') throw new TypeError('page must be a number.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
+		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
+		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
+		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
+	}
+
+	/**
+	 * Fetch all bots listed on botlist.space.
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @returns {Promise<Bot[] | Store<string, Bot>>}
+	 */
+	async fetchBots(options = {}) {
 		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
 		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
@@ -267,6 +285,8 @@ class Client extends EventEmitter {
 		return contents;
 	}
 }
+
+Client.prototype.fetchAllBots = util.deprecate(Client.prototype.fetchAllBots, 'Client#fetchAllBots - Deprecated; Use Client#fetchBots instead.');
 
 module.exports = Client;
 

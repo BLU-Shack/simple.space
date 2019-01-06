@@ -26,9 +26,9 @@ declare module 'simple.space' {
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
 		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>;
-		public postCount(id?: string, options?: PostOptions): object;
 		public postCount(options?: PostOptions): object;
 		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
+		public postCount(id?: string, options?: PostOptions): object;
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 	}
@@ -145,7 +145,6 @@ declare module 'simple.space' {
 		botID?: string;
 		botToken?: string;
 		cache?: boolean;
-		userToken?: string;
 		version?: number;
 	}
 
@@ -154,7 +153,6 @@ declare module 'simple.space' {
 		raw?: boolean;
 		version?: number;
 		botToken?: string;
-		userToken?: string;
 	}
 
 	export type MultiFetchOptions = FetchOptions & {

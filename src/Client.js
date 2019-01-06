@@ -104,10 +104,9 @@ class Client {
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOptions, options);
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const contents = await this.get('/statistics', userToken, version);
+		const contents = await this.get('/statistics', version);
 
 		if (cache) {
 			this.stats.push(new Stats(contents));
@@ -125,12 +124,11 @@ class Client {
 	 * @deprecated Use {@link Client#fetchBots} instead.
 	 */
 	async fetchAllBots(options = {}) {
-		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOptions, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
+		const contents = await this.get('/bots', version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
@@ -142,12 +140,11 @@ class Client {
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
-		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOptions, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
+		const contents = await this.get('/bots', version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
@@ -165,14 +162,13 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOptions, options);
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}`, userToken, version);
+		const contents = await this.get(`/bots/${id}`, version);
 		if (cache) this.bots.set(contents.id, new Bot(contents));
 		return raw ? contents : new Bot(contents);
 	}
@@ -209,13 +205,12 @@ class Client {
 	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
-		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOptions, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/users/${id}`, userToken, version);
+		const contents = await this.get(`/users/${id}`, version);
 		if (cache) this.users.set(contents.id, new User(contents));
 		return raw ? contents : new User(contents);
 	}
@@ -227,13 +222,12 @@ class Client {
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, userToken, page } = Object.assign(MultiFetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version, mapify, page } = Object.assign(MultiFetchOptions, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/users/${id}/bots`, userToken, version, `?page=${page}`);
+		const contents = await this.get(`/users/${id}/bots`, version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
 		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
 		else return raw ? contents : contents.bots.map(b => new Bot(b));

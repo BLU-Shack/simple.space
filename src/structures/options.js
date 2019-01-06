@@ -1,8 +1,7 @@
 /**
  * @typedef {object} ClientOptions The options supplied on instantiating the client.
- * @property {string} [botToken=null] The bot's API token from the site. Required for most endpoints.
+ * @property {string} [botToken=null] The bot's API token from the site. Required for some endpoints.
  * @property {string} [botID=null] The bot's ID.
- * @property {string} [userToken=null] Your site API token. Required for most endpoints.
  * @property {boolean} [cache=false] Whether or not to cache bots/users on fetch.
  * @property {number} [statsLimit=3] The limit on the number of cached Statistics in {@link Client#stats}
  * @property {number} [version=1] The default version of the API to use when fetching and posting.
@@ -10,7 +9,6 @@
 exports.ClientOptions = {
 	botToken: null,
 	botID: null,
-	userToken: null,
 	cache: false,
 	statsLimit: 3,
 	version: 1
@@ -22,14 +20,12 @@ exports.ClientOptions = {
  * Corrosponds to {@link ClientOptions#cache} when not present while fetching.
  * @property {boolean} [version=this.options.version] The version to use to fetch an endpoint.
  * @property {boolean} [raw=false] When set to true, returns the raw fetched object.
- * @property {string} [userToken=this.options.userToken] Your authorization token given from the site.
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  */
 exports.FetchOptions = {
 	cache: false,
 	raw: false,
 	version: 1,
-	userToken: null,
 	botToken: null,
 };
 

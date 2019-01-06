@@ -25,8 +25,10 @@ declare module 'simple.space' {
 		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
-		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>
-		public postCount(id?: string | PostOptions, options?: PostOptions): object;
+		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>;
+		public postCount(id?: string, options?: PostOptions): object;
+		public postCount(options?: PostOptions): object;
+		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 	}

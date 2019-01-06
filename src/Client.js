@@ -49,7 +49,15 @@ class Client {
 		this.stats = [];
 	}
 
-	async get(point, Authorization, version, ...headers) {
+	async get(point, version, ...headers) {
+		const i = await Fetch(this.endpoint + version + point + headers.join(''));
+		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
+		const contents = await i.json();
+		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
+		else return contents;
+	}
+
+	async authGet(point, version, Authorization, ...headers) {
 		const i = await Fetch(this.endpoint + version + point + headers.join(''), { headers: { Authorization } });
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
@@ -57,7 +65,7 @@ class Client {
 		else return contents;
 	}
 
-	async post(point, Authorization, version, body) {
+	async post(point, version, Authorization, body) {
 		const i = await Fetch(this.endpoint + version + point, {
 			method: 'post',
 			headers: { Authorization, 'Content-Type': 'application/json' },
@@ -87,7 +95,7 @@ class Client {
 	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
-		check.edit(toCheck);
+		check(toCheck);
 
 		// Give some properties of the ClientOptions
 		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
@@ -174,7 +182,7 @@ class Client {
 	}
 
 	/**
-	 * Fetch a bot's upvotes from the past month.
+	 * Fetch a bot's upvotes from the past month; Requires Bot Token
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
@@ -192,7 +200,7 @@ class Client {
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}/upvotes`, botToken, version, `?page=${page}`);
+		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, `?page=${page}`);
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
 		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)]));
 		else return raw ? contents : contents.upvotes.map(c => new Upvote(c));
@@ -235,10 +243,15 @@ class Client {
 
 	/**
 	 * Post your server count to botlist.space.
-	 * @param {string | PostOptions} [id=this.options.botID] The bot ID to post server count for. Not required if a bot ID was supplied.
+	 * @param {string | PostOptions | number | number[]} [id=this.options.botID]
+	 * The bot ID to post server count for.
+	 * Not required if a bot ID was supplied.
 	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
-	 * @param {PostOptions} [options={}] Options to pass.
-	 * @returns {object} An object.
+	 * Can also be {@link PostOptions#countOrShards} if a number/array of numbers.
+	 * @param {PostOptions} [options={}]
+	 * Options to pass.
+	 * Overriden by the `id` parameter if `id` is PostOptions/number/array of numbers
+	 * @returns {object} An object that satisfies your low self-esteem reminding you it was successive on post.
 	 */
 	async postCount(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
@@ -259,7 +272,7 @@ class Client {
 		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
-		const contents = await this.post(`/bots/${id}`, botToken, version, body);
+		const contents = await this.post(`/bots/${id}`, version, botToken, body);
 		return contents;
 	}
 }

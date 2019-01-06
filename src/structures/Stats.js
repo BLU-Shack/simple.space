@@ -4,8 +4,23 @@ const Base = require('./Base.js');
  * botlist.space Statistics.
  */
 class Stats extends Base {
+	/**
+	 * @param {object} obj
+	 */
 	constructor(obj) {
 		super(obj);
+
+		/**
+		 * The date of creation.
+		 * @type {Date}
+		 */
+		this.createdAt = new Date();
+
+		/**
+		 * The timestamp of when the Stats was valid.
+		 * @type {number}
+		*/
+		this.createdTimestamp = this.createdAt.getTime();
 
 		/**
 		 * The total amount of bots listed on botlist.space

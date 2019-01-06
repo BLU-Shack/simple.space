@@ -5,17 +5,15 @@
 // License: MIT
 
 declare module 'simple.space' {
-	import { EventEmitter } from 'events';
 	import Store from '@ired_me/red-store';
 	export const version: string;
 
 	//#region Classes
 	/** The Client for interacting with botlist.space */
-	export class Client extends EventEmitter {
+	export class Client {
 		constructor(options?: ClientOptions);
 
 		public endpoint: string;
-		public _nextCache?: NodeJS.Timeout;
 		public bots: Store<string, Bot>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
@@ -23,23 +21,14 @@ declare module 'simple.space' {
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
 		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBot(id?: string | FetchOptions, options?: FetchOptions): Promise<Bot>;
+		public fetchBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
 		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>
 		public postCount(id?: string | PostOptions, options?: PostOptions): object;
-		private _cache(): Promise<void>;
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
-
-		public on(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
-		public on(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public once(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
-		public once(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public addListener(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
-		public addListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public removeListener(event: 'cacheUpdate', listener: (bots: Store<string, Bot>) => void): this;
-		public removeListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 	}
 
 	/** The universal base for all classes. */
@@ -110,6 +99,8 @@ declare module 'simple.space' {
 		constructor(stats: object);
 		private raw: object;
 
+		public createdAt: Date;
+		public createdTimestamp: number;
 		public totalBots: number;
 		public approvedBots: number;
 		public unapprovedBots: number;
@@ -149,8 +140,6 @@ declare module 'simple.space' {
 	//#region Options
 
 	export type ClientOptions = {
-		autoCache?: boolean;
-		autoCacheInterval?: number;
 		botID?: string;
 		botToken?: string;
 		cache?: boolean;

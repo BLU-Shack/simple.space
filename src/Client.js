@@ -41,6 +41,12 @@ class Client {
 		 * @type {Store<string, User>}
 		 */
 		this.users = new Store();
+
+		/**
+		 * An array of the last three fetched Statistics, the first being the oldest.
+		 * @type {Stats[]}
+		 */
+		this.stats = [];
 	}
 
 	async get(point, Authorization, version, ...headers) {
@@ -98,11 +104,17 @@ class Client {
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		const { raw, version, userToken } = Object.assign(FetchOptions, options);
+		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
 		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-
 		const contents = await this.get('/statistics', userToken, version);
+
+		if (cache) {
+			this.stats.push(new Stats(contents));
+			if (this.stats.length >= this.options.statsLimit) {
+				while (this.stats.length >= this.options.statsLimit) this.stats.splice(0, 1);
+			}
+		}
 		return raw ? contents : new Stats(contents);
 	}
 

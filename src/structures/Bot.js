@@ -6,6 +6,9 @@ const util = require('util'); // eslint-disable-line no-unused-vars
  * @extends {Base}
  */
 class Bot extends Base {
+	/**
+	 * @param {object} obj
+	 */
 	constructor(obj) {
 		super(obj);
 

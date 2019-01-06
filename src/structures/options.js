@@ -4,6 +4,7 @@
  * @property {string} [botID=null] The bot's ID.
  * @property {string} [userToken=null] Your site API token. Required for most endpoints.
  * @property {boolean} [cache=false] Whether or not to cache bots/users on fetch.
+ * @property {number} [statsLimit=3] The limit on the number of cached Statistics in {@link Client#stats}
  * @property {number} [version=1] The default version of the API to use when fetching and posting.
  */
 exports.ClientOptions = {
@@ -11,6 +12,7 @@ exports.ClientOptions = {
 	botID: null,
 	userToken: null,
 	cache: false,
+	statsLimit: 3,
 	version: 1
 };
 

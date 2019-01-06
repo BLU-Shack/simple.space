@@ -1,7 +1,6 @@
-const EventEmitter = require('events');
 const Fetch = require('node-fetch').default; // Literally only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
-const { isObject, check, clientEvents: Events } = require('./util/');
+const { isObject, check } = require('./util/');
 
 const ok = /2\d\d/;
 
@@ -16,15 +15,12 @@ const { Bot, User, Upvote, Stats,
 
 /**
  * Main client class for interacting to botlist.space
- * @extends {EventEmitter}
  */
-class Client extends EventEmitter {
+class Client {
 	/**
 	 * @param {ClientOptions} options The options to configure.
 	 */
 	constructor(options = ClientOptions) {
-		super();
-
 		/**
 		 * The ClientOptions.
 		 * @type {ClientOptions}
@@ -32,12 +28,6 @@ class Client extends EventEmitter {
 		this.options = ClientOptions;
 
 		this.edit(Object.assign(ClientOptions, options), true);
-
-		/**
-		 * The next timeout when cache is updated.
-		 * @type {?NodeJS.Timeout}
-		 */
-		this._nextCache = null;
 
 		/**
 		 * Every bot cached, mapped by their IDs.
@@ -67,7 +57,7 @@ class Client extends EventEmitter {
 			headers: { Authorization, 'Content-Type': 'application/json' },
 			body: JSON.stringify(body),
 		});
-		if (i.status === 429) throw new Ratelimit(i);
+		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
 		else return contents;
@@ -83,13 +73,6 @@ class Client extends EventEmitter {
 		return 'https://api.botlist.space/v';
 	}
 
-	async _cache() {
-		if (!this.options.autoCache) return;
-		await this.fetchAllBots({ cache: true });
-		this.emit(Events.cacheUpdate, this.bots);
-		this._nextCache = setTimeout(this._cache, this.options.autoCacheInterval);
-	}
-
 	/**
 	 * Edit the options of the Client.
 	 * @param {ClientOptions} [options={}] The options to change.
@@ -99,16 +82,6 @@ class Client extends EventEmitter {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
 		check.edit(toCheck);
-
-		if ((toCheck.autoCacheInterval !== this.options.autoCacheInterval) && toCheck._nextCache) {
-			clearInterval(this._nextCache);
-			this._cache();
-		} else if (toCheck.autoCache && !this.options.autoCache) {
-			this._cache();
-		} else if (!toCheck.autoCache && this.options.autoCache) {
-			clearInterval(this._nextCache);
-			this._nextCache = null;
-		}
 
 		// Give some properties of the ClientOptions
 		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
@@ -281,7 +254,6 @@ class Client extends EventEmitter {
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
 		const contents = await this.post(`/bots/${id}`, botToken, version, body);
-		this.emit(Events.post, options.countOrShards);
 		return contents;
 	}
 }
@@ -289,15 +261,3 @@ class Client extends EventEmitter {
 Client.prototype.fetchAllBots = util.deprecate(Client.prototype.fetchAllBots, 'Client#fetchAllBots - Deprecated; Use Client#fetchBots instead.');
 
 module.exports = Client;
-
-/**
- * Emitted when cache is automatically updated.
- * @event Client#cacheUpdate
- * @param {Store<string, Bot>} bots The Bots' cache.
- */
-
-/**
- * Emitted when a successful POST is performed.
- * @event Client#post
- * @param {number | number[]} countOrShards The number/array of numbers used to POST.
- */

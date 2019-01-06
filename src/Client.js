@@ -91,11 +91,14 @@ class Client {
 	 * Edit the options of the Client.
 	 * @param {ClientOptions} [options={}] The options to change.
 	 * @param {boolean} [preset=false] If true, uses the default ClientOptions as a target copy. Otherwise, {@link Client#options} is used.
+	 * @returns {ClientOptions}
 	 */
 	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
 		check(toCheck);
+
+		if (toCheck.statsLimit < this.options.statsLimit) while (this.stats.length > toCheck.statsLimit) this.stats.shift();
 
 		// Give some properties of the ClientOptions
 		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
@@ -116,12 +119,7 @@ class Client {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const contents = await this.get('/statistics', version);
 
-		if (cache) {
-			this.stats.push(new Stats(contents));
-			if (this.stats.length >= this.options.statsLimit) {
-				while (this.stats.length >= this.options.statsLimit) this.stats.splice(0, 1);
-			}
-		}
+		if (cache) this.stats.push(new Stats(contents));
 		return raw ? contents : new Stats(contents);
 	}
 
@@ -202,8 +200,8 @@ class Client {
 
 		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, `?page=${page}`);
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
-		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c)]));
-		else return raw ? contents : contents.upvotes.map(c => new Upvote(c));
+		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
+		else return raw ? contents : contents.upvotes.map(c => new Upvote(c, id));
 	}
 
 	/**

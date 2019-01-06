@@ -17,6 +17,7 @@ declare module 'simple.space' {
 		public bots: Store<string, Bot>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
+		public stats: Stats[];
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
 		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
@@ -51,6 +52,7 @@ declare module 'simple.space' {
 		public id: string;
 		public invite: string;
 		public inviteNoPerms: string;
+		public owners: User[];
 		public prefix: string;
 		public shortDescription: string;
 		public updatedAt: number;
@@ -65,7 +67,6 @@ declare module 'simple.space' {
 		public readonly page: string;
 		public readonly views: number[];
 		public readonly owner: User;
-		public readonly owners: User[];
 		public readonly secondaryOwners: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
@@ -96,7 +97,7 @@ declare module 'simple.space' {
 		public toString(): string;
 	}
 
-	/** Represents the site's statistics information. */
+	/** Represents botlist.space's statistics information. */
 	export class Stats {
 		constructor(stats: object);
 		private raw: object;
@@ -112,7 +113,7 @@ declare module 'simple.space' {
 		public readonly botUserTotal: number;
 	}
 
-	/** Represents a user with full information on the site. */
+	/** Represents a User on botlist.space */
 	export class User extends Base {
 		constructor(user: object);
 
@@ -128,11 +129,13 @@ declare module 'simple.space' {
 		public toString(): string;
 	}
 
+	/** Represents a User Upvote of a bot. */
 	export class Upvote extends Base {
-		constructor(obj: object);
+		constructor(obj: object, id: string);
 
-		public user: User;
+		public id: string;
 		public timestamp: number;
+		public user: User;
 
 		public toString(): string;
 	}
@@ -146,6 +149,7 @@ declare module 'simple.space' {
 		botToken?: string;
 		cache?: boolean;
 		version?: number;
+		statsLimit?: number;
 	}
 
 	export type FetchOptions = {

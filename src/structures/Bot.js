@@ -25,12 +25,6 @@ class Bot extends Base {
 		this.avatar = obj.avatar;
 
 		/**
-		 * Whether or not the bot has been certified.
-		 * @type {boolean}
-		 */
-		this.certified = obj.certified;
-
-		/**
 		 * Whether or not the bot's avatar is child friendly
 		 * @type {boolean}
 		 */

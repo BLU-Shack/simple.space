@@ -107,12 +107,6 @@ class Bot extends Base {
 		 * @type {?string}
 		 */
 		this.vanityCode = obj.vanity;
-
-		/**
-		 * The owners of the bot.
-		 * @type {User[]}
-		 */
-		this.owners = obj.owners.map(i => new User(i));
 	}
 
 	/**
@@ -121,8 +115,16 @@ class Bot extends Base {
 	 * @type {User}
 	 */
 	get owner() {
-		if (!this.owners) return null;
-		else return this.owners[0];
+		return this.owners[0];
+	}
+
+	/**
+	 * Users who can manage the Bot on botlist.space
+	 * @readonly
+	 * @type {User[]}
+	 */
+	get owners() {
+		return this.owners.map(owner => new User(owner));
 	}
 
 	/**
@@ -140,8 +142,7 @@ class Bot extends Base {
 	 * @type {User[]}
 	 */
 	get secondaryOwners() {
-		if (!this.owners) return null;
-		else return this.owners.slice(1);
+		return this.owners.slice(1);
 	}
 
 	/**

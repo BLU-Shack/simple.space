@@ -52,7 +52,6 @@ declare module 'simple.space' {
 		public id: string;
 		public invite: string;
 		public inviteNoPerms: string;
-		public owners: User[];
 		public prefix: string;
 		public shortDescription: string;
 		public updatedAt: number;
@@ -67,6 +66,7 @@ declare module 'simple.space' {
 		public readonly page: string;
 		public readonly views: number[];
 		public readonly owner: User;
+		public readonly owners: User[];
 		public readonly secondaryOwners: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;

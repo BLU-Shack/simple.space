@@ -144,7 +144,7 @@ declare module 'simple.space' {
 
 	//#region Options
 
-	export type ClientOptions = {
+	type ClientOptions = {
 		botID?: string;
 		botToken?: string;
 		cache?: boolean;
@@ -152,23 +152,27 @@ declare module 'simple.space' {
 		statsLimit?: number;
 	}
 
-	export type FetchOptions = {
+	type FetchOptions = {
 		cache?: boolean;
 		raw?: boolean;
 		version?: number;
 		botToken?: string;
 	}
 
-	export type MultiFetchOptions = FetchOptions & {
+	type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
 		page?: number;
 	}
 
-	export type PostOptions = {
+	type PostOptions = {
 		botToken?: string;
 		countOrShards: number | number[];
 		version?: number;
 	}
 
+	export const ClientOpts: ClientOptions;
+	export const FetchOpts: FetchOptions;
+	export const MultiFetchOpts: MultiFetchOptions;
+	export const PostOpts: PostOptions;
 	//#endregion
 }

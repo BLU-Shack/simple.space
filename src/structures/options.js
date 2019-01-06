@@ -6,7 +6,7 @@
  * @property {number} [statsLimit=3] The limit on the number of cached Statistics in {@link Client#stats}
  * @property {number} [version=1] The default version of the API to use when fetching and posting.
  */
-exports.ClientOptions = {
+exports.ClientOpts = {
 	botToken: null,
 	botID: null,
 	cache: false,
@@ -22,7 +22,7 @@ exports.ClientOptions = {
  * @property {boolean} [raw=false] When set to true, returns the raw fetched object.
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  */
-exports.FetchOptions = {
+exports.FetchOpts = {
 	cache: false,
 	raw: false,
 	version: 1,
@@ -40,8 +40,8 @@ exports.FetchOptions = {
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  * @property {number} [page=1] The section of the endpoint to take.
  */
-exports.MultiFetchOptions = {
-	...exports.FetchOptions,
+exports.MultiFetchOpts = {
+	...exports.FetchOpts,
 	mapify: true,
 	page: 1
 };
@@ -53,7 +53,7 @@ exports.MultiFetchOptions = {
  * Must be the token corrosponding. Uses {@link ClientOptions#botToken} if omitted.
  * @property {boolean} [version=this.options.version] The version to use to fetch an endpoint.
  */
-exports.PostOptions = {
+exports.PostOpts = {
 	countOrShards: null,
 	botToken: null,
 	version: 1

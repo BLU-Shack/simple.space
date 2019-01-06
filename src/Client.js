@@ -10,7 +10,7 @@ const ok = /2\d\d/;
  */
 const Store = require('@ired_me/red-store');
 const { Bot, User, Upvote, Stats,
-	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,
+	ClientOpts, FetchOpts, PostOpts, MultiFetchOpts,
 	Ratelimit, FetchError, } = require('./structures/');
 
 /**
@@ -20,14 +20,14 @@ class Client {
 	/**
 	 * @param {ClientOptions} options The options to configure.
 	 */
-	constructor(options = ClientOptions) {
+	constructor(options = ClientOpts) {
 		/**
-		 * The ClientOptions.
+		 * The ClientOpts.
 		 * @type {ClientOptions}
 		 */
-		this.options = ClientOptions;
+		this.options = ClientOpts;
 
-		this.edit(Object.assign(ClientOptions, options), true);
+		this.edit(Object.assign(ClientOpts, options), true);
 
 		/**
 		 * Every bot cached, mapped by their IDs.
@@ -90,32 +90,32 @@ class Client {
 	/**
 	 * Edit the options of the Client.
 	 * @param {ClientOptions} [options={}] The options to change.
-	 * @param {boolean} [preset=false] If true, uses the default ClientOptions as a target copy. Otherwise, {@link Client#options} is used.
+	 * @param {boolean} [preset=false] If true, uses the default ClientOpts as a target copy. Otherwise, {@link Client#options} is used.
 	 * @returns {ClientOptions}
 	 */
 	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
+		const toCheck = Object.assign(preset ? ClientOpts : this.options, options);
 		check(toCheck);
 
 		if (toCheck.statsLimit < this.options.statsLimit) while (this.stats.length > toCheck.statsLimit) this.stats.shift();
 
-		// Give some properties of the ClientOptions
-		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
-		FetchOptions.version = MultiFetchOptions.version = PostOptions.version = toCheck.version;
-		FetchOptions.userToken = MultiFetchOptions.userToken = PostOptions.userToken = toCheck.userToken;
-		FetchOptions.botToken = MultiFetchOptions.botToken = PostOptions.botToken = toCheck.botToken;
+		// Give some properties of the ClientOpts
+		FetchOpts.cache = MultiFetchOpts.cache = toCheck.cache;
+		FetchOpts.version = MultiFetchOpts.version = PostOpts.version = toCheck.version;
+		FetchOpts.userToken = MultiFetchOpts.userToken = PostOpts.userToken = toCheck.userToken;
+		FetchOpts.botToken = MultiFetchOpts.botToken = PostOpts.botToken = toCheck.botToken;
 
 		return this.options = toCheck;
 	}
 
 	/**
 	 * Fetch botlist.space statistics.
-	 * @param {FetchOptions} [options={}] Options to pass. (Ignores cache)
+	 * @param {FetchOptions} [options={}] Opts to pass. (Ignores cache)
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		const { cache, raw, version } = Object.assign(FetchOptions, options);
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const contents = await this.get('/statistics', version);
 
@@ -125,12 +125,12 @@ class Client {
 
 	/**
 	 * Fetch all bots listed on botlist.space.
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 * @deprecated Use {@link Client#fetchBots} instead.
 	 */
 	async fetchAllBots(options = {}) {
-		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOptions, options);
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
@@ -142,11 +142,11 @@ class Client {
 
 	/**
 	 * Fetch all bots listed on botlist.space.
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
-		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOptions, options);
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
@@ -159,8 +159,8 @@ class Client {
 	/**
 	 * Fetch a bot listed on botlist.space.
 	 * @param {string | FetchOptions} [id=this.options.botID] The ID of the bot to fetch. Not required if this.options.botID is set.
-	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
-	 * @param {FetchOptions} [options={}] Options to pass.
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
+	 * @param {FetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot>} A bot object.
 	 */
 	async fetchBot(id = this.options.botID, options = {}) {
@@ -168,7 +168,7 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version } = Object.assign(FetchOptions, options);
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
@@ -182,8 +182,8 @@ class Client {
 	/**
 	 * Fetch a bot's upvotes from the past month; Requires Bot Token
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
-	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Upvote[] | Store<string, Upvote>>} An array of upvotes.s
 	 */
 	async fetchUpvotes(id = this.options.botID, options = {}) {
@@ -191,7 +191,7 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOptions, options);
+		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOpts, options);
 		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
@@ -207,11 +207,11 @@ class Client {
 	/**
 	 * Fetch a user logged onto botlist.space.
 	 * @param {string} id The user ID to fetch from the API.
-	 * @param {FetchOptions} [options={}] Options to pass.
+	 * @param {FetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
-		const { cache, raw, version } = Object.assign(FetchOptions, options);
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
@@ -224,11 +224,11 @@ class Client {
 	/**
 	 * Fetches all bots that a user owns.
 	 * @param {string} id A user ID to fetch bots from.
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, page } = Object.assign(MultiFetchOptions, options);
+		const { cache, raw, version, mapify, page } = Object.assign(MultiFetchOpts, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
@@ -241,14 +241,14 @@ class Client {
 
 	/**
 	 * Post your server count to botlist.space.
-	 * @param {string | PostOptions | number | number[]} [id=this.options.botID]
+	 * @param {string | PostOpts | number | number[]} [id=this.options.botID]
 	 * The bot ID to post server count for.
 	 * Not required if a bot ID was supplied.
-	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
-	 * Can also be {@link PostOptions#countOrShards} if a number/array of numbers.
+	 * Can be PostOpts if using the bot ID supplied from ClientOpts.
+	 * Can also be {@link PostOpts#countOrShards} if a number/array of numbers.
 	 * @param {PostOptions} [options={}]
-	 * Options to pass.
-	 * Overriden by the `id` parameter if `id` is PostOptions/number/array of numbers
+	 * Opts to pass.
+	 * Overriden by the `id` parameter if `id` is PostOpts/number/array of numbers
 	 * @returns {object} An object that satisfies your low self-esteem reminding you it was successive on post.
 	 */
 	async postCount(id = this.options.botID, options = {}) {
@@ -262,9 +262,9 @@ class Client {
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const { version, botToken, countOrShards } = Object.assign(PostOptions, options);
+		const { version, botToken, countOrShards } = Object.assign(PostOpts, options);
 
-		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOptions.');
+		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOpts.');
 		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');
 		if (typeof countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
 		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len

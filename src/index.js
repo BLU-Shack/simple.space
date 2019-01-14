@@ -3,5 +3,5 @@ const Client = require('./Client.js');
 
 module.exports = Object.assign(Classes, {
 	Client,
-	version: require('../package.json').version,
+	get version() { return require('../package.json').version; },
 });

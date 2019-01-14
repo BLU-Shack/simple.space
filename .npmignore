@@ -1,4 +1,5 @@
 private/
+docs/
 .github
 .vscode
 .eslintrc.json

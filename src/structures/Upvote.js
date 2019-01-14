@@ -5,8 +5,18 @@ const { Base, User } = require('.');
  * @extends {Base}
  */
 class Upvote extends Base {
-	constructor(obj) {
+	/**
+	 * @param {object} obj
+	 * @param {string} id
+	 */
+	constructor(obj, id) {
 		super(obj);
+
+		/**
+		 * The bot ID of which the users upvoted.
+		 * @type {string}
+		 */
+		this.botID = id;
 
 		/**
 		 * The user that upvoted.

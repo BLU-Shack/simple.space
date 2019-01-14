@@ -5,6 +5,7 @@
 class FetchError extends Error {
 	/**
      * @param {Response} i
+	 * @param {string} message
      */
 	constructor(i, message) {
 		super(`${i.status} ${message}`);

@@ -2,10 +2,12 @@ const Base = require('./Base.js');
 
 /**
  * Represents any user logged onto botlist.space.
- * @class
  * @extends {Base}
  */
 class User extends Base {
+	/**
+	 * @param {object} obj
+	 */
 	constructor(obj) {
 		super(obj);
 
@@ -16,7 +18,7 @@ class User extends Base {
 		this.avatar = obj.avatar;
 
 		/**
-		 * The user's description on the site.
+		 * The user's description on botlist.space.
 		 * @type {?string}
 		 */
 		this.description = obj.short_description;
@@ -41,7 +43,7 @@ class User extends Base {
 	}
 
 	/**
-	 * The user's page on the site.
+	 * The user's page on botlist.space.
 	 * @readonly
 	 * @type {string}
 	 */

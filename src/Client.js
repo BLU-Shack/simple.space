@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
-const EventEmitter = require('events');
 const Fetch = require('node-fetch').default; // Literally only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
-const { isObject, check, clientEvents: Events } = require('./util/');
+const { isObject, check } = require('./util/');
 
 const ok = /2\d\d/;
 
@@ -11,34 +9,25 @@ const ok = /2\d\d/;
  * @see {@link https://github.com/iREDMe/red-store}
  */
 const Store = require('@ired_me/red-store');
-const { Bot, Guild, User, Upvote, Stats,
-	ClientOptions, FetchOptions, PostOptions, MultiFetchOptions,
+const { Bot, User, Upvote, Stats,
+	ClientOpts, FetchOpts, PostOpts, MultiFetchOpts,
 	Ratelimit, FetchError, } = require('./structures/');
 
 /**
  * Main client class for interacting to botlist.space
- * @extends {EventEmitter}
  */
-class Client extends EventEmitter {
+class Client {
 	/**
 	 * @param {ClientOptions} options The options to configure.
 	 */
-	constructor(options = ClientOptions) {
-		super();
-
+	constructor(options = ClientOpts) {
 		/**
-		 * The ClientOptions.
+		 * The ClientOpts.
 		 * @type {ClientOptions}
 		 */
-		this.options = ClientOptions;
+		this.options = ClientOpts;
 
-		this.edit(Object.assign(ClientOptions, options), true);
-
-		/**
-		 * The next timeout when cache is updated.
-		 * @type {?NodeJS.Timeout}
-		 */
-		this._nextCache = null;
+		this.edit(Object.assign(ClientOpts, options), true);
 
 		/**
 		 * Every bot cached, mapped by their IDs.
@@ -52,26 +41,40 @@ class Client extends EventEmitter {
 		 * @type {Store<string, User>}
 		 */
 		this.users = new Store();
+
+		/**
+		 * An array of the last three fetched Statistics, the first being the oldest.
+		 * @type {Stats[]}
+		 */
+		this.stats = [];
 	}
 
-	async get(point, Authorization, version, ...headers) {
+	async get(point, version, ...headers) {
+		const i = await Fetch(this.endpoint + version + point + headers.join(''));
+		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
+		const contents = await i.json();
+		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
+		else return contents;
+	}
+
+	async authGet(point, version, Authorization, ...headers) {
 		const i = await Fetch(this.endpoint + version + point + headers.join(''), { headers: { Authorization } });
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
-		return contents;
+		else return contents;
 	}
 
-	async post(point, Authorization, version, body) {
+	async post(point, version, Authorization, body) {
 		const i = await Fetch(this.endpoint + version + point, {
 			method: 'post',
 			headers: { Authorization, 'Content-Type': 'application/json' },
 			body: JSON.stringify(body),
 		});
-		if (i.status === 429) throw new Ratelimit(i);
+		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
-		return contents;
+		else return contents;
 	}
 
 	/**
@@ -84,79 +87,80 @@ class Client extends EventEmitter {
 		return 'https://api.botlist.space/v';
 	}
 
-	async _cache() {
-		if (!this.options.autoCache) return;
-		const i = { cache: true };
-		await this.fetchAllBots(i);
-		this.emit(Events.cacheUpdate, { bots: this.bots });
-		this._nextCache = setTimeout(this._cache, this.options.autoCacheInterval);
-	}
-
 	/**
 	 * Edit the options of the Client.
 	 * @param {ClientOptions} [options={}] The options to change.
-	 * @param {boolean} [preset=false] If true, uses the default ClientOptions as a target copy. Otherwise, {@link Client#options} is used.
+	 * @param {boolean} [preset=false] If true, uses the default ClientOpts as a target copy. Otherwise, {@link Client#options} is used.
+	 * @returns {ClientOptions}
 	 */
 	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const toCheck = Object.assign(preset ? ClientOptions : this.options, options);
-		check.edit(toCheck);
+		const toCheck = Object.assign(preset ? ClientOpts : this.options, options);
+		check(toCheck);
 
-		if ((toCheck.autoCacheInterval !== this.options.autoCacheInterval) && toCheck._nextCache) {
-			clearInterval(this._nextCache);
-			this._cache();
-		} else if (toCheck.autoCache && !this.options.autoCache) {
-			this._cache();
-		} else if (!toCheck.autoCache && this.options.autoCache) {
-			clearInterval(this._nextCache);
-			this._nextCache = null;
-		}
+		if (toCheck.statsLimit < this.options.statsLimit) while (this.stats.length > toCheck.statsLimit) this.stats.shift();
 
-		// Give some properties of the ClientOptions
-		FetchOptions.cache = MultiFetchOptions.cache = toCheck.cache;
-		FetchOptions.version = MultiFetchOptions.version = PostOptions.version = toCheck.version;
-		FetchOptions.userToken = MultiFetchOptions.userToken = PostOptions.userToken = toCheck.userToken;
-		FetchOptions.botToken = MultiFetchOptions.botToken = PostOptions.botToken = toCheck.botToken;
+		// Give some properties of the ClientOpts
+		FetchOpts.cache = MultiFetchOpts.cache = toCheck.cache;
+		FetchOpts.version = MultiFetchOpts.version = PostOpts.version = toCheck.version;
+		FetchOpts.userToken = MultiFetchOpts.userToken = PostOpts.userToken = toCheck.userToken;
+		FetchOpts.botToken = MultiFetchOpts.botToken = PostOpts.botToken = toCheck.botToken;
 
 		return this.options = toCheck;
 	}
 
 	/**
-	 * Fetch the site statistics.
-	 * @param {FetchOptions} [options={}] Options to pass. (Ignores cache)
+	 * Fetch botlist.space statistics.
+	 * @param {FetchOptions} [options={}] Opts to pass. (Ignores cache)
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		const { raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 		if (!isObject(options)) throw new TypeError('options must be an object.');
+		const contents = await this.get('/statistics', version);
 
-		const contents = await this.get('/statistics', userToken, version);
+		if (cache) this.stats.push(new Stats(contents));
 		return raw ? contents : new Stats(contents);
 	}
 
 	/**
-	 * Fetch all bots listed on the site.
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * Fetch all bots listed on botlist.space.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
+	 * @deprecated Use {@link Client#fetchBots} instead.
 	 */
 	async fetchAllBots(options = {}) {
-		const { cache, mapify, raw, version, userToken, page } = Object.assign(MultiFetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get('/bots', userToken, version, `?page=${page}`);
+		const contents = await this.get('/bots', version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
-		if (mapify) return cache ? this.bots : new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
+		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
 	}
 
 	/**
-	 * Fetch a bot listed on the site.
+	 * Fetch all bots listed on botlist.space.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
+	 * @returns {Promise<Bot[] | Store<string, Bot>>}
+	 */
+	async fetchBots(options = {}) {
+		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
+		if (typeof page !== 'number') throw new TypeError('page must be a number.');
+		if (!isObject(options)) throw new TypeError('options must be an object.');
+
+		const contents = await this.get('/bots', version, `?page=${page}`);
+		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
+		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
+		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
+	}
+
+	/**
+	 * Fetch a bot listed on botlist.space.
 	 * @param {string | FetchOptions} [id=this.options.botID] The ID of the bot to fetch. Not required if this.options.botID is set.
-	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
-	 * @param {FetchOptions} [options={}] Options to pass.
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
+	 * @param {FetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot>} A bot object.
 	 */
 	async fetchBot(id = this.options.botID, options = {}) {
@@ -164,57 +168,55 @@ class Client extends EventEmitter {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}`, userToken, version);
+		const contents = await this.get(`/bots/${id}`, version);
 		if (cache) this.bots.set(contents.id, new Bot(contents));
 		return raw ? contents : new Bot(contents);
 	}
 
 	/**
-	 * Fetch a bot's upvotes from the past month.
+	 * Fetch a bot's upvotes from the past month; Requires Bot Token
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
-	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOptions#bot}) if so
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
-	 * @returns {Promise<Upvote[]>} An array of upvotes.s
+	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
+	 * @returns {Promise<Upvote[] | Store<string, Upvote>>} An array of upvotes.s
 	 */
 	async fetchUpvotes(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOptions, options);
+		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOpts, options);
 		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}/upvotes`, botToken, version, `?page=${page}`);
+		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, `?page=${page}`);
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
-		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)]));
-		else return raw ? contents : contents.upvotes.map(c => new User(c.user));
+		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
+		else return raw ? contents : contents.upvotes.map(c => new Upvote(c, id));
 	}
 
 	/**
-	 * Fetch a user logged onto the site.
+	 * Fetch a user logged onto botlist.space.
 	 * @param {string} id The user ID to fetch from the API.
-	 * @param {FetchOptions} [options={}] Options to pass.
+	 * @param {FetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
-		const { cache, raw, version, userToken } = Object.assign(FetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version } = Object.assign(FetchOpts, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/users/${id}`, userToken, version);
+		const contents = await this.get(`/users/${id}`, version);
 		if (cache) this.users.set(contents.id, new User(contents));
 		return raw ? contents : new User(contents);
 	}
@@ -222,28 +224,32 @@ class Client extends EventEmitter {
 	/**
 	 * Fetches all bots that a user owns.
 	 * @param {string} id A user ID to fetch bots from.
-	 * @param {MultiFetchOptions} [options={}] Options to pass.
+	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, userToken, page } = Object.assign(MultiFetchOptions, options);
-		if (!userToken) throw new ReferenceError('options.userToken must be defined.');
+		const { cache, raw, version, mapify, page } = Object.assign(MultiFetchOpts, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/users/${id}/bots`, userToken, version, `?page=${page}`);
+		const contents = await this.get(`/users/${id}/bots`, version, `?page=${page}`);
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
 		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
 		else return raw ? contents : contents.bots.map(b => new Bot(b));
 	}
 
 	/**
-	 * Post your server count to the site.
-	 * @param {string | PostOptions} [id=this.options.botID] The bot ID to post server count for. Not required if a bot ID was supplied.
-	 * Can be PostOptions if using the bot ID supplied from ClientOptions.
-	 * @param {PostOptions} [options={}] Options to pass.
-	 * @returns {object} An object.
+	 * Post your server count to botlist.space.
+	 * @param {string | PostOpts | number | number[]} [id=this.options.botID]
+	 * The bot ID to post server count for.
+	 * Not required if a bot ID was supplied.
+	 * Can be PostOpts if using the bot ID supplied from ClientOpts.
+	 * Can also be {@link PostOpts#countOrShards} if a number/array of numbers.
+	 * @param {PostOptions} [options={}]
+	 * Opts to pass.
+	 * Overriden by the `id` parameter if `id` is PostOpts/number/array of numbers
+	 * @returns {object} An object that satisfies your low self-esteem reminding you it was successive on post.
 	 */
 	async postCount(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
@@ -256,30 +262,19 @@ class Client extends EventEmitter {
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const { version, botToken, countOrShards } = Object.assign(PostOptions, options);
+		const { version, botToken, countOrShards } = Object.assign(PostOpts, options);
 
-		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOptions.');
+		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOpts.');
 		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');
 		if (typeof countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
 		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
-		const contents = await this.post(`/bots/${id}`, botToken, version, body);
-		this.emit(Events.post, options.countOrShards);
+		const contents = await this.post(`/bots/${id}`, version, botToken, body);
 		return contents;
 	}
 }
 
+Client.prototype.fetchAllBots = util.deprecate(Client.prototype.fetchAllBots, 'Client#fetchAllBots - Deprecated; Use Client#fetchBots instead.');
+
 module.exports = Client;
-
-/**
- * Emitted when cache is automatically updated.
- * @event Client#cacheUpdate
- * @param {Store<string, Bot>} bots The Bots' cache.
- */
-
-/**
- * Emitted when a successful POST is performed.
- * @event Client#post
- * @param {number | number[]} countOrShards The number/array of numbers used to POST.
- */

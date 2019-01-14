@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>structures/Upvote.js - Documentation</title>
+    <title>Store - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,60 +28,104 @@
 
 <div id="main">
     
-    <h1 class="page-title">structures/Upvote.js</h1>
+    <h1 class="page-title">Store</h1>
     
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const { Base, User } = require('.');
+        <h2>
+        Store
+        </h2>
+        
+    
+</header>
 
-/**
- * Resembles an upvote from the `/bots/:id/upvotes` endpoint.
- * @extends {Base}
- */
-class Upvote extends Base {
-	/**
-	 * @param {object} obj
-	 * @param {string} id
-	 */
-	constructor(obj, id) {
-		super(obj);
+<article>
+    <div class="container-overview">
+    
+        
 
-		/**
-		 * The bot ID of which the users upvoted.
-		 * @type {string}
-		 */
-		this.botID = id;
+        
 
-		/**
-		 * The user that upvoted.
-		 * @type {User}
-		 */
-		this.user = new User(obj.user);
 
-		/**
-		 * The timestamp in which the upvote took place.
-		 * @type {number}
-		 */
-		this.timestamp = obj.timestamp;
-	}
+<dl class="details">
 
-	/**
-	 * Returns text that Discord recognizes as a user mention.
-	 * @type {string}
-	 */
-	toString() {
-		return `&lt;@${this.user.id}>`;
-	}
-}
+    
 
-module.exports = Upvote;</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Client.js.html">Client.js</a>, <a href="Client.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/iREDMe/red-store">https://github.com/iREDMe/red-store</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

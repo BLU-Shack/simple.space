@@ -5,42 +5,33 @@
 // License: MIT
 
 declare module 'simple.space' {
-	import { EventEmitter } from 'events';
-	import { Express } from 'express';
 	import Store from '@ired_me/red-store';
 	export const version: string;
 
 	//#region Classes
 	/** The Client for interacting with botlist.space */
-	export class Client extends EventEmitter {
+	export class Client {
 		constructor(options?: ClientOptions);
 
 		public endpoint: string;
-		public _nextCache?: NodeJS.Timeout;
 		public bots: Store<string, Bot>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
+		public stats: Stats[];
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
 		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBot(id?: string | FetchOptions, options?: FetchOptions): Promise<Bot>;
+		public fetchBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
-		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[]>
-		public postCount(id?: string | PostOptions, options?: PostOptions): object;
-		private _cache(): Promise<void>;
+		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>;
+		public postCount(options?: PostOptions): object;
+		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
+		public postCount(id?: string, options?: PostOptions): object;
 		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
-
-		public on(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
-		public on(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public once(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
-		public once(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public addListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
-		public addListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
-		public removeListener(event: 'cacheUpdate', listener: (cache: UpdateCache) => void): this;
-		public removeListener(event: 'post', listener: (countOrShards: number | number[]) => void): this;
 	}
 
 	/** The universal base for all classes. */
@@ -69,13 +60,14 @@ declare module 'simple.space' {
 		public serverCount?: number;
 		public supportCode?: string;
 		public vanity?: string;
+
 		public readonly tag: string;
 		public readonly tags: string[];
 		public readonly page: string;
 		public readonly views: number[];
-		public readonly owners?: User[];
-		public readonly owner?: User;
-		public readonly secondaryOwners?: User[];
+		public readonly owner: User;
+		public readonly owners: User[];
+		public readonly secondaryOwners: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
 		public readonly vanityURL?: string;
@@ -86,41 +78,42 @@ declare module 'simple.space' {
 	/** When an error is caught while fetching, this is thrown. */
 	export class FetchError extends Error {
 		constructor(i: Response);
-		public readonly name: 'FetchError';
-		public toString(): string;
-	}
 
-	/** Represents a Guild on the site. */
-	export class Guild extends Base {
-		constructor(guild: object);
+		public readonly name: 'FetchError';
+
+		public toString(): string;
 	}
 
 	/** A 429 Ratelimit Class. */
 	export class Ratelimit extends Error {
 		constructor(headers: Headers, endpoint: string);
+
 		public readonly headers: Headers;
 		public readonly limit: number;
 		public readonly retryAfter: number;
 		public readonly name: 'Ratelimit';
 		public readonly message: string;
+
 		public toString(): string;
 	}
 
-	/** Represents the site's statistics information. */
+	/** Represents botlist.space's statistics information. */
 	export class Stats {
 		constructor(stats: object);
 		private raw: object;
 
+		public createdAt: Date;
+		public createdTimestamp: number;
 		public totalBots: number;
 		public approvedBots: number;
 		public unapprovedBots: number;
 		public users: number;
-		public tags: number
+		public tags: number;
 
 		public readonly botUserTotal: number;
 	}
 
-	/** Represents a user with full information on the site. */
+	/** Represents a User on botlist.space */
 	export class User extends Base {
 		constructor(user: object);
 
@@ -136,11 +129,13 @@ declare module 'simple.space' {
 		public toString(): string;
 	}
 
+	/** Represents a User Upvote of a bot. */
 	export class Upvote extends Base {
-		constructor(obj: object);
+		constructor(obj: object, id: string);
 
-		public user: User;
+		public id: string;
 		public timestamp: number;
+		public user: User;
 
 		public toString(): string;
 	}
@@ -149,41 +144,35 @@ declare module 'simple.space' {
 
 	//#region Options
 
-	export type ClientOptions = {
-		autoCache?: boolean;
-		autoCacheInterval?: number;
+	type ClientOptions = {
 		botID?: string;
 		botToken?: string;
 		cache?: boolean;
-		userToken?: string;
 		version?: number;
+		statsLimit?: number;
 	}
 
-	export type FetchOptions = {
+	type FetchOptions = {
 		cache?: boolean;
 		raw?: boolean;
 		version?: number;
+		botToken?: string;
 	}
 
-	export type MultiFetchOptions = FetchOptions & {
+	type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
 		page?: number;
 	}
 
-	export type PostOptions = {
+	type PostOptions = {
 		botToken?: string;
 		countOrShards: number | number[];
 		version?: number;
 	}
 
-	//#endregion
-
-	//#region Typedefs
-
-	interface UpdateCache {
-		bots: Store<string, Bot>;
-		users: Store<string, User>;
-	}
-
+	export const ClientOpts: ClientOptions;
+	export const FetchOpts: FetchOptions;
+	export const MultiFetchOpts: MultiFetchOptions;
+	export const PostOpts: PostOptions;
 	//#endregion
 }

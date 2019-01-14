@@ -124,7 +124,7 @@ class Bot extends Base {
 	 * @type {User[]}
 	 */
 	get owners() {
-		return this.owners.map(owner => new User(owner));
+		return this.raw.owners.map(owner => new User(owner));
 	}
 
 	/**

@@ -3,7 +3,6 @@ const { ClientOpts, FetchOpts, MultiFetchOpts, PostOpts } = require('./options.j
 module.exports = {
 	get Base() { return require('./Base.js'); },
 	get Bot() { return require('./Bot.js'); },
-	get Guild() { return require('./Guild.js'); },
 	get User() { return require('./User.js'); },
 	get Upvote() { return require('./Upvote.js'); },
 

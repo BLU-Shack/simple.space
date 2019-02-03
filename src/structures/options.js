@@ -39,8 +39,9 @@ exports.FetchOpts = {
  * @property {string} [userToken=this.options.userToken] Your authorization token given from the site.
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  * @property {number} [page=1] The section of the endpoint to take.
- * @property {boolean} [reverse=false] When set to true, reverses the given
- * @property {string} [sortBy=null] The property of
+ * @property {boolean} [reverse=false] When set to true, reverses the output. Only works with `v1/bots`
+ * Requires {@link MultiFetchOptions#sortBy} to have value,
+ * @property {string} [sortBy=null] The property of a bot to.
  */
 exports.MultiFetchOpts = {
 	...exports.FetchOpts,

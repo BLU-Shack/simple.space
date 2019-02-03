@@ -213,7 +213,7 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, botToken, page, mapify, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
+		const { cache, raw, version, botToken, page, mapify, } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
@@ -222,8 +222,6 @@ class Client {
 
 		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, {
 			page: page,
-			sortBy: sortBy,
-			reverseSort: reverse,
 		});
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
 		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
@@ -254,15 +252,13 @@ class Client {
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, page, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
+		const { cache, raw, version, mapify, page, } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get(`/users/${id}/bots`, version, {
 			page: page,
-			sortBy: sortBy,
-			reverseSort: reverse,
 		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
 		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));

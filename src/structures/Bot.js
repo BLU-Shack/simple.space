@@ -1,4 +1,5 @@
-const { Base, User } = require('.');
+const Base = require('./Base.js');
+const User = require('./User.js');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**

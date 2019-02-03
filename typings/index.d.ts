@@ -6,6 +6,7 @@
 
 declare module 'simple.space' {
 	import Store from '@ired_me/red-store';
+	import { Response } from 'node-fetch';
 	export const version: string;
 
 	//#region Classes
@@ -30,7 +31,8 @@ declare module 'simple.space' {
 		public postCount(options?: PostOptions): object;
 		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
 		public postCount(id?: string, options?: PostOptions): object;
-		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
+		private get(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
+		private authGet(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 	}
 
@@ -162,6 +164,8 @@ declare module 'simple.space' {
 	type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
 		page?: number;
+		reverse?: boolean;
+		sortBy?: string;
 	}
 
 	type PostOptions = {
@@ -169,10 +173,5 @@ declare module 'simple.space' {
 		countOrShards: number | number[];
 		version?: number;
 	}
-
-	export const ClientOpts: ClientOptions;
-	export const FetchOpts: FetchOptions;
-	export const MultiFetchOpts: MultiFetchOptions;
-	export const PostOpts: PostOptions;
 	//#endregion
 }

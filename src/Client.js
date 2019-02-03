@@ -32,7 +32,7 @@ class Client {
 		 */
 		this.options = ClientOpts;
 
-		this.edit(Object.assign(ClientOpts, options), true);
+		this.edit(options, true);
 
 		/**
 		 * Every bot cached, mapped by their IDs.
@@ -54,7 +54,7 @@ class Client {
 		this.stats = [];
 	}
 
-	async get(point, version, headers) {
+	async get(point, version, headers = {}) {
 		let endpoint = this.endpoint + version + point;
 		endpoint += Object.entries(headers).map((e, i) => (i ? '&' : '?') + e[0] + '=' + e[1]).join('');
 		const i = await Fetch(endpoint);
@@ -64,8 +64,14 @@ class Client {
 		else return contents;
 	}
 
-	async authGet(point, version, Authorization, ...headers) {
-		const i = await Fetch(this.endpoint + version + point + headers.join(''), { headers: { Authorization } });
+	async authGet(point, version, Authorization, headers = {}) {
+		let endpoint = this.endpoint + version + point;
+		endpoint += Object.entries(headers).map((e, i) => (i ? '&' : '?') + e[0] + '=' + e[1]).join('');
+		const i = await Fetch(endpoint, {
+			headers: {
+				Authorization: Authorization
+			}
+		});
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
@@ -75,7 +81,10 @@ class Client {
 	async post(point, version, Authorization, body) {
 		const i = await Fetch(this.endpoint + version + point, {
 			method: 'post',
-			headers: { Authorization, 'Content-Type': 'application/json' },
+			headers: {
+				Authorization: Authorization,
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify(body),
 		});
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
@@ -122,7 +131,7 @@ class Client {
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
-		const { cache, raw, version } = Object.assign(FetchOpts, options);
+		const { cache, raw, version } = check.fetch(Object.assign(FetchOpts, options));
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const contents = await this.get('/statistics', version);
 
@@ -137,7 +146,7 @@ class Client {
 	 * @deprecated Use {@link Client#fetchBots} instead.
 	 */
 	async fetchAllBots(options = {}) {
-		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
+		const { cache, mapify, raw, version, page } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
@@ -155,7 +164,7 @@ class Client {
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
-		const { cache, mapify, raw, version, page, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
+		const { cache, mapify, raw, version, page, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
@@ -181,7 +190,7 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version } = Object.assign(FetchOpts, options);
+		const { cache, raw, version } = check.fetch(Object.assign(FetchOpts, options));
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
@@ -204,7 +213,7 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, botToken, page, mapify, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
+		const { cache, raw, version, botToken, page, mapify, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
@@ -228,7 +237,7 @@ class Client {
 	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
-		const { cache, raw, version } = Object.assign(FetchOpts, options);
+		const { cache, raw, version } = check.fetch(Object.assign(FetchOpts, options));
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
@@ -245,7 +254,7 @@ class Client {
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, page, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
+		const { cache, raw, version, mapify, page, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
@@ -262,7 +271,7 @@ class Client {
 
 	/**
 	 * Post your server count to botlist.space.
-	 * @param {string | PostOpts | number | number[]} [id=this.options.botID]
+	 * @param {string | PostOptions | number | number[]} [id=this.options.botID]
 	 * The bot ID to post server count for.
 	 * Not required if a bot ID was supplied.
 	 * Can be PostOpts if using the bot ID supplied from ClientOpts.
@@ -283,7 +292,7 @@ class Client {
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
-		const { version, botToken, countOrShards } = Object.assign(PostOpts, options);
+		const { version, botToken, countOrShards } = check.post(Object.assign(PostOpts, options));
 
 		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOpts.');
 		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');

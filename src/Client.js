@@ -119,7 +119,6 @@ class Client {
 		// Give some properties of the ClientOpts
 		FetchOpts.cache = MultiFetchOpts.cache = toCheck.cache;
 		FetchOpts.version = MultiFetchOpts.version = PostOpts.version = toCheck.version;
-		FetchOpts.userToken = MultiFetchOpts.userToken = PostOpts.userToken = toCheck.userToken;
 		FetchOpts.botToken = MultiFetchOpts.botToken = PostOpts.botToken = toCheck.botToken;
 
 		return this.options = toCheck;

@@ -28,9 +28,9 @@ declare module 'simple.space' {
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
 		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>;
+		public postCount(id?: string, options?: PostOptions): object;
 		public postCount(options?: PostOptions): object;
 		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
-		public postCount(id?: string, options?: PostOptions): object;
 		private get(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
 		private authGet(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
@@ -49,7 +49,7 @@ declare module 'simple.space' {
 		public approved: boolean;
 		public avatar: string;
 		public childFriendlyAvatar: boolean;
-		public createdAt: number;
+		public createdTimestamp: number;
 		public discriminator: string;
 		public id: string;
 		public invite: string;
@@ -63,13 +63,14 @@ declare module 'simple.space' {
 		public supportCode?: string;
 		public vanity?: string;
 
-		public readonly tag: string;
-		public readonly tags: string[];
-		public readonly page: string;
-		public readonly views: number[];
+		public readonly createdAt: Date;
 		public readonly owner: User;
 		public readonly owners: User[];
+		public readonly page: string;
 		public readonly secondaryOwners: User[];
+		public readonly tag: string;
+		public readonly tags: string[];
+		public readonly views: number[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
 		public readonly vanityURL?: string;
@@ -82,7 +83,6 @@ declare module 'simple.space' {
 		constructor(i: Response);
 
 		public readonly name: 'FetchError';
-
 		public toString(): string;
 	}
 

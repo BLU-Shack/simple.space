@@ -35,7 +35,7 @@ class Bot extends Base {
 		 * The timestamp of the bot's creation date.
 		 * @type {number}
 		 */
-		this.createdAt = obj.created_at;
+		this.createdTimestamp = obj.created_at;
 
 		/**
 		 * The bot's 4 digits.
@@ -108,6 +108,14 @@ class Bot extends Base {
 		 * @type {?string}
 		 */
 		this.vanityCode = obj.vanity;
+	}
+
+	/**
+	 * The Date of when the bot was created.
+	 * @type {Date}
+	 */
+	get createdAt() {
+		return new Date(this.createdTimestamp);
 	}
 
 	/**

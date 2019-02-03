@@ -39,11 +39,15 @@ exports.FetchOpts = {
  * @property {string} [userToken=this.options.userToken] Your authorization token given from the site.
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  * @property {number} [page=1] The section of the endpoint to take.
+ * @property {boolean} [reverse=false] When set to true, reverses the given
+ * @property {string} [sortBy=null] The property of
  */
 exports.MultiFetchOpts = {
 	...exports.FetchOpts,
 	mapify: true,
-	page: 1
+	page: 1,
+	reverse: false,
+	sortBy: null,
 };
 
 /**

@@ -9,9 +9,14 @@ const ok = /2\d\d/;
  * @see {@link https://github.com/iREDMe/red-store}
  */
 const Store = require('@ired_me/red-store');
-const { Bot, User, Upvote, Stats,
-	ClientOpts, FetchOpts, PostOpts, MultiFetchOpts,
-	Ratelimit, FetchError, } = require('./structures/');
+
+const Bot = require('./structures/Bot.js');
+const User = require('./structures/User.js');
+const Upvote = require('./structures/Upvote.js');
+const Stats = require('./structures/Stats.js');
+const Ratelimit = require('./structures/Errors/Ratelimit.js');
+const FetchError = require('./structures/Errors/FetchError.js');
+const { ClientOpts, FetchOpts, PostOpts, MultiFetchOpts } = require('./structures/options.js');
 
 /**
  * Main client class for interacting to botlist.space
@@ -43,14 +48,16 @@ class Client {
 		this.users = new Store();
 
 		/**
-		 * An array of the last three fetched Statistics, the first being the oldest.
+		 * An array of the latest fetched Statistics, from oldest to newest.
 		 * @type {Stats[]}
 		 */
 		this.stats = [];
 	}
 
-	async get(point, version, ...headers) {
-		const i = await Fetch(this.endpoint + version + point + headers.join(''));
+	async get(point, version, headers) {
+		let endpoint = this.endpoint + version + point;
+		endpoint += Object.entries(headers).map((e, i) => (i ? '&' : '?') + e[0] + '=' + e[1]).join('');
+		const i = await Fetch(endpoint);
 		if (i.status === 429) throw new Ratelimit(i.headers, version + point);
 		const contents = await i.json();
 		if (contents.code && !ok.test(contents.code)) throw new FetchError(i, contents.message);
@@ -96,7 +103,7 @@ class Client {
 	edit(options = {}, preset = false) {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const toCheck = Object.assign(preset ? ClientOpts : this.options, options);
-		check(toCheck);
+		check.edit(toCheck);
 
 		if (toCheck.statsLimit < this.options.statsLimit) while (this.stats.length > toCheck.statsLimit) this.stats.shift();
 
@@ -134,7 +141,9 @@ class Client {
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get('/bots', version, `?page=${page}`);
+		const contents = await this.get('/bots', version, {
+			page: page
+		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
@@ -146,11 +155,15 @@ class Client {
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
-		const { cache, mapify, raw, version, page } = Object.assign(MultiFetchOpts, options);
+		const { cache, mapify, raw, version, page, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get('/bots', version, `?page=${page}`);
+		const contents = await this.get('/bots', version, {
+			page: page,
+			sortBy: sortBy,
+			reverseSort: reverse,
+		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
 		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
@@ -191,14 +204,18 @@ class Client {
 			options = id;
 			id = this.options.botID;
 		}
-		const { cache, raw, version, botToken, page, mapify } = Object.assign(MultiFetchOpts, options);
+		const { cache, raw, version, botToken, page, mapify, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
 		if (!botToken) throw new ReferenceError('options.botToken must be defined.');
 
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, `?page=${page}`);
+		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, {
+			page: page,
+			sortBy: sortBy,
+			reverseSort: reverse,
+		});
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
 		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
 		else return raw ? contents : contents.upvotes.map(c => new Upvote(c, id));
@@ -228,12 +245,16 @@ class Client {
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
-		const { cache, raw, version, mapify, page } = Object.assign(MultiFetchOpts, options);
+		const { cache, raw, version, mapify, page, reverse, sortBy } = Object.assign(MultiFetchOpts, options);
 		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string') throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/users/${id}/bots`, version, `?page=${page}`);
+		const contents = await this.get(`/users/${id}/bots`, version, {
+			page: page,
+			sortBy: sortBy,
+			reverseSort: reverse,
+		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
 		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
 		else return raw ? contents : contents.bots.map(b => new Bot(b));

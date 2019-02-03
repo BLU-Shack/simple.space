@@ -1,6 +1,7 @@
-const Fetch = require('node-fetch').default; // Literally only for linting
+const Fetch = require('node-fetch').default; // Only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
-const { isObject, check } = require('./util/');
+const isObject = require('./util/isObject.js');
+const check = require('./util/check.js');
 
 const ok = /2\d\d/;
 

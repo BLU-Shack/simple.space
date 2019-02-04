@@ -1,6 +1,7 @@
 /* eslint-disable curly */
 
 exports.edit = options => {
+	if ('userToken' in options) process.emitWarning('options#userToken - Obsolete in its use.', 'DeprecationWarning');
 	if (typeof options.botToken !== 'string' && options.botToken !== null)
 		throw new TypeError('options.botToken must be a string.');
 	else if (typeof options.botID !== 'string' && options.botID !== null)
@@ -14,6 +15,7 @@ exports.edit = options => {
 };
 
 exports.fetch = options => {
+	if ('userToken' in options) process.emitWarning('options#userToken - Obsolete in its use.', 'DeprecationWarning');
 	if (typeof options.cache !== 'boolean')
 		throw new TypeError('options.cache must be boolean.');
 	else if (typeof options.raw !== 'boolean')

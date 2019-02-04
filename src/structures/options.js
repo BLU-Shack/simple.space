@@ -40,6 +40,7 @@ exports.FetchOpts = {
  * Corrosponds to {@link ClientOptions#version} when not present.
  * @property {boolean} [mapify=true] When set to true, the fetched value will be in a Store, mapped by their IDs
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
+ * The token should be related to the bot ID of fetch. Uses {@link ClientOptions#botToken} if omitted.
  * @property {number} [page=1] The section of the endpoint to take.
  * @property {boolean} [reverse=false] When set to true, reverses the output. Only works with `v1/bots` and `v1/users/:id/bots`,
  * or `Client.fetchBots()` and `Client.fetchBotsOfUser()` respectively. Requires {@link MultiFetchOptions#sortBy} to have value.
@@ -60,7 +61,7 @@ exports.MultiFetchOpts = {
  * @typedef {object} PostOptions Options when POSTing bot count.
  * @property {number | number[]} [countOrShards=null] The server count/array of shards that the bot currently has.
  * @property {string} [botToken=this.options.botToken] The bot authorization token to use for authenticating the POST.
- * The token should be related to the bot ID of fetch. Uses {@link ClientOptions#botToken} if omitted.
+ * The token should be related to the bot ID of POST. Uses {@link ClientOptions#botToken} if omitted.
  * @property {boolean} [version=this.options.version] The API version to use for POSTing.
  * Corrosponds to {@link ClientOptions#version} when not present.
  */

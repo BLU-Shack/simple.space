@@ -15,8 +15,7 @@ const Bot = require('./structures/Bot.js');
 const User = require('./structures/User.js');
 const Upvote = require('./structures/Upvote.js');
 const Stats = require('./structures/Stats.js');
-const Ratelimit = require('./structures/Errors/Ratelimit.js');
-const FetchError = require('./structures/Errors/FetchError.js');
+const { Ratelimit, FetchError } = require('./structures/errors.js');
 const { ClientOpts, FetchOpts, PostOpts, MultiFetchOpts } = require('./structures/options.js');
 
 /**

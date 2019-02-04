@@ -1,4 +1,4 @@
-// Type definitions for simple.space v3.0.0
+// Type definitions for simple.space v3.2.0
 // Project: https://github.com/BLU-Shack/simple.space
 // Definitions by:
 //   iREDMe <foodrickme@gmail.com> (https://github.com/iREDMe)
@@ -49,7 +49,7 @@ declare module 'simple.space' {
 		public approved: boolean;
 		public avatar: string;
 		public childFriendlyAvatar: boolean;
-		public createdTimestamp: number;
+		public createdAt: number;
 		public discriminator: string;
 		public id: string;
 		public invite: string;
@@ -63,17 +63,17 @@ declare module 'simple.space' {
 		public supportCode?: string;
 		public vanity?: string;
 
-		public readonly createdAt: Date;
+		public readonly createdTimestamp: Date;
 		public readonly owner: User;
 		public readonly owners: User[];
 		public readonly page: string;
 		public readonly secondaryOwners: User[];
-		public readonly tag: string;
-		public readonly tags: string[];
-		public readonly views: number[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
+		public readonly tag: string;
+		public readonly tags: string[];
 		public readonly vanityURL?: string;
+		public readonly views: number[];
 
 		public toString(): string;
 	}
@@ -112,6 +112,7 @@ declare module 'simple.space' {
 		public users: number;
 		public tags: number;
 
+		public readonly createdTimestamp: number;
 		public readonly botUserTotal: number;
 	}
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Base - Documentation</title>
+    <title>structures/errors.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,258 +28,72 @@
 
 <div id="main">
     
-    <h1 class="page-title">Base</h1>
+    <h1 class="page-title">structures/errors.js</h1>
     
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        Base
-        </h2>
-        
-            <div class="class-description">The universal base for all classes.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="Base"><span class="type-signature"></span>new Base<span class="signature">(obj)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_Base.js.html">structures/Base.js</a>, <a href="structures_Base.js.html#line4">line 4</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            <div class="subsection-item">
-                
-<h4 class="name" id="raw"><span class="type-signature">(readonly) </span>raw<span class="type-signature"> :object</span></h4>
-
-
-
-
-<div class="description">
-    The raw object used to create the class and gave class values.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul class="ul-type">
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="structures_Base.js.html">structures/Base.js</a>, <a href="structures_Base.js.html#line9">line 9</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            </div>
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @external Headers
+ * @see {@link https://github.com/bitinn/node-fetch/blob/master/src/headers.js}
+ */
+
+class Ratelimit extends Error {
+	/**
+	 * @param {Headers} headers
+	 * @param {string} endpoint
+	 */
+	constructor(headers, endpoint) {
+		super();
+		Error.captureStackTrace(this, Ratelimit);
+
+		// It has to be like this, otherwise the error output emits an object >:( (Enumerability)
+		Object.defineProperties(this, {
+			name: {
+				value: 'Ratelimit',
+			},
+			headers: {
+				value: headers,
+			},
+			message: {
+				value: `Endpoint /v${endpoint} Ratelimited, ${this.limit} times per ${this.retryAfter} second${this.retryAfter === 1 ? '' : 's'}`,
+			}
+		});
+	}
+
+	get limit() {
+		return parseInt(this.headers.get('x-ratelimit-limit'));
+	}
+
+	get retryAfter() {
+		return parseInt(this.headers.get('retry-after'));
+	}
+
+	toString() {
+		return this.messages.split(' ')[1];
+	}
+}
+
+class FetchError extends Error {
+	constructor(i, message) {
+		super(`${i.status} ${message}`);
+		Object.defineProperty(this, 'name', { value: 'FetchError' });
+		if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
+	}
+
+	toString() {
+		return this.message;
+	}
+}
+
+exports.FetchError = FetchError;
+exports.Ratelimit = Ratelimit;</code></pre>
+        </article>
+    </section>
 
 
 

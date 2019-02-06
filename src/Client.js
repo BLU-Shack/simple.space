@@ -221,7 +221,7 @@ class Client {
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
-		const contents = await this.get(`/bots/${id}/upvotes`, version, botToken, {
+		const contents = await this.authGet(`/bots/${id}/upvotes`, version, botToken, {
 			page: page,
 		});
 		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));

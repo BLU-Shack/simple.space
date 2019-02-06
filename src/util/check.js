@@ -19,7 +19,7 @@ exports.fetch = options => {
 	if (typeof options.cache !== 'boolean')
 		throw new TypeError('options.cache must be boolean.');
 	else if (typeof options.raw !== 'boolean')
-		throw new TypeError('options.cache must be boolean.');
+		throw new TypeError('options.raw must be boolean.');
 	else if (typeof options.version !== 'number')
 		throw new TypeError('options.version must be a number.');
 	else if (typeof options.botToken !== 'string' && options.botToken !== null)
@@ -49,7 +49,7 @@ exports.post = options => {
 	else if (typeof options.version !== 'number')
 		throw new TypeError('options.version must be a number.');
 	else if (!Array.isArray(options.countOrShards) && typeof options.countOrShards !== 'number')
-		throw new TypeError('options.version must be a number or an array of numbers.');
+		throw new TypeError('options.countOrShards must be a number or an array of numbers.');
 	else
 		return options;
 };

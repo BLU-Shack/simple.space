@@ -13,13 +13,12 @@ To install, use `npm i simple.space`
 
 ## What sets the difference than the original?
 
-| [botlist.space](https://www.npmjs.com/package/botlist.space) | simple.space                                       |
-|--------------------------------------------------------------|----------------------------------------------------|
-| `Client.getBot('1234')`                                      | `Client.fetchBot('1234')`                          |
-| `Client.getSelfBot()`                                        | `Client.fetchBot()` (omit id -> Use options.botID) |
-| `Client.postServerCount(1)`                                  | `Client.postCount('1234', { countOrShards: 1 })`   |
-| `Client.postServerCount([1, 2])`                             | `Client.postCount({ countOrShards: [1, 2] })`      |
-| No cache built-in                                            | Caching is disabled by default.                    |
+| [botlist.space](https://www.npmjs.com/package/botlist.space)    | simple.space                                                 |
+|-----------------------------------------------------------------|--------------------------------------------------------------|
+| `Client.getBot('1234')`                                         | `Client.fetchBot('1234')`                                    |
+| `Client.getSelfBot()`                                           | `Client.fetchBot()` (omit id -> Use options.botID)           |
+| `Client.postServerCount(1)` OR `Client.postServerCount([1, 2])` | `Client.postCount('1234', { countOrShards: (1 OR [1, 2]) })` |
+| No cache built-in                                               | Caching is disabled by default.                              |
 
 ## Full JSDoc Documentation
 

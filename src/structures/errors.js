@@ -3,10 +3,6 @@
  * @see {@link https://github.com/bitinn/node-fetch/blob/master/src/headers.js}
  */
 
-/**
- * Thrown when there is a Ratelimit. Includes more information about the kind of ratelimit.
- * @extends {Error}
- */
 class Ratelimit extends Error {
 	/**
 	 * @param {Headers} headers
@@ -43,15 +39,7 @@ class Ratelimit extends Error {
 	}
 }
 
-/**
- * FetchError
- * @extends {Error}
- */
 class FetchError extends Error {
-	/**
-     * @param {Response} i
-	 * @param {string} message
-     */
 	constructor(i, message) {
 		super(`${i.status} ${message}`);
 		Object.defineProperty(this, 'name', { value: 'FetchError' });

@@ -1,6 +1,7 @@
 const Fetch = require('node-fetch').default; // Only for linting
 const util = require('util'); // eslint-disable-line no-unused-vars
-const isObject = require('./util/isObject.js');
+
+const isObject = obj => !Array.isArray(obj) && obj === Object(obj);
 const check = require('./util/check.js');
 
 const ok = /2\d\d/;
@@ -135,6 +136,7 @@ class Client {
 		const contents = await this.get('/statistics', version);
 
 		if (cache) this.stats.push(new Stats(contents));
+		while (this.stats.length > this.options.statsLimit) this.stats.shift();
 		return raw ? contents : new Stats(contents);
 	}
 

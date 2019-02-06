@@ -1,1 +1,0 @@
-module.exports = obj => !Array.isArray(obj) && obj === Object(obj);

@@ -3,6 +3,10 @@
  * @see {@link https://github.com/bitinn/node-fetch/blob/master/src/headers.js}
  */
 
+/**
+ * Thrown when there is a Ratelimit. Includes more information about the kind of ratelimit.
+ * @extends {Error}
+ */
 class Ratelimit extends Error {
 	/**
 	 * @param {Headers} headers
@@ -12,7 +16,7 @@ class Ratelimit extends Error {
 		super();
 		Error.captureStackTrace(this, Ratelimit);
 
-		// It has to be in here, otherwise the error output emits an object >:(
+		// It has to be like this, otherwise the error output emits an object >:( (Enumerability)
 		Object.defineProperties(this, {
 			name: {
 				value: 'Ratelimit',

@@ -2,6 +2,7 @@ const Base = require('./Base.js');
 
 /**
  * botlist.space Statistics.
+ * @extends {Base}
  */
 class Stats extends Base {
 	/**

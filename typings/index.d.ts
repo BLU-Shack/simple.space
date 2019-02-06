@@ -14,11 +14,11 @@ declare module 'simple.space' {
 	export class Client {
 		constructor(options?: ClientOptions);
 
-		public endpoint: string;
 		public bots: Store<string, Bot>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
 		public stats: Stats[];
+		public readonly endpoint: string;
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
 		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
@@ -153,6 +153,7 @@ declare module 'simple.space' {
 		cache?: boolean;
 		version?: number;
 		statsLimit?: number;
+		[key: string]: any;
 	}
 
 	type FetchOptions = {
@@ -173,6 +174,7 @@ declare module 'simple.space' {
 		botToken?: string;
 		countOrShards: number | number[];
 		version?: number;
+		[key: string]: any;
 	}
 	//#endregion
 }

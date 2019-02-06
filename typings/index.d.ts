@@ -1,11 +1,12 @@
-// Type definitions for simple.space v3.0.0
+// Type definitions for simple.space v3.2.0
 // Project: https://github.com/BLU-Shack/simple.space
 // Definitions by:
 //   iREDMe <foodrickme@gmail.com> (https://github.com/iREDMe)
 // License: MIT
 
 declare module 'simple.space' {
-	import Store from '@ired_me/red-store';
+	import Store = require('@ired_me/red-store');
+	import { Response } from 'node-fetch';
 	export const version: string;
 
 	//#region Classes
@@ -13,11 +14,11 @@ declare module 'simple.space' {
 	export class Client {
 		constructor(options?: ClientOptions);
 
-		public endpoint: string;
 		public bots: Store<string, Bot>;
 		public users: Store<string, User>;
 		public options: ClientOptions;
 		public stats: Stats[];
+		public readonly endpoint: string;
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
 		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
@@ -27,10 +28,11 @@ declare module 'simple.space' {
 		public fetchStats(options?: FetchOptions): Promise<Stats>;
 		public fetchUser(id: string, options?: FetchOptions): Promise<User>;
 		public fetchUpvotes(id?: string, options?: MultiFetchOptions): Promise<Upvote[] | Store<string, Upvote>>;
+		public postCount(id?: string, options?: PostOptions): object;
 		public postCount(options?: PostOptions): object;
 		public postCount(countOrShards?: number | number[], options?: PostOptions): object;
-		public postCount(id?: string, options?: PostOptions): object;
-		private get(point: string, Authorization: string, version: number, ...headers: string[]): Promise<Response>;
+		private get(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
+		private authGet(point: string, Authorization: string, version: number, headers: object): Promise<Response>;
 		private fetch(point: string, Authorization: string, version: number, body: object): Promise<Response>;
 	}
 
@@ -61,16 +63,17 @@ declare module 'simple.space' {
 		public supportCode?: string;
 		public vanity?: string;
 
-		public readonly tag: string;
-		public readonly tags: string[];
-		public readonly page: string;
-		public readonly views: number[];
+		public readonly createdTimestamp: Date;
 		public readonly owner: User;
 		public readonly owners: User[];
+		public readonly page: string;
 		public readonly secondaryOwners: User[];
 		public readonly shards?: number[];
 		public readonly supportURL?: string;
+		public readonly tag: string;
+		public readonly tags: string[];
 		public readonly vanityURL?: string;
+		public readonly views: number[];
 
 		public toString(): string;
 	}
@@ -80,7 +83,6 @@ declare module 'simple.space' {
 		constructor(i: Response);
 
 		public readonly name: 'FetchError';
-
 		public toString(): string;
 	}
 
@@ -110,6 +112,7 @@ declare module 'simple.space' {
 		public users: number;
 		public tags: number;
 
+		public readonly createdTimestamp: number;
 		public readonly botUserTotal: number;
 	}
 
@@ -162,6 +165,8 @@ declare module 'simple.space' {
 	type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
 		page?: number;
+		reverse?: boolean;
+		sortBy?: string;
 	}
 
 	type PostOptions = {
@@ -169,10 +174,5 @@ declare module 'simple.space' {
 		countOrShards: number | number[];
 		version?: number;
 	}
-
-	export const ClientOpts: ClientOptions;
-	export const FetchOpts: FetchOptions;
-	export const MultiFetchOpts: MultiFetchOptions;
-	export const PostOpts: PostOptions;
 	//#endregion
 }

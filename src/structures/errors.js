@@ -12,7 +12,7 @@ class Ratelimit extends Error {
 		super();
 		Error.captureStackTrace(this, Ratelimit);
 
-		// It has to be in here, otherwise the error output emits an object >:(
+		// It has to be like this, otherwise the error output emits an object >:( (Enumerability)
 		Object.defineProperties(this, {
 			name: {
 				value: 'Ratelimit',
@@ -39,4 +39,17 @@ class Ratelimit extends Error {
 	}
 }
 
-module.exports = Ratelimit;
+class FetchError extends Error {
+	constructor(i, message) {
+		super(`${i.status} ${message}`);
+		Object.defineProperty(this, 'name', { value: 'FetchError' });
+		if (Error.captureStackTrace) Error.captureStackTrace(this, FetchError);
+	}
+
+	toString() {
+		return this.message;
+	}
+}
+
+exports.FetchError = FetchError;
+exports.Ratelimit = Ratelimit;

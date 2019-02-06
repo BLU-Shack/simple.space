@@ -1,4 +1,5 @@
-const { Base, User } = require('.');
+const Base = require('./Base.js');
+const User = require('./User.js');
 
 /**
  * Resembles an upvote from the `/bots/:id/upvotes` endpoint.

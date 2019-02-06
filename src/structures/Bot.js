@@ -1,4 +1,5 @@
-const { Base, User } = require('.');
+const Base = require('./Base.js');
+const User = require('./User.js');
 const util = require('util'); // eslint-disable-line no-unused-vars
 
 /**
@@ -32,9 +33,9 @@ class Bot extends Base {
 
 		/**
 		 * The timestamp of the bot's creation date.
-		 * @type {number}
+		 * @type {Date}
 		 */
-		this.createdAt = obj.created_at;
+		this.createdAt = new Date(obj.created_at);
 
 		/**
 		 * The bot's 4 digits.
@@ -110,6 +111,14 @@ class Bot extends Base {
 	}
 
 	/**
+	 * The Date of when the bot was created.
+	 * @type {number}
+	 */
+	get createdTimestamp() {
+		return this.createdAt.getTime();
+	}
+
+	/**
 	 * The main owner of the bot.
 	 * @readonly
 	 * @type {User}
@@ -124,7 +133,7 @@ class Bot extends Base {
 	 * @type {User[]}
 	 */
 	get owners() {
-		return this.owners.map(owner => new User(owner));
+		return this.raw.owners.map(owner => new User(owner));
 	}
 
 	/**

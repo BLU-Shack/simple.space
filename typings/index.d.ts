@@ -153,7 +153,6 @@ declare module 'simple.space' {
 		cache?: boolean;
 		version?: number;
 		statsLimit?: number;
-		[key: string]: any;
 	}
 
 	type FetchOptions = {
@@ -174,7 +173,6 @@ declare module 'simple.space' {
 		botToken?: string;
 		countOrShards: number | number[];
 		version?: number;
-		[key: string]: any;
 	}
 	//#endregion
 }

@@ -224,7 +224,7 @@ class Client {
 		const contents = await this.authGet(`/bots/${id}/upvotes`, version, botToken, {
 			page: page,
 		});
-		if (cache) this.users = this.users.concat(new Store(contents.upvotes.map(c => [c.user.id, new User(c.user)])));
+		if (cache) for (const c of contents.upvotes) this.users.set(c.user.id, new User(c.user));
 		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
 		else return raw ? contents : contents.upvotes.map(c => new Upvote(c, id));
 	}

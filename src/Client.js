@@ -176,7 +176,7 @@ class Client {
 		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
-		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
+		else return raw ? contents : contents.bots.map(bot => new Bot(bot, this));
 	}
 
 	/**

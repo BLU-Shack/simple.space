@@ -33,12 +33,6 @@ exports.multi = options => {
 
 	if (typeof options.mapify !== 'boolean')
 		throw new TypeError('options.mapify must be boolean.');
-	else if (typeof options.page !== 'number')
-		throw new TypeError('options.page must be a number.');
-	else if (typeof options.reverse !== 'boolean')
-		throw new TypeError('options.reverse must be boolean.');
-	else if (typeof options.sortBy !== 'string' && options.sortBy !== null)
-		throw new TypeError('options.sortBy must be a string.');
 	else
 		return options;
 };

@@ -46,7 +46,6 @@ exports.FetchOpts = {
 exports.MultiFetchOpts = {
 	...exports.FetchOpts,
 	mapify: true,
-	page: 1,
 };
 
 /**

@@ -150,7 +150,7 @@ class Client {
 
 		const contents = await this.get('/bots', version);
 		if (cache) this.bots = this.bots.concat(new Store(contents.map(bot => [bot.id, new Bot(bot, this)])));
-		if (mapify) return new Store(contents.map(bot => [bot.id, new Bot(bot, this)]));
+		if (mapify) return new Store(contents.map(bot => [bot.id, raw ? bot : new Bot(bot, this)]));
 		else return raw ? contents : contents.map(bot => new Bot(bot, this));
 	}
 
@@ -198,7 +198,7 @@ class Client {
 
 		const contents = await this.authGet(`/bots/${id}/upvotes`, version, botToken);
 		if (cache) for (const c of contents) this.users.set(c.user.id, new User(c.user));
-		if (mapify) return new Store(contents.map(c => [c.user.id, new Upvote(c, id)]));
+		if (mapify) return new Store(contents.map(c => [c.user.id, raw ? c : new Upvote(c, id)]));
 		else return raw ? contents : contents.map(c => new Upvote(c, id));
 	}
 

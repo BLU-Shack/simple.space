@@ -232,9 +232,9 @@ class Client {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get(`/users/${id}/bots`, version);
-		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(b => [b.id, new Bot(b)])));
-		if (mapify) return new Store(contents.bots.map(b => [b.id, new Bot(b)]));
-		else return raw ? contents : contents.bots.map(b => new Bot(b));
+		if (cache) for (const bot of contents) this.bots.set(bot.id, new Bot(bot));
+		if (mapify) return new Store(contents.map(b => [b.id, raw ? b : new Bot(b)]));
+		else return raw ? contents : contents.map(b => new Bot(b));
 	}
 
 	/**

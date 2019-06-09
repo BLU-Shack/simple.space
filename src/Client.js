@@ -24,7 +24,7 @@ const { ClientOpts, FetchOpts, PostOpts, MultiFetchOpts } = require('./structure
  */
 class Client {
 	/**
-	 * @param {ClientOptions} options The options to configure.
+	 * @param {ClientOptions} [options] The options to configure.
 	 */
 	constructor(options = ClientOpts) {
 		/**
@@ -43,7 +43,6 @@ class Client {
 
 		/**
 		 * Every user cached, mapped by their IDs.
-		 * **This store does not automatically cache like the others, and only caches upon a user fetch.**
 		 * @type {Store<string, User>}
 		 */
 		this.users = new Store();
@@ -165,14 +164,12 @@ class Client {
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
-		const { cache, mapify, raw, version, page, reverse, sortBy } = check.multi(Object.assign(MultiFetchOpts, options));
+		const { cache, mapify, raw, version, page } = check.multi(Object.assign(MultiFetchOpts, options));
 		if (typeof page !== 'number') throw new TypeError('page must be a number.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get('/bots', version, {
 			page: page,
-			sortBy: sortBy,
-			reverseSort: reverse,
 		});
 		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
 		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));

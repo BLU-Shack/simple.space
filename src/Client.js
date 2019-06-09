@@ -126,7 +126,7 @@ class Client {
 
 	/**
 	 * Fetch botlist.space statistics.
-	 * @param {FetchOptions} [options={}] Opts to pass. (Ignores cache)
+	 * @param {FetchOptions} [options={}] Options to pass. (Ignores cache)
 	 * @returns {Promise<Stats>} The statistics.
 	 */
 	async fetchStats(options = {}) {
@@ -141,7 +141,7 @@ class Client {
 
 	/**
 	 * Fetch all bots listed on botlist.space.
-	 * @param {MultiFetchOptions} [options={}] Opts to pass.
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
@@ -149,16 +149,16 @@ class Client {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.get('/bots', version);
-		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
-		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
-		else return raw ? contents : contents.bots.map(bot => new Bot(bot, this));
+		if (cache) this.bots = this.bots.concat(new Store(contents.map(bot => [bot.id, new Bot(bot, this)])));
+		if (mapify) return new Store(contents.map(bot => [bot.id, new Bot(bot, this)]));
+		else return raw ? contents : contents.map(bot => new Bot(bot, this));
 	}
 
 	/**
 	 * Fetch a bot listed on botlist.space.
 	 * @param {string | FetchOptions} [id=this.options.botID] The ID of the bot to fetch. Not required if this.options.botID is set.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
-	 * @param {FetchOptions} [options={}] Opts to pass.
+	 * @param {FetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Bot>} A bot object.
 	 */
 	async fetchBot(id = this.options.botID, options = {}) {
@@ -181,7 +181,7 @@ class Client {
 	 * Fetch a bot's upvotes from the past month; Requires Bot Token
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
-	 * @param {MultiFetchOptions} [options={}] Opts to pass.
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Upvote[] | Store<string, Upvote>>} An array of upvotes.s
 	 */
 	async fetchUpvotes(id = this.options.botID, options = {}) {
@@ -197,15 +197,15 @@ class Client {
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 
 		const contents = await this.authGet(`/bots/${id}/upvotes`, version, botToken);
-		if (cache) for (const c of contents.upvotes) this.users.set(c.user.id, new User(c.user));
-		if (mapify) return new Store(contents.upvotes.map(c => [c.user.id, new Upvote(c, id)]));
-		else return raw ? contents : contents.upvotes.map(c => new Upvote(c, id));
+		if (cache) for (const c of contents) this.users.set(c.user.id, new User(c.user));
+		if (mapify) return new Store(contents.map(c => [c.user.id, new Upvote(c, id)]));
+		else return raw ? contents : contents.map(c => new Upvote(c, id));
 	}
 
 	/**
 	 * Fetch a user logged onto botlist.space.
 	 * @param {string} id The user ID to fetch from the API.
-	 * @param {FetchOptions} [options={}] Opts to pass.
+	 * @param {FetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<User>} A user object.
 	 */
 	async fetchUser(id, options = {}) {
@@ -222,7 +222,7 @@ class Client {
 	/**
 	 * Fetches all bots that a user owns.
 	 * @param {string} id A user ID to fetch bots from.
-	 * @param {MultiFetchOptions} [options={}] Opts to pass.
+	 * @param {MultiFetchOptions} [options={}] Options to pass.
 	 * @returns {Promise<Bot[]>}
 	 */
 	async fetchBotsOfUser(id, options = {}) {
@@ -245,7 +245,7 @@ class Client {
 	 * Can be PostOpts if using the bot ID supplied from ClientOpts.
 	 * Can also be {@link PostOpts#countOrShards} if a number/array of numbers.
 	 * @param {PostOptions} [options={}]
-	 * Opts to pass.
+	 * Options to pass.
 	 * Overriden by the `id` parameter if `id` is PostOpts/number/array of numbers
 	 * @returns {object} An object that satisfies your low self-esteem reminding you it was successive on post.
 	 */

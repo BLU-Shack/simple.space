@@ -7,7 +7,7 @@
     </p>
 </div>
 
-# botlist.space - Alternative Wrapper
+# simple.space - An API wrapper for botlist.space
 
 To install, use `npm i simple.space`
 

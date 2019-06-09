@@ -1,11 +1,11 @@
 {
 	"name": "simple.space",
-	"version": "3.2.0",
-	"description": "A simplified alternative for botlist.space",
+	"version": "4.0.0",
+	"description": "An API wrapper for botlist.space",
 	"main": "src/index.js",
 	"types": "typings/index.d.ts",
 	"dependencies": {
-		"@ired_me/red-store": "^1.2.0",
+		"blu-store": "^1.0.1",
 		"node-fetch": "^2.3.0"
 	},
 	"devDependencies": {

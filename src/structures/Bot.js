@@ -20,12 +20,6 @@ class Bot extends Base {
 		this.approved = obj.approved;
 
 		/**
-		 * The bot's avatar URL.
-		 * @type {string}
-		 */
-		this.avatar = obj.avatar;
-
-		/**
 		 * Whether or not the bot's avatar is child friendly
 		 * @type {boolean}
 		 */
@@ -60,12 +54,6 @@ class Bot extends Base {
 		 * @type {string}
 		 */
 		this.invite = obj.links.invite;
-
-		/**
-		 * The invite URL of the bot, with no permissions requested.
-		 * @type {string}
-		 */
-		this.inviteNoPerms = obj.links.no_permission_invite;
 
 		/**
 		 * The prefix that the bot uses.
@@ -111,11 +99,29 @@ class Bot extends Base {
 	}
 
 	/**
+	 * The bot's Discord avatar
+	 * @type {string}
+	 * @readonly
+	 */
+	get avatar() {
+		return `https://cdn.discordapp.com/avatars/${this.id}/${this.raw.avatar}`;
+	}
+
+	/**
 	 * The Date of when the bot was created.
 	 * @type {number}
 	 */
 	get createdTimestamp() {
 		return this.createdAt.getTime();
+	}
+
+	/**
+	 * The invite URL of the bot, with no permissions requested.
+	 * @type {string}
+	 * @readonly
+	 */
+	get inviteNoPerms() {
+		return this.invite.replace(/&permissions=\d+/gi, '&permissions=0');
 	}
 
 	/**

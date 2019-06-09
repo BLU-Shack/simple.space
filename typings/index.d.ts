@@ -21,7 +21,6 @@ declare module 'simple.space' {
 		public readonly endpoint: string;
 
 		public edit(options?: ClientOptions, preset?: boolean): ClientOptions;
-		public fetchAllBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBot(id?: string | FetchOptions, options?: FetchOptions): Promise<Bot>;
 		public fetchBots(options?: MultiFetchOptions): Promise<Bot[] | Store<string, Bot>>;
 		public fetchBotsOfUser(id: string, options?: MultiFetchOptions): Promise<Bot[]>;
@@ -47,13 +46,11 @@ declare module 'simple.space' {
 		constructor(bot: object);
 
 		public approved: boolean;
-		public avatar: string;
 		public childFriendlyAvatar: boolean;
 		public createdAt: number;
 		public discriminator: string;
 		public id: string;
 		public invite: string;
-		public inviteNoPerms: string;
 		public prefix: string;
 		public shortDescription: string;
 		public updatedAt: number;
@@ -63,7 +60,9 @@ declare module 'simple.space' {
 		public supportCode?: string;
 		public vanity?: string;
 
+		public readonly avatar: string;
 		public readonly createdTimestamp: Date;
+		public readonly inviteNoPerms: string;
 		public readonly owner: User;
 		public readonly owners: User[];
 		public readonly page: string;
@@ -120,12 +119,12 @@ declare module 'simple.space' {
 	export class User extends Base {
 		constructor(user: object);
 
-		public avatar: string;
 		public description: string;
 		public discriminator: string;
 		public id: string;
 		public username: string;
 
+		public readonly avatar: string;
 		public readonly page: string;
 		public readonly tag: string;
 
@@ -164,9 +163,6 @@ declare module 'simple.space' {
 
 	type MultiFetchOptions = FetchOptions & {
 		mapify?: boolean;
-		page?: number;
-		reverse?: boolean;
-		sortBy?: string;
 	}
 
 	type PostOptions = {

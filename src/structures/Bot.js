@@ -56,12 +56,6 @@ class Bot extends Base {
 		this.invite = obj.links.invite;
 
 		/**
-		 * The invite URL of the bot, with no permissions requested.
-		 * @type {string}
-		 */
-		this.inviteNoPerms = obj.links.no_permission_invite;
-
-		/**
 		 * The prefix that the bot uses.
 		 * @type {string}
 		 */
@@ -119,6 +113,15 @@ class Bot extends Base {
 	 */
 	get createdTimestamp() {
 		return this.createdAt.getTime();
+	}
+
+	/**
+	 * The invite URL of the bot, with no permissions requested.
+	 * @type {string}
+	 * @readonly
+	 */
+	get inviteNoPerms() {
+		return this.invite.replace(/&permissions=\d+/gi, '&permissions=0');
 	}
 
 	/**

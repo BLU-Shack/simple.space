@@ -42,8 +42,8 @@ exports.post = options => {
 		throw new TypeError('options.botToken must be a string.');
 	else if (typeof options.version !== 'number')
 		throw new TypeError('options.version must be a number.');
-	else if (!Array.isArray(options.countOrShards) && typeof options.countOrShards !== 'number')
-		throw new TypeError('options.countOrShards must be a number or an array of numbers.');
+	else if (!Array.isArray(options.countOrShards) && typeof options.countOrShards !== 'number' && options.countOrShards !== null)
+		throw new TypeError('options.countOrShards must be a number, array of numbers, or null.');
 	else
 		return options;
 };

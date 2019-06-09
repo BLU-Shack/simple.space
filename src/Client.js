@@ -178,7 +178,7 @@ class Client {
 	}
 
 	/**
-	 * Fetch a bot's upvotes from the past month; Requires Bot Token
+	 * Fetch a bot's upvotes in the current month. Requires a bot token.
 	 * @param {string | MultiFetchOptions} [id=this.options.botID] The bot ID to fetch upvotes from.
 	 * Can be {@link FetchOptions}, uses [options.botID]({@link ClientOpts#bot}) if so
 	 * @param {MultiFetchOptions} [options={}] Options to pass.
@@ -243,21 +243,21 @@ class Client {
 	 * The bot ID to post server count for.
 	 * Not required if a bot ID was supplied.
 	 * Can be PostOpts if using the bot ID supplied from ClientOpts.
-	 * Can also be {@link PostOpts#countOrShards} if a number/array of numbers.
+	 * Can also be {@link PostOpts#countOrShards} if a number/array of numbers/null.
 	 * @param {PostOptions} [options={}]
 	 * Options to pass.
-	 * Overriden by the `id` parameter if `id` is PostOpts/number/array of numbers
+	 * Overriden by the `id` parameter if `id` is PostOpts/number/array of numbers/null.
 	 * @returns {object} An object that satisfies your low self-esteem reminding you it was successive on post.
 	 */
 	async postCount(id = this.options.botID, options = {}) {
 		if (isObject(id)) {
 			options = id;
 			id = this.options.botID;
-		} else if (typeof id === 'number' || Array.isArray(id)) {
+		} else if (typeof id === 'number' || Array.isArray(id) || id === null) {
 			options.countOrShards = id;
 			id = this.options.botID;
 		}
-		if (typeof id === 'undefined' || id === null) throw new ReferenceError('id must be defined.');
+		if (typeof id === 'undefined') throw new ReferenceError('id must be defined.');
 		if (typeof id !== 'string' && !isObject(id)) throw new TypeError('id must be a string.');
 		if (!isObject(options)) throw new TypeError('options must be an object.');
 		const { version, botToken, countOrShards } = check.post(Object.assign(PostOpts, options));
@@ -265,7 +265,7 @@ class Client {
 		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOpts.');
 		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');
 		if (typeof countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
-		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards)) throw new TypeError('options.countOrShards must be a number or array of numbers.'); // eslint-disable-line max-len
+		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards) && options.countOrShards !== null) throw new TypeError('options.countOrShards must be a number, array of numbers, or null.'); // eslint-disable-line max-len
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
 		const contents = await this.post(`/bots/${id}`, version, botToken, body);

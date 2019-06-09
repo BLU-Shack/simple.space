@@ -42,19 +42,11 @@ exports.FetchOpts = {
  * @property {string} [botToken=this.options.botToken] One of your bot's authorization token from the site.
  * The token should be related to the bot ID of fetch. Uses {@link ClientOptions#botToken} if omitted.
  * @property {number} [page=1] The section of the endpoint to take.
- * @property {boolean} [reverse=false] When set to true, reverses the output. Only works with `v1/bots` and `v1/users/:id/bots`,
- * or `Client.fetchBots()` and `Client.fetchBotsOfUser()` respectively. Requires {@link MultiFetchOptions#sortBy} to have value.
- * Example: `server_count`: It will sort the response by the bot with least to greatest server count.
- * @property {string} [sortBy=null] A raw bot object's property to sort by. This should not be the Class' property.
- * To see a raw object's property, check [here](https://docs.botlist.space/bl-docs/bots), under the Response tab.
- * Example: `server_count`; It will sort the response by the bot with greatest to least server count.
  */
 exports.MultiFetchOpts = {
 	...exports.FetchOpts,
 	mapify: true,
 	page: 1,
-	reverse: false,
-	sortBy: null,
 };
 
 /**

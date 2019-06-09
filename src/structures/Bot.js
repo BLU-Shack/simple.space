@@ -106,7 +106,7 @@ class Bot extends Base {
 
 	/**
 	 * The bot's Discord avatar
-	 * @returns {string}
+	 * @type {string}
 	 * @readonly
 	 */
 	get avatar() {

@@ -38,7 +38,7 @@ class User extends Base {
 
 	/**
 	 * The user's Discord avatar
-	 * @returns {string}
+	 * @type {string}
 	 * @readonly
 	 */
 	get avatar() {

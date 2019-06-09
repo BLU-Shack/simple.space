@@ -143,25 +143,6 @@ class Client {
 	 * Fetch all bots listed on botlist.space.
 	 * @param {MultiFetchOptions} [options={}] Opts to pass.
 	 * @returns {Promise<Bot[] | Store<string, Bot>>}
-	 * @deprecated Use {@link Client#fetchBots} instead.
-	 */
-	async fetchAllBots(options = {}) {
-		const { cache, mapify, raw, version, page } = check.multi(Object.assign(MultiFetchOpts, options));
-		if (typeof page !== 'number') throw new TypeError('page must be a number.');
-		if (!isObject(options)) throw new TypeError('options must be an object.');
-
-		const contents = await this.get('/bots', version, {
-			page: page
-		});
-		if (cache) this.bots = this.bots.concat(new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)])));
-		if (mapify) return new Store(contents.bots.map(bot => [bot.id, new Bot(bot, this)]));
-		else return raw ? contents : contents.bots.map(c => new Bot(c.bots, this));
-	}
-
-	/**
-	 * Fetch all bots listed on botlist.space.
-	 * @param {MultiFetchOptions} [options={}] Opts to pass.
-	 * @returns {Promise<Bot[] | Store<string, Bot>>}
 	 */
 	async fetchBots(options = {}) {
 		const { cache, mapify, raw, version, page } = check.multi(Object.assign(MultiFetchOpts, options));
@@ -298,7 +279,5 @@ class Client {
 		return contents;
 	}
 }
-
-Client.prototype.fetchAllBots = util.deprecate(Client.prototype.fetchAllBots, 'Client#fetchAllBots - Deprecated; Use Client#fetchBots instead.');
 
 module.exports = Client;

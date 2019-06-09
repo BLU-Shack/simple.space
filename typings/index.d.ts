@@ -5,7 +5,7 @@
 // License: MIT
 
 declare module 'simple.space' {
-	import Store = require('@ired_me/red-store');
+	import Store = require('blu-store');
 	import { Response } from 'node-fetch';
 	export const version: string;
 

@@ -8,9 +8,9 @@ const ok = /2\d\d/;
 
 /**
  * @external Store
- * @see {@link https://github.com/iREDMe/red-store}
+ * @see {@link https://github.com/iREDMe/blu-store}
  */
-const Store = require('@ired_me/red-store');
+const Store = require('blu-store');
 
 const Bot = require('./structures/Bot.js');
 const User = require('./structures/User.js');

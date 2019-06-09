@@ -20,12 +20,6 @@ class Bot extends Base {
 		this.approved = obj.approved;
 
 		/**
-		 * The bot's avatar URL.
-		 * @type {string}
-		 */
-		this.avatar = obj.avatar;
-
-		/**
 		 * Whether or not the bot's avatar is child friendly
 		 * @type {boolean}
 		 */
@@ -108,6 +102,15 @@ class Bot extends Base {
 		 * @type {?string}
 		 */
 		this.vanityCode = obj.vanity;
+	}
+
+	/**
+	 * The bot's Discord avatar
+	 * @returns {string}
+	 * @readonly
+	 */
+	get avatar() {
+		return `https://cdn.discordapp.com/avatars/${this.id}/${this.raw.avatar}`;
 	}
 
 	/**

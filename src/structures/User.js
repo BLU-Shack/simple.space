@@ -12,12 +12,6 @@ class User extends Base {
 		super(obj);
 
 		/**
-		 * The user's avatar URL.
-		 * @type {string}
-		 */
-		this.avatar = obj.avatar;
-
-		/**
 		 * The user's description on botlist.space.
 		 * @type {?string}
 		 */
@@ -40,6 +34,15 @@ class User extends Base {
 		 * @type {string}
 		 */
 		this.username = obj.username;
+	}
+
+	/**
+	 * The user's Discord avatar
+	 * @returns {string}
+	 * @readonly
+	 */
+	get avatar() {
+		return `https://cdn.discordapp.com/avatars/${this.id}/${this.raw.avatar}`;
 	}
 
 	/**

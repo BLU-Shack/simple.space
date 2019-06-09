@@ -265,7 +265,7 @@ class Client {
 		if (typeof botToken === 'undefined') throw new ReferenceError('options.botToken must be defined, or in ClientOpts.');
 		if (typeof botToken !== 'string') throw new TypeError('options.botToken must be a string.');
 		if (typeof countOrShards === 'undefined') throw new ReferenceError('options.countOrShards must be defined.');
-		if (typeof options.countOrShards !== 'number' && !Array.isArray(options.countOrShards) && options.countOrShards !== null) throw new TypeError('options.countOrShards must be a number, array of numbers, or null.'); // eslint-disable-line max-len
+		if (typeof countOrShards !== 'number' && !Array.isArray(countOrShards) && countOrShards !== null) throw new TypeError('options.countOrShards must be a number, array of numbers, or null.'); // eslint-disable-line max-len
 
 		const body = Array.isArray(options.countOrShards) ? { shards: options.countOrShards } : { server_count: options.countOrShards };
 		const contents = await this.post(`/bots/${id}`, version, botToken, body);
